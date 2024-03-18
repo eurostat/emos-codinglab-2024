@@ -7,7 +7,8 @@ set -eux
 mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
 cp .binder/overrides.json ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
 
-pip install -U jupyterlab-github
+pip install -U jupyterlab-git \
+    jupyterlab-github
 
 
 # Install JupyterLab extension
@@ -31,3 +32,6 @@ pip install jupyter_contrib_nbextensions
 
 # Import the workspace into JupyterLab
 #jupyter lab workspaces import .binder/workspace.json
+
+# Rebuild assets to include updates
+jupyter lab build
