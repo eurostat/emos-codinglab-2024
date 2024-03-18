@@ -24,14 +24,14 @@ pip install -U jupyterlab-git \
 # jupyter nbextension enable --py widgetsnbextension
 # jupyter labextension install @jupyter-widgets/jupyterlab-manager
 
-pip install jupyter_contrib_nbextensions
+# pip install jupyter_contrib_nbextensions
 
 # see example at: https://github.com/binder-examples/r_with_python/blob/master/binder/postBuild
 # Remove output from Jupyter notebooks
-#jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace index.ipynb
+# jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace index.ipynb
 
 # Import the workspace into JupyterLab
-#jupyter lab workspaces import .binder/workspace.json
+# jupyter lab workspaces import .binder/workspace.json
 
 # Rebuild assets to include updates
 jupyter lab build --dev-build=False --minimize=False
