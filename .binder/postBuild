@@ -34,4 +34,4 @@ pip install jupyter_contrib_nbextensions
 #jupyter lab workspaces import .binder/workspace.json
 
 # Rebuild assets to include updates
-jupyter lab build
+jupyter lab build --dev-build=False --minimize=False
