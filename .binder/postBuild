@@ -5,7 +5,7 @@
 set -eux
 
 mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
-cp overrides.json ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
+cp .binder/overrides.json ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
 
 pip install -U jupyterlab-git
 
