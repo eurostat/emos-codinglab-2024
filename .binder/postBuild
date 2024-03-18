@@ -34,4 +34,4 @@ pip install -U jupyterlab-git \
 # jupyter lab workspaces import .binder/workspace.json
 
 # Rebuild assets to include updates
-jupyter lab build --dev-build=False --minimize=False
+jupyter lab build --dev-build=False # --minimize=False
