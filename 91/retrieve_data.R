@@ -1,2 +1,4 @@
 library(restatapi)
-get_eurostat_data("ilc_mddw02",date_filter=2021, flags=T)
+id <- "ilc_mddw02"
+get_eurostat_dsd(id)
+#get_eurostat_data(id,date_filter=2020, filters="grime", label = T, name=T, keep_flags = T)
