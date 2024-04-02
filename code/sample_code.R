@@ -7,7 +7,7 @@ library(kableExtra)
 library(tmap)
 library(chron)
 library(giscoR)
-
+library(highcharter)
 
 # https://github.com/eurostat/statistics-coded/blob/master/popul/population/population-structure-ageing_r.ipynb
 
