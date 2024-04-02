@@ -6,7 +6,7 @@ library(plotly)
 library(kableExtra)
 library(tmap)
 library(chron)
-
+library(giscoR)
 
 
 # https://github.com/eurostat/statistics-coded/blob/master/popul/population/population-structure-ageing_r.ipynb
@@ -56,16 +56,16 @@ for(i in 1:length(times)){
 }
 levels(dataset5$indic_de)[levels(dataset5$indic_de)=="PC_Y15_24"] <- "PC_Y15_64"
 dataset5 <- dataset5[dataset5$indic_de!="PC_Y25_49" & dataset5$indic_de!="PC_Y50_64",]
-age0_14_2009 <- dataset5[dataset5$indic_de=="PC_Y0_14" & dataset5$time=="2009", -c(1,3)]
-age0_14_2019 <- dataset5[dataset5$indic_de=="PC_Y0_14" & dataset5$time=="2019", -c(1,3)]
+age0_14_2009 <- dataset5[dataset5$indic_de=="PC_Y0_14" & dataset5$time=="2009", -c(2,3)]
+age0_14_2019 <- dataset5[dataset5$indic_de=="PC_Y0_14" & dataset5$time=="2019", -c(2,3)]
 age0_14_2009 <- age0_14_2009[order(factor(age0_14_2009$geo, levels=unique(countries))),-1]
 age0_14_2019 <- age0_14_2019[order(factor(age0_14_2019$geo, levels=unique(countries))),-1]
-age15_64_2009 <- dataset5[dataset5$indic_de=="PC_Y15_64" & dataset5$time=="2009", -c(1,3)]
-age15_64_2019 <- dataset5[dataset5$indic_de=="PC_Y15_64" & dataset5$time=="2019", -c(1,3)]
+age15_64_2009 <- dataset5[dataset5$indic_de=="PC_Y15_64" & dataset5$time=="2009", -c(2,3)]
+age15_64_2019 <- dataset5[dataset5$indic_de=="PC_Y15_64" & dataset5$time=="2019", -c(2,3)]
 age15_64_2009 <- age15_64_2009[order(factor(age15_64_2009$geo, levels=unique(countries))),-1]
 age15_64_2019 <- age15_64_2019[order(factor(age15_64_2019$geo, levels=unique(countries))),-1]
-age65_MAX_2009 <- dataset5[dataset5$indic_de=="PC_Y65_MAX" & dataset5$time=="2009", -c(1,3)]
-age65_MAX_2019 <- dataset5[dataset5$indic_de=="PC_Y65_MAX" & dataset5$time=="2019", -c(1,3)]
+age65_MAX_2009 <- dataset5[dataset5$indic_de=="PC_Y65_MAX" & dataset5$time=="2009", -c(2,3)]
+age65_MAX_2019 <- dataset5[dataset5$indic_de=="PC_Y65_MAX" & dataset5$time=="2019", -c(2,3)]
 age65_MAX_2009 <- age65_MAX_2009[order(factor(age65_MAX_2009$geo, levels=unique(countries))),-1]
 age65_MAX_2019 <- age65_MAX_2019[order(factor(age65_MAX_2019$geo, levels=unique(countries))),-1]
 cntr <- as.factor(c("EU-27", "Belgium", "Bulgaria", "Czechia", "Denmark", "Germany", "Estonia", "Ireland",
@@ -99,7 +99,7 @@ map <- gisco_get_nuts(
 app_map <- app_tot[time == "2020" & !(citizen %in% c("TOTAL","EUR_C_E_OTH","AME","AFR","ASI","EUR","OCE")) & age == "TOTAL" & sex == "T", sum(values, na.rm = T),geo]
 setnames(app_map,"V1","Apprehended")
 options(repr.plot.width=9, repr.plot.height=9,repr.plot.res=400)
-map <- left_join(map, app_map, by=c("NUTS_ID"="geo"))%>%
+map <- dplyr::left_join(map, app_map, by=c("NUTS_ID"="geo"))%>%
   tm_shape() +
   tm_fill("Apprehended",
           popup.vars = c("Apprehended","NUTS_ID", "NUTS_NAME"),
@@ -122,14 +122,15 @@ efta_cc<-c("CH","NO","IS","LI")
 dt_sep<-data.table::data.table(geo=c(" ","  ","   "),group=rep("Scientists and Engineers",3),values=rep(NA,3),pct=rep(NA,3),name=c(" ","  ","   "))
 dt_fig1<-get_eurostat_data("hrst_st_nocc",date_filter=year,filters=c("THS","HRSTO","^Scient","OC",gsub(" to ","-",age_group1)),exact_match=F,label=F)[geo!="EA19",c("category","isco08","geo","values")]
 dt_fig1<-dt_fig1[grepl("^SE",category),isco08:=category]
-dt_fig1<-dcast(dt_fig1,geo ~ isco08,value.var="values")[,OC2_SE:=OC2-SE]
+dt_fig1<-as.data.table(dcast(dt_fig1,geo ~ isco08,value.var="values"))[,OC2_SE:=OC2-SE]
 setnames(dt_fig1,c("geo","Professionals","Technicians and associate professionals","Scientists and Engineers","Other professionals (other than SE)"))
-dt_fig1<-melt(dt_fig1[,c(1,3:5)],id.vars="geo")[]
+dt_fig1<-as.data.table(melt(dt_fig1[,c(1,3:5)],id.vars="geo"))
 setnames(dt_fig1,c("geo","group","values"))
 dt_fig1[,pct:=values/sum(values)*100,by=geo]
 dsd<-as.data.table(get_eurostat_dsd("hrst_st_nocc"))[concept=="geo",c("code","name")]
 dt_fig1<-merge(dt_fig1,dsd,by.x="geo",by.y="code",all.x=T)
 dt_fig1$name<-gsub(" \\(.*\\)","",dt_fig1$name)
+dt_fig1<-dt_fig1[geo!="EA20"]
 dt_fig1$name<-gsub("^Eu.*","EU",dt_fig1$name)
 name_ord<-dt_fig1[(geo %in% eu_cc)&grepl("^Scien",group)]
 name_ord_eu<-name_ord[order(pct)]$name
@@ -175,7 +176,7 @@ temp <- hh2 %>%
   rename(b5n = "values") %>%
   mutate(eu_index = round(b5n * 100 / b5n[geo == "EU27_2020"], 1))
 
-sf <- left_join(map, temp,by=c("NUTS_ID"="geo"))
+sf <- dplyr::left_join(map, temp,by=c("NUTS_ID"="geo"))
 
 options(repr.plot.width=9, repr.plot.height=9,repr.plot.res=400)
 # tmap_mode("view")
@@ -193,6 +194,48 @@ sf %>%
 
 # https://github.com/eurostat/statistics-coded/blob/master/popul/living-conditions/living-conditions-time-use_r.ipynb
 
+
+yr<-2010
+eu_ctry_names<-do.call(rbind,lapply(get("cc",envir=.restatapi_env)$EU28,search_eurostat_dsd,dsd=get_eurostat_dsd("tus_00age"),exact_match=TRUE))$name
+dt<-get_eurostat_data("tus_00age",filters=list(unit="spent",age="total",sex="total",acl00=c("sleep","eat","^employ"," (family|personal) care","^leisure","^study","except travel")),date_filter=eval(yr),label=T,ignore.case=T,exact_match=F,perl=T,stringsAsFactors=F,force_local_filter=T)
+if (is.factor(dt$values)|is.character(dt$values)) dt<-dt[,values:=chron::times(paste0(values,":00"))]
+dt<-dt[,c("acl00","geo","values")]
+sdt<-dt[grepl("(ating|ther)",acl00),.(acl00="Eating and other personal care",values=sum(values)),by=geo]
+dt<-rbind(dt[!grepl("(ating|ther)",acl00)],sdt)
+fig1_colors<-c("#F6A26B","#F06423","#71A8DF","#286EB4","#FDDBA3","#FCC975","#FAA519")
+ggplot(dt, aes(x=geo, y=values,fill=acl00)) + 
+  geom_bar(position="stack",stat="identity")+
+  scale_y_chron(format="%H:%M") +
+  scale_fill_manual(values = fig1_colors)+
+  ggtitle("Figure 1") +
+  ylab ("")+
+  xlab("")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+dt_sep<-data.table::data.table(acl00=c("Sleep","Sleep"),geo=c(" ","  "),values=c(chron::times(NA),chron::times(NA)))
+dt<-rbind(dt,dt_sep)
+acls_ord<-c('Travel except travel related to jobs','Leisure, social and associative life','Household and family care','Study','Employment, related activities and travel as part of/during main and second job','Eating and other personal care','Sleep')
+dt$acl00<- factor(dt$acl00,levels=acls_ord)
+geo_ord<-c('Belgium','Germany','Estonia','Greece','Spain','France','Italy','Luxembourg','Hungary','Netherlands','Austria','Poland','Romania','Finland','United Kingdom',' ','Norway','  ','Serbia','Turkey')
+dt$geo<-factor(dt$geo,levels=geo_ord)
+
+options(repr.plot.width=9, repr.plot.height=6,repr.plot.res=300)
+ggplot(dt, aes(x=geo, y=values,fill=acl00)) + theme_minimal() +
+  geom_bar(position="stack",stat="identity",width=0.5)+
+  scale_y_chron(format="%H:%M",breaks=seq(0,1,4/24)) +
+  scale_fill_manual(values = fig1_colors)+
+  ggtitle("Figure 1: Mean time spent on daily activities, all individuals by country, (hh:mm; 2008 to 2015)") +
+  ylab("")+
+  xlab("")+
+  theme(legend.title = element_blank(), 
+        axis.text.x = element_text(angle = 90, hjust = 1),
+        panel.grid.major.x = element_blank())
+
+
+
+
+dt<-get_eurostat_data("tus_00age",filters=list(unit="Participation time",age="total",sex="total",acl00=c("^study","^empl")),date_filter=eval(yr),label=T,ignore.case=T,exact_match=F,perl=T,stringsAsFactors=F,force_local_filter=T)
+if (is.factor(dt$values)|is.character(dt$values)) dt<-dt[,values:=chron::times(paste0(values,":00"))]
+dt<-dt[,c("acl00","geo","values")]  
 dt_sep<-data.table::data.table(acl00=c("Study","Study"),geo=c(" ","  "),values=c(chron::times(NA),chron::times(NA)))
 dt<-rbind(dt,dt_sep)
 geo_ord<-dt[(geo %in% eu_ctry_names)&grepl("Empl",acl00)]
