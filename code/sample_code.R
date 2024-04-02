@@ -111,6 +111,44 @@ map <- dplyr::left_join(map, app_map, by=c("NUTS_ID"="geo"))%>%
   tm_layout(bg.color = "lightblue")
 map
 
+
+ref_tot <- get_eurostat_data("migr_eirfs")
+app_tot <- get_eurostat_data("migr_eipre")
+ord_tot <- get_eurostat_data("migr_eiord")
+ret_tot <- get_eurostat_data("migr_eirtn")
+
+refused <- ref_tot[geo == "EU27_2020" & reason == "TOTAL" & border == "TOTAL" & citizen == "TOTAL", .(time,values)]
+setnames(refused, "values","refused")
+
+apprehended <- app_tot[geo == "EU27_2020" & citizen == "TOTAL" & age == "TOTAL" & sex == "T" & unit == "PER" & apprehen == "TOTAL", .(time,values)]
+setnames(apprehended, "values","apprehended")
+
+ordered <- ord_tot[geo == "EU27_2020" & sex == "T" & citizen == "TOTAL" & age == "TOTAL", .(time, values)]
+setnames(ordered, "values","ordered")
+
+returned <- ret_tot[geo == "EU27_2020" & sex == "T" & citizen =="TOTAL" & age == "TOTAL" & c_dest == "TOTAL", .(time,values)]
+setnames(returned, "values","returned")
+
+
+dt <- dplyr::left_join(refused, apprehended)%>%
+  dplyr::left_join(ordered)%>%
+  dplyr::left_join(returned)
+
+plot_ly(dt, x = ~time,y= ~refused,
+        name = "Refused",type = "scatter",mode = 'lines+markers') %>%
+  add_trace(y = ~apprehended, name = 'Apprehended', mode = 'lines+markers') %>%
+  add_trace(y = ~ordered, name = 'Ordered to leave', mode = 'lines+markers') %>%
+  add_trace(y = ~returned, name = 'Returned', mode = 'lines+markers') %>%
+  layout(paper_bgcolor='gray20',
+         plot_bgcolor='gray87',
+         xaxis = list(color = 'black',tickangle = 0),
+         yaxis = list(color = 'black', title = "Persons",exponentformat="none",separatethoudands = TRUE)
+  ) %>%
+  layout(hovermode = "x unified")
+
+
+
+
 # https://github.com/eurostat/statistics-coded/blob/master/popul/labour-market/hr-science-technology_r.ipynb
 
 year<-2020
