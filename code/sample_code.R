@@ -1,14 +1,18 @@
-library(ggplot2)
 library(restatapi)
-library(data.table)
-library(reshape2)
-library(plotly)
-library(kableExtra)
-library(tmap)
-library(chron)
 library(giscoR)
-library(highcharter)
 
+library(data.table)
+library(chron)
+library(reshape2)
+
+library(kableExtra)
+library(ggplot2)
+library(tmap)
+
+library(highcharter)
+library(plotly)
+
+# example 1
 # https://github.com/eurostat/statistics-coded/blob/master/popul/population/population-structure-ageing_r.ipynb
 
 ageclass <- c("Y_LT5", "Y5-9", "Y10-14", "Y15-19", "Y20-24", "Y25-29", "Y30-34", "Y35-39", "Y40-44",
@@ -39,7 +43,7 @@ plot1 <- ggplot(dataset1, aes(x=age , y=values, fill= sex,)) +
 
 print(plot1)
 
-
+# formatted table
 
 countries <- as.factor(c("EU27_2020","BE", "BG","CZ","DK", "DE", "EE","IE","EL","ES","FR",
                          "HR", "IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO",
@@ -86,8 +90,9 @@ dt %>%
   group_rows(" ", 30,34) %>%
   group_rows(" ", 34,38)
   
+# example 2
 # https://github.com/eurostat/statistics-coded/blob/master/popul/population/imigration-legislation-enforcement_r.ipynb
-
+# plot1
 
 options(timeout=300)
 app_tot<- get_eurostat_data("migr_eipre")
@@ -111,6 +116,7 @@ map <- dplyr::left_join(map, app_map, by=c("NUTS_ID"="geo"))%>%
   tm_layout(bg.color = "lightblue")
 map
 
+# plot2 - interactive
 
 ref_tot <- get_eurostat_data("migr_eirfs")
 app_tot <- get_eurostat_data("migr_eipre")
@@ -148,17 +154,17 @@ plot_ly(dt, x = ~time,y= ~refused,
 
 
 
-
+# example 3
 # https://github.com/eurostat/statistics-coded/blob/master/popul/labour-market/hr-science-technology_r.ipynb
 
-year<-2020
+year<-2019
 age_group1<-'25 to 64' 
 age_group2<-'15 to 74'
+age_group<-age_group2
 eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
 efta_cc<-c("CH","NO","IS","LI")
-#get_eurostat_dsd("hrst_st_nocc")
 dt_sep<-data.table::data.table(geo=c(" ","  ","   "),group=rep("Scientists and Engineers",3),values=rep(NA,3),pct=rep(NA,3),name=c(" ","  ","   "))
-dt_fig1<-get_eurostat_data("hrst_st_nocc",date_filter=year,filters=c("THS","HRSTO","^Scient","OC",gsub(" to ","-",age_group1)),exact_match=F,label=F)[geo!="EA19",c("category","isco08","geo","values")]
+dt_fig1<-get_eurostat_data("hrst_st_nocc",date_filter=year,filters=c("THS","HRSTO","^Scient","OC",gsub(" to ","-",age_group)),exact_match=F,label=F)[geo!="EA19",c("category","isco08","geo","values")]
 dt_fig1<-dt_fig1[grepl("^SE",category),isco08:=category]
 dt_fig1<-as.data.table(dcast(dt_fig1,geo ~ isco08,value.var="values"))[,OC2_SE:=OC2-SE]
 setnames(dt_fig1,c("geo","Professionals","Technicians and associate professionals","Scientists and Engineers","Other professionals (other than SE)"))
@@ -187,7 +193,7 @@ ggplot(dt_fig1, aes(x=name,y=pct,fill=group)) + theme_minimal() +
   geom_bar(stat='identity',width=0.5)+
   scale_fill_manual(values = fig1_colors)+
   scale_y_continuous(limits=c(0,101),breaks=seq(0,100,10),label =  function(x) paste0(x, "%"))+
-  ggtitle("Figure 1: HRSTO by occupation, age 25-64, 2020 (%)") +
+  ggtitle(paste0("Figure 1: HRSTO by occupation, age ",age_group,", ",year," (%)")) +
   ylab("")+
   xlab("")+
   coord_flip()+
@@ -197,6 +203,8 @@ ggplot(dt_fig1, aes(x=name,y=pct,fill=group)) + theme_minimal() +
         panel.grid.major.y = element_blank())+             
   guides(fill=guide_legend(reverse=T))
 
+
+# example 4
 # https://github.com/eurostat/statistics-coded/blob/master/economy/regional_household_income/statistics_coded_regional_HHI.ipynb
 
 
@@ -204,7 +212,7 @@ hh2 <- get_eurostat_data("nama_10r_2hhinc")
 gdp2 <- get_eurostat_data("nama_10r_2gdp")
 pop3 <- get_eurostat_data("nama_10r_3popgdp")
 map <- gisco_get_nuts(
-  resolution = "60",
+  resolution = "10",
   nuts_level = "2",
   year = "2016"
 )
@@ -217,7 +225,7 @@ temp <- hh2 %>%
 sf <- dplyr::left_join(map, temp,by=c("NUTS_ID"="geo"))
 
 options(repr.plot.width=9, repr.plot.height=9,repr.plot.res=400)
-# tmap_mode("view")
+tmap_mode("view")
 sf %>%
   filter(CNTR_CODE != "UK") %>%
   tm_shape() +
@@ -230,8 +238,9 @@ sf %>%
   tm_borders()
 
 
+# example 5
 # https://github.com/eurostat/statistics-coded/blob/master/popul/living-conditions/living-conditions-time-use_r.ipynb
-
+# plot 1
 
 yr<-2010
 eu_ctry_names<-do.call(rbind,lapply(get("cc",envir=.restatapi_env)$EU28,search_eurostat_dsd,dsd=get_eurostat_dsd("tus_00age"),exact_match=TRUE))$name
@@ -249,12 +258,16 @@ ggplot(dt, aes(x=geo, y=values,fill=acl00)) +
   ylab ("")+
   xlab("")+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# plot 2 
+
 dt_sep<-data.table::data.table(acl00=c("Sleep","Sleep"),geo=c(" ","  "),values=c(chron::times(NA),chron::times(NA)))
 dt<-rbind(dt,dt_sep)
 acls_ord<-c('Travel except travel related to jobs','Leisure, social and associative life','Household and family care','Study','Employment, related activities and travel as part of/during main and second job','Eating and other personal care','Sleep')
 dt$acl00<- factor(dt$acl00,levels=acls_ord)
-geo_ord<-c('Belgium','Germany','Estonia','Greece','Spain','France','Italy','Luxembourg','Hungary','Netherlands','Austria','Poland','Romania','Finland','United Kingdom',' ','Norway','  ','Serbia','Turkey')
+geo_ord<-c('Belgium','Germany','Estonia','Greece','Spain','France','Italy','Luxembourg','Hungary','Netherlands','Austria','Poland','Romania','Finland','United Kingdom',' ','Norway','  ','Serbia','Türkiye')
 dt$geo<-factor(dt$geo,levels=geo_ord)
+
 
 options(repr.plot.width=9, repr.plot.height=6,repr.plot.res=300)
 ggplot(dt, aes(x=geo, y=values,fill=acl00)) + theme_minimal() +
@@ -270,6 +283,7 @@ ggplot(dt, aes(x=geo, y=values,fill=acl00)) + theme_minimal() +
 
 
 
+# plot 3
 
 dt<-get_eurostat_data("tus_00age",filters=list(unit="Participation time",age="total",sex="total",acl00=c("^study","^empl")),date_filter=eval(yr),label=T,ignore.case=T,exact_match=F,perl=T,stringsAsFactors=F,force_local_filter=T)
 if (is.factor(dt$values)|is.character(dt$values)) dt<-dt[,values:=chron::times(paste0(values,":00"))]
@@ -278,7 +292,7 @@ dt_sep<-data.table::data.table(acl00=c("Study","Study"),geo=c(" ","  "),values=c
 dt<-rbind(dt,dt_sep)
 geo_ord<-dt[(geo %in% eu_ctry_names)&grepl("Empl",acl00)]
 geo_ord<-geo_ord[order(values)]$geo
-geo_ord<-c(geo_ord,' ','Norway','  ','Serbia','Turkey')
+geo_ord<-c(geo_ord,' ','Norway','  ','Serbia','Türkiye')
 dt$geo<-factor(dt$geo,levels=geo_ord)
 fig2_colors<-c("#FAA519","#286EB4")
 
