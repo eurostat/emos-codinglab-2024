@@ -32,7 +32,7 @@ cultural_empl <- get_eurostat_data("cult_emp_sex")
 
 
 ###################################
-# Table 1 - Jose
+# Table 1 - José
 ###################################
 
 
