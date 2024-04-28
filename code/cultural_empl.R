@@ -36,6 +36,7 @@ cultural_empl_2022 <- subset(cultural_empl_2022, unit == "PC_EMP")
 
 # 1. first possibility with nuts data
 nuts <- gisco_get_nuts(year = 2021, nuts_level = 0)
+merged_data <- merge(nuts, cultural_empl_2022, by.x = "geo", by.y = "geo", all.x = TRUE)
 
 
 ggplot(merged_data) +
@@ -48,7 +49,6 @@ coord_sf(
  labs(title = "Cultural employment")
 
 
-merged_data <- merge(nuts, cultural_empl_2022, by.x = "geo", by.y = "geo", all.x = TRUE)
 
 
 
