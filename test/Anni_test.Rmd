@@ -174,7 +174,7 @@ tab2_data <- get_eurostat_data(tab2_id,
 # Filters 
 ```{r}
 fig2_type_key <- "TOTAL" 
-fig2_exp_keys <- c("Exports")
+fig2_exp_keys <- "EXP"
 fig2_dates <- c(2017, 2022)
 fig2_country_keys <- c("EU27_2020", "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "EL", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK", "CH", "NO", "IS", "XK", "ME", "MK", "TR", "RS", "AL")
 ```
@@ -184,8 +184,8 @@ fig2_country_keys <- c("EU27_2020", "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "E
 fig2_data <- get_eurostat_data(id,
                                  filters=
                                    list(geo = fig2_country_keys,
-                                        sitc06 = fig2_type_key,
-                                        indic_et = fig2_exp_keys),
+                                        type = fig2_type_key,
+                                        exports = fig2_exp_keys),
                                  date_filter = fig2_dates,
                                  label = T
                                 )
