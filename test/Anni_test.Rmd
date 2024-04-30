@@ -17,14 +17,17 @@ library(restatapi)
 library(kableExtra)
 library(dplyr)
 library(tidyr) # to pivot tables
-
+library(highcharter)
+library(plotly)
+library(ggplot2)
 id <- "cult_trd_prd"
+get_eurostat_dsd(id)
 ```
 
 
 
 
-#### Table 1: Extra-EU trade in cultural goods, EU, 2017 and 2022 ####
+#### Table 1: Extra-EU trade in cultural goods, EU, 2017 and 2022####
 
 # Filters
 
@@ -111,7 +114,7 @@ tab1_combined <- tab1_combined %>%
 
                                                                   
 
-#### Figure 1: Evolution of extra-EU imports and exports in cultural goods and in total goods, EU, 2011-2022 ####
+#### Figure 1: Evolution of extra-EU imports and exports in cultural goods and in total goods, EU, 2011-2022####
 
 # Filters
 ```{r}
@@ -149,7 +152,7 @@ fig1_data_2 <- get_eurostat_data(fig1_id2,
 
 
 
-#### Table 2: International trade in cultural goods, 2017 and 2022 ####
+#### Table 2: International trade in cultural goods, 2017 and 2022####
 
 # Filters 
 ```{r}
@@ -166,35 +169,50 @@ tab2_data <- get_eurostat_data(tab2_id,
                                label = T)
 ```
 
-#### Figure 2: Exports of cultural goods as a share of total exports, 2017 and 2022
+#### Figure 2: Exports of cultural goods as a share of total exports, 2017 and 2022####
 
 # Filters 
 ```{r}
-fig2_id2 <- "cult_trd_prd"
+fig2_type_key <- "TOTAL" 
+fig2_exp_keys <- c("Exports")
+fig2_dates <- c(2017, 2022)
+fig2_country_keys <- c("EU27_2020", "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "EL", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK", "CH", "NO", "IS", "XK", "ME", "MK", "TR", "RS", "AL")
+```
+
+# Retrieve filtered data
+```{r}
+fig2_data <- get_eurostat_data(id,
+                                 filters=
+                                   list(geo = fig1_id2_country_keys,
+                                        sitc06 = fig2_type_key,
+                                        indic_et = fig2_exp_keys),
+                                 date_filter = fig2_dates,
+                                 label = T
+                                )
+View(fig2_data)
 ```
 
 
-
-# Retrieve filtered data
 ```{r}
 
 ```
 
-#### Figure 3: Imports of cultural goods as a share of total imports, 2017 and 2022
 
-#### Figure 4: Share of extra-EU and intra-EU trade in all exports of cultural goods, 2022
+#### Figure 3: Imports of cultural goods as a share of total imports, 2017 and 2022####
 
-#### Figure 5: Share of extra-EU and intra-EU trade in all imports of cultural goods, 2022
+#### Figure 4: Share of extra-EU and intra-EU trade in all exports of cultural goods, 2022####
 
-#### Table 3: Exports of cultural goods by product category, 2022
+#### Figure 5: Share of extra-EU and intra-EU trade in all imports of cultural goods, 2022####
 
-#### Table 4: Imports of cultural goods by product category, 2022
+#### Table 3: Exports of cultural goods by product category, 2022####
+
+#### Table 4: Imports of cultural goods by product category, 2022####
 
 #### Figure 6: 2022 main partners for extra-EU exports of cultural goods, EU, 2017 and 2022
 
-#### Figure 7: 2021 main partners for extra EU imports of cultural goods, EU, 2017 and 2022
+#### Figure 7: 2021 main partners for extra EU imports of cultural goods, EU, 2017 and 2022####
 
-#### Figure 8 : Value of extra-EU exports of cultural goods by main partner and by category, EU, 2022 (€ million)
+#### Figure 8 : Value of extra-EU exports of cultural goods by main partner and by category, EU, 2022 (€ million)####
 
-#### Figure 9: Value of extra-EU imports of cultural goods by main partner and by category, EU, 2022 (€ million)
+#### Figure 9: Value of extra-EU imports of cultural goods by main partner and by category, EU, 2022 (€ million)####
 
