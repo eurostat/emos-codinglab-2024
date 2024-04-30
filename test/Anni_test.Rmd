@@ -183,7 +183,7 @@ fig2_country_keys <- c("EU27_2020", "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "E
 ```{r}
 fig2_data <- get_eurostat_data(id,
                                  filters=
-                                   list(geo = fig1_id2_country_keys,
+                                   list(geo = fig2_country_keys,
                                         sitc06 = fig2_type_key,
                                         indic_et = fig2_exp_keys),
                                  date_filter = fig2_dates,
