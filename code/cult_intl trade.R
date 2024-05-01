@@ -82,6 +82,42 @@ tab1_combined <- tab1_combined %>%
                         )
                                                                   
 
+
+
+# Trying to recreate the same style/colour as in the article
+
+styled_table <- tab1_combined %>%
+  kable("html", escape = FALSE, align = rep('c', ncol(tab1_combined)), 
+        col.names = c(" ", "2017 Exports (€ million)", "2017 Imports (€ million)", 
+                      "2017 Trade Balance", "2017 Cover Ratio", "2022 Exports (€ million)", 
+                      "2022 Imports (€ million)", "2022 Trade Balance", "2022 Cover Ratio", 
+                      "Relative Change Exports (%)", "Relative Change Imports (%)"),
+        table.attr = "style='font-family: Arial; font-size: 14px; border-collapse: collapse;'",
+        format.args = list(decimal.mark = ',', big.mark = ' ')) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "left"
+  ) %>%
+  add_header_above(
+    c(
+      " " = 1, 
+      "2017" = 4, 
+      "2022" = 4, 
+      "Relative change in value, 2022 to 2017" = 2
+    )
+  ) %>%
+  column_spec(1, bold = TRUE) %>%
+  column_spec(1:11, border_right = TRUE, border_left = TRUE) %>%
+  row_spec(0, bold = TRUE, background = "#E1D5E7", color = "black")
+
+
+print(styled_table)
+
+
+
+
+
 #### Figure 1: Evolution of extra-EU imports and exports in cultural goods and in total goods, EU, 2011-2022 ####
 
 # Filters
