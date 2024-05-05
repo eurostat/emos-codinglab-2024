@@ -11,7 +11,9 @@ p_load(restatapi,    # for Eurostat data
        giscoR,       # for Eurostat geographical Data
        ggplot2,      # for graphic design
        highcharter,   # for interactive elements in graphics
-      tidyverse)
+      tidyverse,
+      eurostat
+      )
 
 
 #load data for article "Culture statistics - cultural employment"
@@ -26,29 +28,39 @@ p_load(ggmap, mapproj, rnaturalearth, rnaturalearthdata, sf, tidyverse)
 
 
 
-
-# filter data for needed variables
-cultural_empl_2022 <- cultural_empl[cultural_empl$time == 2022, ]
-cultural_empl_2022 <- cultural_empl_2022[cultural_empl_2022$sex == "T"]
-cultural_empl_2022 <- subset(cultural_empl_2022, geo != "EU27_2020")
-cultural_empl_2022 <- subset(cultural_empl_2022, unit == "PC_EMP")
+# filter data for needed variables  
+# (unit: PC_EMP = Percent of Total Employment, 
+#        THS_PERS = Total number per 1000 persons)
+cultural_empl_map <- cultural_empl %>% 
+             filter(time == 2022, sex == "T", 
+             geo != "EU27_2020", unit == "PC_EMP") %>% 
+             select(geo, values) 
 
 
 # 1. first possibility with nuts data
 nuts <- gisco_get_nuts(year = 2021, nuts_level = 0)
-merged_data <- merge(nuts, cultural_empl_2022, by.x = "geo", by.y = "geo", all.x = TRUE)
+merged_data <- merge(nuts, cultural_empl_map, 
+                     by.x = "geo", by.y = "geo", all.x = TRUE)
 
 
 ggplot(merged_data) +
 geom_sf(aes(fill = values)) +
-  # ETRS89 / ETRS-LAEA
+  scale_fill_continuous(breaks = c(3.45, 3.75, 4.05, 4.35, 4.65), 
+                        labels = c("< 3.5", "3.5 -< 4", "4 -< 4.1", "4.1 -< 4.6", "≥ 4.6"),
+                        type = "viridis") +
 coord_sf(
   crs = 3035, xlim = c(2377294, 7453440),
    ylim = c(1313597, 5628510)
  ) +
- labs(title = "Cultural employment")
-
-
+ labs(title = "Cultural employment, 2022", subtitle = "(% of total employment)") +
+  guides(fill = guide_legend(override.aes = list(fill = c("blue", "green", "yellow", "orange", "red")),
+                             keywidth = unit(0.8, "cm"), keyheight = unit(0.4, "cm"))) +
+  theme(legend.position = c(0.85, 0.85), 
+        legend.text = element_text(size = 6),
+         # legend.title = element_text("EU = 3.8"),
+        legend.key.size = unit(0.3, "cm"),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank())
 
 
 
