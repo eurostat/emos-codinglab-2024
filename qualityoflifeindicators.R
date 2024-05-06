@@ -14,13 +14,14 @@ ilc_pw01 <- ilc_pw01[(ilc_pw01$geo %in% eu_iso_a2), ]
 
 country_names <- toupper(c("AT" = "Austria", "BE" = "Belgium", "BG" = "Bulgaria", "CY" = "Cyprus", "CZ" = "Czech Republic", "DE" = "Germany", "DK" = "Denmark", "EE" = "Estonia", "EL" = "Greece", "ES" = "Spain", "FI" = "Finland", "FR" = "France", "HR" = "Croatia", "HU" = "Hungary", "IE" = "Ireland", "IT" = "Italy", "LT" = "Lithuania", "LU" = "Luxembourg", "LV" = "Latvia", "MT" = "Malta", "NL" = "Netherlands", "PL" = "Poland", "PT" = "Portugal", "RO" = "Romania", "SE" = "Sweden","SI" = "Slovenia", "SK" = "Slovakia"))
 
-filtered_countries <- countries[countries$geo %in% names(country_names), ]
 
 #Figure 1
 #Satisfaction by country
 countries <- subset(ilc_pw01, sex == "T" & age == "Y_GE16" & time == "2022" & geo != "EU27_2020")
 
 countries2<- subset(ilc_pw01, sex == "T" & age == "Y_GE16" & time == "2022")
+
+filtered_countries <- countries[countries$geo %in% names(country_names), ]
 
 EU_value=countries2$values[countries2$geo== "EU27_2020"]
 
@@ -58,6 +59,10 @@ print(plot0)
 
 
 #Figure 2
+
+library(dplyr)
+library(tidyr)
+
 ilc_pw01_2 <- get_eurostat_data("ilc_pw01", filters = c(unit = "RTG", indic_wb = "LIFESAT"))
 
 eu_iso_a2 <- c("AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL" ,"ES", "FI","FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", 
