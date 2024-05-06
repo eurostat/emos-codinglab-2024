@@ -17,9 +17,7 @@ id <- "cult_emp_sex"
 get_eurostat_dsd(id)
 get_eurostat_data(id,label=T,name=T,keep_flags=T)
 
-countries <- as.factor(c("EU27_2020", "BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", 
-                         "HR", "IT", "CY", "LV", "LT", "LU", "HU", "MT", "NL", "AT", "PL", "RO", 
-                         "SI", "SK", "FI", "SE", "IS", "NO", "CH", "UK", "ME", "MK", "RS", "TR"))
+#first try to reproduce the table
 
 dataset <- get_eurostat_data(id="cult_emp_sex",date_filter=c(2019:2022))
 
@@ -31,26 +29,27 @@ filtered_data <- dataset %>%
 
 kable_styling(
   kable(filtered_data, format = "html", escape = FALSE) %>%
-    kableExtra::row_spec(0, bold = TRUE, background = "#FFF2CC") %>% # Estilizar la cabecera
-    kableExtra::column_spec(1, bold = TRUE)  # Hacer la primera columna de países en negrita
+    kableExtra::row_spec(0, bold = TRUE, background = "#FFF2CC") %>% 
+    kableExtra::column_spec(1, bold = TRUE)  # first column in bold
   , full_width = FALSE, position = "left"
 ) %>%
   kableExtra::add_header_above(c(" " = 1, "Number" = 3))
 
-#let's try another approach to spread the values across the table
-dataset <- get_eurostat_data(id = "cult_emp_sex", date_filter = c(2019:2022))
-
+#spread the values across the table
 filtered_data <- dataset %>% 
   filter(sex == "T") %>% 
   select(geo, unit, time, values) %>% 
   arrange(desc(time))
 
-# Organizar los años en columnas
 spread_data <- filtered_data %>%
-  group_by(unit) %>%  # Agrupar por ubicación geográfica y unidad
+  group_by(unit) %>%  
   spread(key = time, value = values)
 
-# Imprimir la tabla organizada
 print(spread_data)
 
+#now the years appear on the columns, let's make two different for each unit variable
+pc_emp <- spread_data[spread_data$unit == "PC_EMP", ]
+ths_per <- spread_data[spread_data$unit == "THS_PER", ]
+
+#doubt: don't know how to transpose the data to have the unit variables as the header
 
