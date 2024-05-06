@@ -11,6 +11,7 @@ library(kableExtra)
 library(knitr)
 library(ggplot2)
 library(dplyr)
+library(tidyr)
 
 id <- "cult_emp_sex"
 get_eurostat_dsd(id)
@@ -20,7 +21,7 @@ countries <- as.factor(c("EU27_2020", "BE", "BG", "CZ", "DK", "DE", "EE", "IE", 
                          "HR", "IT", "CY", "LV", "LT", "LU", "HU", "MT", "NL", "AT", "PL", "RO", 
                          "SI", "SK", "FI", "SE", "IS", "NO", "CH", "UK", "ME", "MK", "RS", "TR"))
 
-dataset <- get_eurostat_data(id="cult_emp_sex",date_filter=c(2019:2022),filters=list(geo=countries))
+dataset <- get_eurostat_data(id="cult_emp_sex",date_filter=c(2019:2022))
 
 filtered_data <- dataset %>% 
   filter(sex == "T") %>% 
@@ -35,3 +36,21 @@ kable_styling(
   , full_width = FALSE, position = "left"
 ) %>%
   kableExtra::add_header_above(c(" " = 1, "Number" = 3))
+
+#let's try another approach to spread the values across the table
+dataset <- get_eurostat_data(id = "cult_emp_sex", date_filter = c(2019:2022))
+
+filtered_data <- dataset %>% 
+  filter(sex == "T") %>% 
+  select(geo, unit, time, values) %>% 
+  arrange(desc(time))
+
+# Organizar los años en columnas
+spread_data <- filtered_data %>%
+  group_by(unit) %>%  # Agrupar por ubicación geográfica y unidad
+  spread(key = time, value = values)
+
+# Imprimir la tabla organizada
+print(spread_data)
+
+
