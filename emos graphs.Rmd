@@ -1,0 +1,111 @@
+---
+title: "emos"
+author: "Maripaz Venegas"
+date: "2024-04-22"
+output: html_document
+---
+
+# Libraries
+
+```{r}
+library(restatapi)
+library(ggplot2)
+library(restatapi)
+library(giscoR) 
+library(data.table)
+library(chron) 
+library(reshape2)
+library(kableExtra)
+#library(tmap) 
+library(highcharter)
+library(plotly)
+```
+
+# Population reporting noise from neighbours or from the street, EU (1), 2011-2020
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment
+
+## Data
+```{r}
+env=get_eurostat_data("ilc_mddw01", filters = c("EU", "TOTAL"))
+```
+
+## Graph
+```{r}
+ggplot(env, aes(x=time, y=values, group=1)) +
+  #ylim(0,20)+
+  scale_y_continuous(limits=c(0,20), breaks=seq(0,20,2))+
+  geom_line(color="orange", linewidth=1) +
+  theme_minimal()+
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())+
+       # panel.border = element_blank(),
+        #axis.line.y = element_blank())+
+ggtitle(paste0("Population reporting noise from neighbours or from the street, \n EU(1), 2011-2020 \n (%)"))+
+  ylab("")+
+  xlab("")
+```
+
+
+# Population reporting noise from neighbours or from the street, by income situation, 2020
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment
+
+## Data
+```{r}
+env2=get_eurostat_data("ilc_mddw01", date_filter = "2020", filters = list(incgrp=c("B_MD60", "TOTAL"), hhtyp="TOTAL"))
+env2=env2[!(geo %in% c("EA18", "EA19", "EU27_2020")), ]
+```
+
+## Graph
+```{r}
+ggplot(data=env2, aes(x=geo, y=values, fill=incgrp)) +
+  scale_y_continuous(limits=c(0,40), breaks=seq(0,40,5))+
+  geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
+  theme_minimal()+
+  theme(axis.title.x = element_blank(),
+        axis.title.y=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank(),
+        axis.line.y = element_blank(),
+        legend.position="bottom",
+        legend.title=element_blank(),
+        axis.text.x = element_text(angle = 90))+
+        ggtitle(paste0("Population reporting noise from neighbours or from the street by, \n income situation, 2020 \n (%)"))+
+        scale_fill_manual(labels= c("Total population","Population at-risk-of-poverty(2)"), values=c("orange", "blue"))
+  
+```
+
+# People who used the internet for civic or political participation, 2022.
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
+
+## Data
+```{r}
+dw=get_eurostat_data("isoc_ci_ac_i", filters = list(time="2022", indic_is="I_IUCPP"))
+dw=dw[!(geo %in% c("EA18", "EA19", "EU27_2020" | unit %in% c("PC_IND_IU3")) )]
+
+#, ind_type=c("F_Y16_29", "F_Y35_44", "F_Y45_54", "F_Y55_75")
+# 
+```
+
+# People who used internet for doing an online course, 2022
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
+
+## Data
+```{r}
+dw2=get_eurostat_data("isoc_ci_ac_i", filters = list(time="2022", indic_is="I_IUOLC"))
+dw=dw[!(geo %in% c("EA18", "EA19", "EU27_2020") | unit %in% c("PC_IND_IU3"))]
+
+#, ind_type=c("F_Y16_29", "F_Y35_44", "F_Y45_54", "F_Y55_75")
+# 
+```
+
+# Percentage of individuals who have verified the information or content found on internet, 2021
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
+
+## Data
+```{r}
+#dw3=get_eurostat_data("isoc_sk_edic_i21")
+dw3=get_eurostat_data("isoc_sk_edic_i21", filters = list(time="2021", indic_is="I_TIC"))
+dw=dw[!(geo %in% c("EA18", "EA19", "EU27_2020") | unit %in% c("PC_IND_IU3")) ]
+```
