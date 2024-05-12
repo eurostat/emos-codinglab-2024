@@ -1,128 +1,126 @@
-### 
+# Consumer prices of recreational and sports 
+# https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Consumer_prices_of_recreational_and_sporting_goods_and_services
 
 library(restatapi)
 library(ggplot2)
-library(reshape2)
-#library(dplyr)
-library(giscoR)
-library(data.table)
-library(chron)
 library(kableExtra)
-library(tmap)
-library(highcharter)
-library(plotly)
+library(reshape2)
 
+#The all-items HICP and the HICPs for sporting goods and services, EU, 2013-2023
+caption = "Note: the data refer to the official EU aggregate. Its country coverage changes in line with the addition of new EU 
+Member States and integrates them using a chain-linked index formula.
+Source: Eurostat (online data code: prc_hicp_aind)"
 
-#get the dataset
-prc_hicp_aind_eu <- get_eurostat_data("prc_hicp_aind", filters = c(unit = "RCH_A_AVG", geo = "EU27_2020"))
+prc_hicp_aind_eu <- get_eurostat_data("prc_hicp_aind", filters = c(unit = "RCH_A_AVG", geo = "EU27_2020"), label = T)
 prc_hicp_aind_eu$time <- as.numeric(as.character(prc_hicp_aind_eu$time))
-prc_hicp_aind_eu_1 <- subset(prc_hicp_aind_eu, (coicop =="CP00" | coicop == "CP0932" | coicop == "CP0941")&time >=2013)
+prc_hicp_aind_eu_1 <- subset(prc_hicp_aind_eu, (coicop =="All-items HICP" | coicop == "Equipment for sport, camping and open-air recreation" | coicop == "Recreational and sporting services") &time >=2013)
 
 plot1 <- ggplot(data = prc_hicp_aind_eu_1, aes(x = time, y = values, group = coicop, color = coicop)) +
-  geom_line() +  
-  theme_bw()
+  geom_line(linewidth = 1) + 
+  geom_point(size = 2, shape = 21, aes(fill = coicop)) +
+  labs(title = "The all-items HICP and the HICPs for sporting goods and services, EU, 2013-2023",
+       subtitle = "(%, annual rate of change)",
+       x = "",
+       y = "(% annual rate of change)",
+       caption = caption) +
+  theme_bw() +
+  theme(plot.title = element_text(size = 12, face = "bold", hjust = 0),
+        axis.title.y = element_text(size = 8),
+        axis.title.x = element_blank(),
+        legend.text = element_text(size = 10),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical",
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title.position = "plot",
+        plot.caption = element_text(size = 7, hjust = 0),
+        plot.caption.position = "plot") +
+  scale_y_continuous(limits = c(-1, 10), breaks = seq(-1, 10, 1)) + 
+  scale_x_continuous(breaks = 2013:2023, labels = function(x) ifelse(x %% 2 == 1, x, "")) + 
+  scale_color_manual(values = c("All-items HICP" = "#B655BD", "Equipment for sport, camping and open-air recreation" = "#B09120", "Recreational and sporting services" = "#2644A7")) +
+  scale_fill_manual(values = c("All-items HICP" = "#B655BD", "Equipment for sport, camping and open-air recreation" = "#B09120", "Recreational and sporting services" = "#2644A7")) 
+
 print(plot1)
 
-
-#Figure 2 - countries by year
-#2013-2023
-prc_hicp_aind_00 <- get_eurostat_data("prc_hicp_aind", filters = c(unit = "RCH_A_AVG", COICOP = "CP00"))
-
-eu_iso_a2 <- c("AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL" ,"ES", "FI","FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", 
-               "RO", "SE", "SI", "SK" ,"EU27_2020")
-
-prc_hicp_aind_00 <- prc_hicp_aind_00[(prc_hicp_aind_00$geo %in% eu_iso_a2), ]
-
-prc_hicp_aind_00$time <- as.numeric(as.character(prc_hicp_aind_00$time))
-
-prc_hicp_aind_00_ <- subset(prc_hicp_aind_00, time >=2013)
-
-plot2 <- ggplot(data = prc_hicp_aind_00_, aes(x = time, y = values, group = geo, color = geo)) +
-  geom_line() +  
-  theme_bw()
-print(plot2)
-
-#Figure 3 - countries in 2023
-prc_hicp_aind_2023 <- get_eurostat_data("prc_hicp_aind", filters = c(COICOP = "CP00", time = "2023"))
-prc_hicp_aind_2023 <- prc_hicp_aind_2023[(prc_hicp_aind_2023$geo %in% eu_iso_a2), ]
-prc_hicp_aind_rch <- subset(prc_hicp_aind_2023, unit == "RCH_A_AVG")
-countries_rch <- subset(prc_hicp_aind_rch, geo != "EU27_2020")
-EU_value_rch=prc_hicp_aind_rch$values[prc_hicp_aind_rch$geo== "EU27_2020"]
-
-countries_rch$text <- paste("Country:", countries_rch$geo, "<br>", "Value:", countries_rch$values)
-
-plot3 <- ggplot(countries_rch, aes(x = reorder(geo, values[geo != "EU27_2020"], decreasing = TRUE), y = values, text = paste("Country:", geo, "<br>", "Value:", values))) +
-  geom_col(width = 0.6, fill = "#2644A7") +
-  geom_hline(yintercept = EU_value_rch, color = "#F8AE21",linetype = "solid",linewidth =1) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 20),breaks = seq(0, 20, by = 1)) +
-  #scale_x_discrete(labels = country_names[unique(countries$geo)]) +
-  scale_x_discrete(labels = country_names[unique(toupper(filtered_countries$geo))]) +
-  coord_cartesian(ylim = c(0, 20)) +
-  theme(panel.grid.major.y = element_line(color = "gray", linetype = "dashed"),         panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank(),
-        axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1, color="black"),
-        axis.text.y = element_text(vjust = 0.5, hjust = 0, color="black"),
-        panel.background = element_rect(fill = "white"),
-        axis.line.x = element_line(colour = "black", linetype = "solid"),
-        #axis.line = element_blank(),
-        #axis.line = element_line(color = "black"),
-        axis.ticks = element_line(),
-        axis.ticks.length.y  = unit(0, "cm")
-        #axis.ticks = element_line()
-  )+
-  labs(x = NULL, y = NULL, title="The all-item HICP for sporting goods and services, EU, 2023 (%, annual rate of change)")
-
-print(plot3)
-
-plot3_int <- ggplotly(plot3)
-print(plot3_int)
-
-#Figure 4 - countries in 2023
-prc_hicp_aind_inx <- subset(prc_hicp_aind_2023, unit == "INX_A_AVG")
-countries_inx <- subset(prc_hicp_aind_inx, geo != "EU27_2020")
-EU_value_inx=prc_hicp_aind_inx$values[prc_hicp_aind_inx$geo== "EU27_2020"]
-
-plot4 <- ggplot(countries_inx, aes(x = reorder(geo, values[geo != "EU27_2020"], decreasing = TRUE), y = values)) +
-  geom_col(width = 0.6, fill = "#2644A7") +
-  geom_hline(yintercept = EU_value_inx, color = "#F8AE21",linetype = "solid",linewidth =1) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 180),breaks = seq(0, 180, by = 20)) +
-  #scale_x_discrete(labels = country_names[unique(countries$geo)]) +
-  scale_x_discrete(labels = country_names[unique(toupper(filtered_countries$geo))]) +
-  coord_cartesian(ylim = c(0, 200)) +
-  #theme_minimal() +
-  theme(panel.grid.major.y = element_line(color = "gray", linetype = "dashed"),         panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank(),
-        axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1, color="black"),
-        axis.text.y = element_text(vjust = 0.5, hjust = 0, color="black"),
-        panel.background = element_rect(fill = "white"),
-        axis.line.x = element_line(colour = "black", linetype = "solid"),
-        #axis.line = element_blank(),
-        #axis.line = element_line(color = "black"),
-        axis.ticks = element_line(),
-        axis.ticks.length.y  = unit(0, "cm")
-        #axis.ticks = element_line()
-  )+
-  labs(x = NULL, y = NULL, title="The all-item HICP for sporting goods and services, EU, 2023 (annual average index)")
-print(plot4)
-
-#Figure 5
-prc_hicp_aind_rch_eu <- get_eurostat_data("prc_hicp_aind", filters = c(geo = "EU27_2020", unit = "RCH_A_AVG"))
-prc_hicp_aind_rch_eu <- subset(prc_hicp_aind_rch_eu, coicop =="CP00" | coicop == "CP09411" | coicop == "CP09412" | coicop == "CP09322" | coicop == "CP09321" )
+#Harmonised indices of consumer prices for selected sporting goods and services
+prc_hicp_aind_rch_eu <- get_eurostat_data("prc_hicp_aind", filters = c(geo = "EU27_2020", unit = "RCH_A_AVG"), label = T)
+prc_hicp_aind_rch_eu <- subset(prc_hicp_aind_rch_eu, coicop =="All-items HICP" | coicop == "Recreational and sporting services - Participation" | coicop == "Recreational and sporting services - Attendance" | coicop == "Equipment for camping and open-air recreation" | coicop == "Equipment for sport" )
 prc_hicp_aind_rch_eu$time <- as.numeric(as.character(prc_hicp_aind_rch_eu$time))
 prc_hicp_aind_2018_23 <- prc_hicp_aind_rch_eu[time >= 2018 & time <= 2023, .("2018_2023" = mean(values)), by = coicop]
 prc_hicp_aind_2022_23 <- prc_hicp_aind_rch_eu[time >= 2022 & time <= 2023, .("2022_2023" = mean(values)), by = coicop]
+prc_hicp_aind_merged <- merge(prc_hicp_aind_2018_23, prc_hicp_aind_2022_23, on = "coicop")
+prc_hicp_aind_merged <- reshape2::melt(prc_hicp_aind_merged, id.vars = "coicop")
 
-merged_table <- merge(prc_hicp_aind_2018_23, prc_hicp_aind_2022_23, on = "coicop")
-merged_long <- reshape2::melt(merged_table, id.vars = "coicop")
-colors <- c("2018_2023" = "#F8AE21", "2022_2023" = paste0("#F8AE21", "50"))
+prc_hicp_aind_merged$group <- ifelse(prc_hicp_aind_merged$coicop == "All-items HICP"&prc_hicp_aind_merged$variable == "2018_2023", "CP00 2018_2023", 
+                                     ifelse(prc_hicp_aind_merged$coicop == "All-items HICP"&prc_hicp_aind_merged$variable == "2022_2023", "CP00 2022_2023",
+                                            ifelse(prc_hicp_aind_merged$variable == "2018_2023", "Others 2018_2023", "Others 2022_2023")))
 
-ggplot(merged_long, aes(x = coicop, y = value, fill = variable)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Average Values for each coicop",
-       x = "coicop",
-       y = "Average Value",
-       fill = "Dataset") + 
-  scale_fill_manual(values = colors) +
+plot2 <- ggplot(prc_hicp_aind_merged, aes(x = coicop, y = value, fill = group)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +
+  labs(title = "Harmonised indices of consumer prices for selected sporting goods and services, EU,\nannual average rates of change 2018-2023 and 2022-2023",
+       subtitle = "(%)", 
+       fill = "coicop",
+       caption = caption) + 
+  scale_fill_manual(values = c("CP00 2018_2023" = "#9cade8", 
+                               "CP00 2022_2023" = "#2644A7",
+                               "Others 2018_2023" = "#e2bbe5", 
+                               "Others 2022_2023" = "#B655BD"),
+                    breaks = c("Others 2018_2023","Others 2022_2023"),
+                    labels = c("2018-2023","2022-2023")) +
   theme_minimal() +
   coord_flip() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.title = element_blank(),
+        axis.text.x = element_text(hjust = 1),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.caption = element_text(size = 7, hjust = 0),
+        plot.caption.position = "plot",
+        panel.grid.major.y = element_blank(),
+        plot.title.position = "plot",
+        legend.justification = c(0,0)
+  ) +
+  scale_y_continuous(breaks = seq(0,8,1))
+
+print(plot2)
+
+#HICP for sporting goods and services – focus on countries
+prc_hicp_aind <- get_eurostat_data("prc_hicp_aind", filters = list(unit = "RCH_A_AVG", coicop = c("All-items HICP", "Recreational and sporting services - Participation", "Recreational and sporting services - Attendance", "Equipment for camping and open-air recreation", "Equipment for sport")), date_filter=seq(2018,2023,1), label = T)
+prc_hicp_aind$time <- as.numeric(as.character(prc_hicp_aind$time))
+prc_hicp_aind$time_group <- ifelse(prc_hicp_aind$time >= 2018 & prc_hicp_aind$time <= 2023, "2018-2023", NA)
+prc_hicp_aind$time_group[prc_hicp_aind$time >= 2022 & prc_hicp_aind$time <= 2023] <- paste(prc_hicp_aind$time_group[prc_hicp_aind$time >= 2022 & prc_hicp_aind$time <= 2023], "2022-2023", sep=",")
+prc_hicp_aind$time_group <- ifelse(prc_hicp_aind$time_group == "2018-2023,2022-2023", "2018-2023 & 2022-2023", prc_hicp_aind$time_group)
+
+cntr <- as.factor(c("European Union - 27 countries (from 2020)", "Belgium", "Bulgaria", "Czechia", "Denmark", "Germany", "Estonia", "Ireland",
+                    "Greece", "Spain", "France", "Croatia", "Italy", "Cyprus", "Latvia", "Lithuania",
+                    "Luxembourg", "Hungary", "Malta", "Netherlands", "Austria", "Poland","Portugal", "Romania",
+                    "Slovenia", "Slovakia", "Finland", "Sweden","United Kingdom", "Iceland", "Liechtenstein",
+                    "Norway", "Switze e o rland", "Montenegro", "North Macedonia", "Albania", "Serbia", "Turkey"))
+prc_hicp_aind <- prc_hicp_aind[(prc_hicp_aind$geo %in% cntr), ]
+prc_hicp_aind$geo <- as.character(prc_hicp_aind$geo)
+prc_hicp_aind$geo <- factor(prc_hicp_aind$geo, levels = cntr)
+cntr <- as.character(cntr)
+
+pivot_table <- dcast(prc_hicp_aind, geo ~ coicop + time_group, value.var = "values", fun.aggregate = sum)
+colnames(pivot_table) <- c("Countries ", "2018-2023", "2022-2023","2018-2023","2022-2023","2018-2023","2022-2023","2018-2023","2022-2023","2018-2023","2022-2023")
+
+kable_styling <- kable(pivot_table, format = "html", escape = F, digits = 1) %>%
+  kable_styling(c("striped", "bordered")) %>%
+  add_header_above(c("-" = 1, "All-items HICP" = 2, "Equipment for sport" = 2, "Equipment for camping and open-air recreation" = 2, "Recreational and sporting services - Attendance" = 2, "Recreational and sporting services - Participation" = 2), background='#f0dcf1') %>%
+  group_rows(" ", 29, 30) %>%
+  group_rows(" ", 30, 33) %>%
+  group_rows(" ", 33, 35) %>%
+  row_spec(row = 0, background = "#f0dcf1") %>%
+  row_spec(row = 1, background = "#e1bae4", bold = TRUE) %>%
+  column_spec(1, bold=TRUE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = F, font_size = 12, fixed_thead = TRUE)
+
+kable_styling
