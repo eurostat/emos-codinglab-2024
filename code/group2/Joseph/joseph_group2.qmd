@@ -1,0 +1,236 @@
+---
+title: "Exposure to pollution, grime or other environmental problems"
+author: "Joseph"
+format: html
+editor: visual
+toc: true
+toc-location: left
+code-link: true
+code-line-numbers: true
+linkcolor: blue
+---
+
+## Loading Packages
+
+```{r}
+#| warning: false
+#| message: false
+
+
+require(conflicted)
+
+require(restatapi)
+require(giscoR)
+
+require(data.table)
+require(chron)
+require(reshape2)
+
+require(kableExtra)
+require(tidyverse)
+require(tmap)
+
+require(highcharter)
+require(plotly)
+```
+
+## Figure 1
+
+### Retrieving data
+
+```{r data-fig1}
+id1<-"ilc_mddw02"
+date1 = 2011:2020
+
+data1 = get_eurostat_data(
+  id1, 
+  filters = list(incgrp = "TOTAL",
+              hhtyp = "TOTAL",
+              geo = "EU27_2020",
+              time = date1,
+              label = T)
+  )
+
+
+# system.time(
+#   get_eurostat_data(
+#     id1, 
+#     filters = list(
+#       incgrp = "TOTAL",
+#       hhtyp = "TOTAL",
+#       geo = "EU27_2020",
+#       time = date1
+#     )
+#   )
+# )
+
+#head(data1,5)
+```
+
+```{r}
+data1 = data1 |>
+        group_by(time) |>
+        summarise(exp = mean(values)) |>
+        ungroup()
+  
+
+p1 <- ggplot(data = data1, aes(x = time, y = exp, group = 1)) +
+      geom_line()+ 
+      scale_y_continuous(expand = c(0, 0), 
+                         limits = c(0, max(data1$exp+2)),
+                         breaks = seq(0, max(data1$exp)+2, 2))+
+      geom_line(color="orange", linewidth = 1)+
+      labs(
+        title = paste0("Population reporting exposure to pollution, ",
+                       "grime or other\nenvironmental problems, EU (\U00B9) ",date1[1],"-",date1[length(date1)]),
+        subtitle = paste("(%)"),
+        caption = paste0("\n(\U00B9) Estimate.",
+                         "\nSource: Eurostat (online data code: ",id1,")")
+        )+
+      theme_bw()+
+      theme(axis.title.x = element_blank(),
+            axis.title.y=element_blank(),
+            panel.grid.major.x=element_blank(),
+            panel.grid.minor.x = element_blank(),
+            panel.grid.minor.y = element_blank(),
+            panel.border = element_blank(),
+            axis.line.y = element_blank(),
+            axis.line.x = element_line(colour = "black",linetype = "solid"),
+            plot.caption = element_text(hjust = 0),
+            plot.title = element_text(hjust = 0, face = "bold"),
+            axis.text.x = element_text(hjust = 1.5)
+            )
+
+ggsave("figures/p1.png", plot = p1, width = 8, height = 6, 
+       dpi = 1000, create.dir = T)
+knitr::include_graphics("figures/p1.png")
+
+# axis.title.x = theme_text(vjust=-0.5)
+```
+
+## Figure 2
+
+```{r}
+id2<-"ilc_mddw02"
+date2 = 2020
+
+data2 = get_eurostat_data(
+  id2, 
+  filters = list(
+    incgrp = c("TOTAL","B_MD60"),
+    time = date2,
+    freq = "Annual",
+    hhtyp = "TOTAL",
+    unit = "Percentage"
+    )
+  )
+```
+
+```{r}
+data2 = data2 |>
+        select(geo, incgrp, values)
+
+
+p2 = ggplot(data = data2, aes(x = geo, y = values, fill = incgrp))+
+  geom_bar(stat = "identity", position = "dodge", width = 0.5)+
+  scale_fill_manual(values = c("orange","blue"))+ 
+  scale_y_continuous(expand = c(0, 0), 
+                       limits = c(0, max(data2$values)+5),
+                       breaks = seq(0, max(data2$values)+5, 5))+
+  theme_bw()+
+    theme(
+      axis.text.x = element_text(angle = 90, hjust = 1),
+      axis.title.x = element_blank(),
+      axis.title.y=element_blank(),
+      panel.grid.major.x=element_blank(),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.border = element_blank(),
+      axis.line.y = element_blank(),
+      axis.line.x = element_line(colour = "black",linetype = "solid"),
+      plot.caption = element_text(hjust = 0),
+      plot.title = element_text(hjust = 0, face = "bold"),
+      legend.position = "bottom",
+      legend.title = element_blank()
+          )+
+  labs(
+        title = paste0("Population reporting exposure to pollution, ",
+                       "grime or other environmental\nproblems, ",
+                       "by income situation, ",date2," (% share)"),
+        caption = paste0("\n(\U00B9) Estimate.",
+                         "\n(\U00B2) People living below the national poverty ",
+                         "threshold (60% of median equivalised income).",
+                         "\n(\U00B3) Break in series.",
+                         "\n(\U2074) 2019 instead of 2020.",
+                         "\n(\U2075) Low reliability.",
+                         "\n(\U2076) 2018 instead of 2020.",
+                         "\nSource: Eurostat (online data code: ",id2,")"))
+
+
+ggsave("figures/p2.png", plot = p2, width = 8, height = 6, dpi = 1000)
+knitr::include_graphics("figures/p2.png")
+```
+
+## Figure 3
+
+```{r}
+id3<-"ilc_mddw05"
+date3 = 2020
+
+#get_eurostat_dsd(id3)
+
+data3 = get_eurostat_data(
+  id3, 
+  filters = list(
+    incgrp = c("Total"),
+    time = date2,
+    freq = "Annual",
+    deg_urb = c("Cities", "Towns and suburbs", "Rural areas"),
+    unit = "Percentage"
+    )
+  )
+```
+
+```{r}
+data3 = data3 |>
+        select(geo, deg_urb, values)
+
+
+p3 = ggplot(data = data3, aes(x = geo, y = values, fill = deg_urb))+
+  geom_bar(stat = "identity", position = "dodge", width = 0.5)+
+  scale_fill_manual(values = c("orange","steelblue", "red"))+ 
+  scale_y_continuous(expand = c(0, 0), 
+                       limits = c(0, max(data3$values)+5),
+                       breaks = seq(0, max(data3$values)+5, 5))+
+  theme_bw()+
+    theme(
+      axis.text.x = element_text(angle = 90, hjust = 1),
+      axis.title.x = element_blank(),
+      axis.title.y=element_blank(),
+      panel.grid.major.x=element_blank(),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.border = element_blank(),
+      axis.line.y = element_blank(),
+      axis.line.x = element_line(colour = "black",linetype = "solid"),
+      plot.caption = element_text(hjust = 0),
+      plot.title = element_text(hjust = 0, face = "bold"),
+      legend.position = "bottom",
+      legend.title = element_blank()
+          )+
+  labs(
+        title = paste0("Population reporting exposure to pollution, ",
+                       "grime or other environmental\nproblems, ",
+                       "by degree of urbanisation, ",date3," (% share)"),
+        subtitle = paste("(%)"),
+        caption = paste0("\n(\U00B9) Estimate.",
+                         "\n(\U00B2) Break in series.",
+                         "\n(\U00B3) 2019 instead of 2020.",
+                         "\n(\U2074) Low reliability.",
+                         "\n(\U2075) 2018 instead of 2020.",
+                         "\nSource: Eurostat (online data code: ",id3,")"))
+
+
+ggsave("figures/p3.png", plot = p3, width = 8, height = 6, dpi = 1000)
+knitr::include_graphics("figures/p3.png")
+```
