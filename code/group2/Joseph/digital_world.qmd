@@ -1,0 +1,15 @@
+---
+title: "Young people - digital world"
+author: "Joseph"
+editor: visual
+toc: true
+toc-location: left
+code-link: true
+code-line-numbers: true
+linkcolor: blue
+output-file: "Digital World"
+---
+
+## Article Source
+
+The figures here are replicated from [Young people - digital world](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world).\
