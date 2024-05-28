@@ -119,123 +119,186 @@ knitr::include_graphics("figures/p1.png")
 id2<-"ilc_mddw02"
 date2 = 2020
 
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+
+efta_cc<-c("CH","NO","IS","LI")
+
 data2 = get_eurostat_data(
   id2, 
   filters = list(
     incgrp = c("TOTAL","B_MD60"),
-    time = date2,
     freq = "Annual",
     hhtyp = "TOTAL",
     unit = "Percentage"
+  ),date_filter = eval(date2),
+  label=T,
+  ignore.case=T,
+  exact_match=F,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+
+dsd<-as.data.table(get_eurostat_dsd(id2))[concept=="geo",c("code","name")]
+
+data3<-merge(data2, dsd, 
+             by.x="geo",by.y="name", 
+             all.x=T, all.y = F)
+
+data3 <- data3[!code %in% c("EA19", "EA18", "EA")]
+
+data3$geo<-gsub(" \\(.*\\)","",data3$geo)
+
+
+
+
+data3$geo<-gsub("^Eu.*","EU",data3$geo)
+
+
+name_ord <- data3[(code %in% eu_cc) & (incgrp == "Total")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-data3[(code %in% efta_cc) & (incgrp == "Total")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-data3[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (incgrp == "Total")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+data3 <- data3 |>
+  select(geo, incgrp, values) |>
+  mutate(incgrp = recode(incgrp,
+                         "Below 60% of median equivalised income" = "Population at-risk-of-poverty (\U00B2)")) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      incgrp = rep("Total", 3),
+      values = rep(NA, 3)
     )
-  )
+    rbind(df, dt_sep)
+  })()
+
+data3$geo <- factor(data3$geo,levels = rev(name_ord))
+data3$incgrp <- factor(data3$incgrp, levels = c("Total", "Population at-risk-of-poverty (\U00B2)"))
+
+data3 <- data3 |>
+  mutate(geo = recode(geo,
+                      "France" = "France (\U00B3)",
+                      "Luxembourg" = "Luxembourg (\U00B3)",
+                      "Germany" = "Germany (\U00B3)(\U2075)",
+                      "Ireland" = "Ireland (\U00B3)",
+                      "EU" = "EU (\U00B9)"))
+
+
+
 ```
 
 ```{r}
-data2 = data2 |>
-        select(geo, incgrp, values)
 
-
-p2 = ggplot(data = data2, aes(x = geo, y = values, fill = incgrp))+
+p2 = ggplot(data = data3, aes(x = geo, y = values, fill = incgrp))+
   geom_bar(stat = "identity", position = "dodge", width = 0.5)+
   scale_fill_manual(values = c("orange","blue"))+ 
   scale_y_continuous(expand = c(0, 0), 
-                       limits = c(0, max(data2$values)+5),
-                       breaks = seq(0, max(data2$values)+5, 5))+
+                     limits = c(0, max(data2$values)+5),
+                     breaks = seq(0, max(data2$values)+5, 5))+
   theme_bw()+
-    theme(
-      axis.text.x = element_text(angle = 90, hjust = 1),
-      axis.title.x = element_blank(),
-      axis.title.y=element_blank(),
-      panel.grid.major.x=element_blank(),
-      panel.grid.minor.x = element_blank(),
-      panel.grid.minor.y = element_blank(),
-      panel.border = element_blank(),
-      axis.line.y = element_blank(),
-      axis.line.x = element_line(colour = "black",linetype = "solid"),
-      plot.caption = element_text(hjust = 0),
-      plot.title = element_text(hjust = 0, face = "bold"),
-      legend.position = "bottom",
-      legend.title = element_blank()
-          )+
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y=element_blank(),
+    panel.grid.major.x=element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black",linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  )+
   labs(
-        title = paste0("Population reporting exposure to pollution, ",
-                       "grime or other environmental\nproblems, ",
-                       "by income situation, ",date2," (% share)"),
-        caption = paste0("\n(\U00B9) Estimate.",
-                         "\n(\U00B2) People living below the national poverty ",
-                         "threshold (60% of median equivalised income).",
-                         "\n(\U00B3) Break in series.",
-                         "\n(\U2074) 2019 instead of 2020.",
-                         "\n(\U2075) Low reliability.",
-                         "\n(\U2076) 2018 instead of 2020.",
-                         "\nSource: Eurostat (online data code: ",id2,")"))
+    title = paste0("Population reporting exposure to pollution, ",
+                   "grime or other environmental\nproblems, ",
+                   "by income situation, ",date2," (% share)"),
+    subtitle = "(%)",
+    caption = paste0("\n(\U00B9) Estimate.",
+                     "\n(\U00B2) People living below the national poverty ",
+                     "threshold (60% of median equivalised income).",
+                     "\n(\U00B3) Break in series.",
+                     "\n(\U2074) 2019 instead of 2020.",
+                     "\n(\U2075) Low reliability.",
+                     "\n(\U2076) 2018 instead of 2020.",
+                     "\nSource: Eurostat (online data code: ",id2,")"))
 
 
-ggsave("figures/p2.png", plot = p2, width = 8, height = 6, dpi = 1000)
+ggsave("figures/p2.png", plot = p2, width = 8, height = 8, dpi = 1000)
 knitr::include_graphics("figures/p2.png")
 ```
 
-## Figure 3
+<!-- ## Figure 3 -->
 
-```{r}
-id3<-"ilc_mddw05"
-date3 = 2020
+<!-- ```{r} -->
+<!-- id3<-"ilc_mddw05" -->
+<!-- date3 = 2020 -->
 
-#get_eurostat_dsd(id3)
+<!-- #get_eurostat_dsd(id3) -->
 
-data3 = get_eurostat_data(
-  id3, 
-  filters = list(
-    incgrp = c("Total"),
-    time = date2,
-    freq = "Annual",
-    deg_urb = c("Cities", "Towns and suburbs", "Rural areas"),
-    unit = "Percentage"
-    )
-  )
-```
+<!-- data3 = get_eurostat_data( -->
+<!--   id3,  -->
+<!--   filters = list( -->
+<!--     incgrp = c("Total"), -->
+<!--     time = date2, -->
+<!--     freq = "Annual", -->
+<!--     deg_urb = c("Cities", "Towns and suburbs", "Rural areas"), -->
+<!--     unit = "Percentage" -->
+<!--     ) -->
+<!--   ) -->
+<!-- ``` -->
 
-```{r}
-data3 = data3 |>
-        select(geo, deg_urb, values)
-
-
-p3 = ggplot(data = data3, aes(x = geo, y = values, fill = deg_urb))+
-  geom_bar(stat = "identity", position = "dodge", width = 0.5)+
-  scale_fill_manual(values = c("orange","steelblue", "red"))+ 
-  scale_y_continuous(expand = c(0, 0), 
-                       limits = c(0, max(data3$values)+5),
-                       breaks = seq(0, max(data3$values)+5, 5))+
-  theme_bw()+
-    theme(
-      axis.text.x = element_text(angle = 90, hjust = 1),
-      axis.title.x = element_blank(),
-      axis.title.y=element_blank(),
-      panel.grid.major.x=element_blank(),
-      panel.grid.minor.x = element_blank(),
-      panel.grid.minor.y = element_blank(),
-      panel.border = element_blank(),
-      axis.line.y = element_blank(),
-      axis.line.x = element_line(colour = "black",linetype = "solid"),
-      plot.caption = element_text(hjust = 0),
-      plot.title = element_text(hjust = 0, face = "bold"),
-      legend.position = "bottom",
-      legend.title = element_blank()
-          )+
-  labs(
-        title = paste0("Population reporting exposure to pollution, ",
-                       "grime or other environmental\nproblems, ",
-                       "by degree of urbanisation, ",date3," (% share)"),
-        subtitle = paste("(%)"),
-        caption = paste0("\n(\U00B9) Estimate.",
-                         "\n(\U00B2) Break in series.",
-                         "\n(\U00B3) 2019 instead of 2020.",
-                         "\n(\U2074) Low reliability.",
-                         "\n(\U2075) 2018 instead of 2020.",
-                         "\nSource: Eurostat (online data code: ",id3,")"))
+<!-- ```{r} -->
+<!-- data3 = data3 |> -->
+<!--         select(geo, deg_urb, values) -->
 
 
-ggsave("figures/p3.png", plot = p3, width = 8, height = 6, dpi = 1000)
-knitr::include_graphics("figures/p3.png")
-```
+<!-- p3 = ggplot(data = data3, aes(x = geo, y = values, fill = deg_urb))+ -->
+<!--   geom_bar(stat = "identity", position = "dodge", width = 0.5)+ -->
+<!--   scale_fill_manual(values = c("orange","steelblue", "red"))+  -->
+<!--   scale_y_continuous(expand = c(0, 0),  -->
+<!--                        limits = c(0, max(data3$values)+5), -->
+<!--                        breaks = seq(0, max(data3$values)+5, 5))+ -->
+<!--   theme_bw()+ -->
+<!--     theme( -->
+<!--       axis.text.x = element_text(angle = 90, hjust = 1), -->
+<!--       axis.title.x = element_blank(), -->
+<!--       axis.title.y=element_blank(), -->
+<!--       panel.grid.major.x=element_blank(), -->
+<!--       panel.grid.minor.x = element_blank(), -->
+<!--       panel.grid.minor.y = element_blank(), -->
+<!--       panel.border = element_blank(), -->
+<!--       axis.line.y = element_blank(), -->
+<!--       axis.line.x = element_line(colour = "black",linetype = "solid"), -->
+<!--       plot.caption = element_text(hjust = 0), -->
+<!--       plot.title = element_text(hjust = 0, face = "bold"), -->
+<!--       legend.position = "bottom", -->
+<!--       legend.title = element_blank() -->
+<!--           )+ -->
+<!--   labs( -->
+<!--         title = paste0("Population reporting exposure to pollution, ", -->
+<!--                        "grime or other environmental\nproblems, ", -->
+<!--                        "by degree of urbanisation, ",date3," (% share)"), -->
+<!--         subtitle = paste("(%)"), -->
+<!--         caption = paste0("\n(\U00B9) Estimate.", -->
+<!--                          "\n(\U00B2) Break in series.", -->
+<!--                          "\n(\U00B3) 2019 instead of 2020.", -->
+<!--                          "\n(\U2074) Low reliability.", -->
+<!--                          "\n(\U2075) 2018 instead of 2020.", -->
+<!--                          "\nSource: Eurostat (online data code: ",id3,")")) -->
+
+
+<!-- ggsave("figures/p3.png", plot = p3, width = 8, height = 6, dpi = 1000) -->
+<!-- knitr::include_graphics("figures/p3.png") -->
+<!-- ``` -->
