@@ -169,6 +169,7 @@ ggdraw(europe_map) +
 ####################################
 
 
+
 cult_emp_n2 <- get_eurostat_data("cult_emp_n2") %>% 
   filter(time != "2011") %>% 
   filter(nace_r2 %in% c("C18", "J58", "J59", "J60", "M74", "R90", "R91")) %>% 
@@ -176,10 +177,8 @@ cult_emp_n2 <- get_eurostat_data("cult_emp_n2") %>%
 
 
 
-table(cult_emp_n2$nace_r2)
 
-table(cult_emp_n2$geo)
-
+# create labels and order for nace_r2 as a factor
 cult_emp_n2$nace_r2 <- factor(cult_emp_n2$nace_r2, levels = c('R90', 'M74', 'C18', 'J58', 'R91', 'J59', 'J60'), 
                                                               labels = c(
                                                                   "Creative, arts and entertainment activities (NACE, R90)",
@@ -213,14 +212,17 @@ Source: Eurostat(online data code: cult_emp_n2") +
         panel.background = element_blank(),
         plot.margin = margin(40, 150, 80, 40),
         plot.caption=element_text(hjust = 0)
-  ) +
- annotate("text", x = -Inf, y = -Inf, # x = 0, y = -0.9,  
-           label = 
-           "Note: a break in time series for all countries for which 2021 data are available due to the implementation of the new Regulation (EU)2019/1700, also called the integrated European Social Statistics Framework Regulation (IESS FR) (see LFS metadata)",
-           size = 2, color = "black", hjust = 0, vjust = 0) +
- annotate("text",  x = Inf, y = -Inf,
-           label = "Source: Eurostat(online data code: cult_emp_n2",
-           size = 2, color = "black", hjust = 0) 
+  ) 
+
+
+
+# annotate("text", x = -Inf, y = -Inf, # x = 0, y = -0.9,  
+#           label = 
+#           "Note: a break in time series for all countries for which 2021 data are available due to the implementation of the new Regulation (EU)2019/1700, also called the integrated European Social Statistics Framework Regulation (IESS FR) (see LFS metadata)",
+#           size = 2, color = "black", hjust = 0, vjust = 0) +
+# annotate("text",  x = Inf, y = -Inf,
+#           label = "Source: Eurostat(online data code: cult_emp_n2",
+#           size = 2, color = "black", hjust = 0) 
 
 ###################################
 # Figure 3
