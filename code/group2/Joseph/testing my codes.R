@@ -87,12 +87,25 @@ data3 <- data3 |>
 data3$geo <- factor(data3$geo,levels = rev(name_ord))
 data3$incgrp <- factor(data3$incgrp, levels = c("Total", "Population at-risk-of-poverty (\U00B2)"))
 
-data3 <- data3 |>
+data4 <- data3 |>
   mutate(geo = recode(geo,
                       "France" = "France (\U00B3)",
                       "Luxembourg" = "Luxembourg (\U00B3)",
                       "Germany" = "Germany (\U00B3)(\U2075)",
-                      "Ireland" = "Ireland (\U00B3)"))
+                      "Ireland" = "Ireland (\U00B3)",
+                      "Poland" = "Poland (\U2074)",
+                      .default = geo))
+
+data4 <- data3 %>%
+  mutate(geo = case_when(
+    geo == "France" ~ "France (\U00B3)",
+    geo == "Luxembourg" ~ "Luxembourg (\U00B3)",
+    geo == "Germany" ~ "Germany (\U00B3)(\U2075)",
+    geo == "Ireland" ~ "Ireland (\U00B3)",
+    geo == "Poland" ~ "Poland (\U2074)",
+    TRUE ~ as.character(geo)
+  ))
+
 
 
 ggplot(data = data3, aes(x = geo, y = values, fill = incgrp))+
