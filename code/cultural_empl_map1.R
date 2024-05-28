@@ -21,6 +21,15 @@ p_load(restatapi,     # for Eurostat data
 cultural_empl <- get_eurostat_data("cult_emp_sex")
 
 
+# color palette
+clrs <- read.csv("C:\\Users\\User\\Documents\\emos-codinglab-2024\\code\\estat_colour_themes.txt",sep="\t",stringsAsFactors = F)
+image(c(1:6),c(1:nrow(clrs)),matrix(1:(6*nrow(clrs)),6,nrow(clrs)),col=as.vector(t(apply(as.matrix(clrs[,c(3:8)]),2,rev))), xlab = "", ylab = "", xaxt = "n", yaxt = "n", bty = "n",
+      main = "Eurostat colour palettes")
+text(c(0.5), c(1:nrow(clrs)), adj=c(0,1),rev(clrs$theme_desc), col = clrs$text_light)
+text(c(1.5), c(1:nrow(clrs)), adj=c(0,1),rev(clrs$theme_desc), col = clrs$text_dark)
+
+my_col <- clrs[2, 3:7]
+
 ####################################
 # Map 1 - interactive - N.
 ###################################
@@ -49,8 +58,10 @@ malta <- merged_data[merged_data$geo == "MT", ]
 # create a map that shows Malta only
 malta_map <- ggplot(malta) +
   geom_sf(aes(fill = values)) + 
-  scale_fill_continuous(breaks = c(3.45, 3.75, 4.05, 4.35, 4.65), 
-  type = "viridis") +
+  scale_fill_gradient(breaks = c(3.45, 3.75, 4.05, 4.35, 4.65),
+                      low = my_col[5],  # Specify the low color
+                      high = my_col[1]  # Specify the high color
+  ) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.text.y = element_blank(),
@@ -61,16 +72,21 @@ malta_map <- ggplot(malta) +
         legend.position = "none") 
   
 
+
 # create a map of Europe
 europe_map <- ggplot(merged_data) +
   geom_sf(aes(fill = values)) +
-      scale_fill_continuous(breaks = c(3.45, 3.75, 4.05, 4.35, 4.65), 
-          labels = c("≥ 4.6", "4.1 -< 4.6","4 -< 4.1", "3.5 -< 4", "< 3.5"),
-          type = "viridis") +
+  scale_fill_gradientn(breaks = c(3.45, 3.75, 4.05, 4.35, 4.65),
+                      labels = c("≥ 4.6", "4.1 -< 4.6","4 -< 4.1", "3.5 -< 4", "< 3.5"),
+                      # low = my_col[5],  # Specify the low color
+                      # high = my_col[1],  # Specify the high color
+                      colours = my_col,
+                      na.value = "lightgrey") +
   coord_sf(crs = 3035, xlim = c(2377294, 7453440), ylim = c(1313597, 5628510)) +
   labs(title = "Cultural employment, 2022", subtitle = "(% of total employment)") +
   guides(fill = guide_legend(keywidth = unit(0.6, "cm"), keyheight = unit(0.3, "cm"), 
-                             title="EU = 3.8")) +
+                             title="EU = 3.8", low = my_col[5],
+                             high = my_col[1])) +
   annotate("text", x = 2380000, y = 1350000, 
          label = "Definition differs for Spain and France (see LFS metadata).",
          size = 2, color = "black", hjust = 0) +
@@ -149,17 +165,70 @@ ggdraw(europe_map) +
 
 
 ###################################
-# Table 2
+# Figure 2 - N. 
 ####################################
 
 
+cult_emp_n2 <- get_eurostat_data("cult_emp_n2") %>% 
+  filter(time != "2011") %>% 
+  filter(nace_r2 %in% c("C18", "J58", "J59", "J60", "M74", "R90", "R91")) %>% 
+  filter(geo %in% "EU27_2020")
+
+
+
+table(cult_emp_n2$nace_r2)
+
+table(cult_emp_n2$geo)
+
+cult_emp_n2$nace_r2 <- factor(cult_emp_n2$nace_r2, levels = c('R90', 'M74', 'C18', 'J58', 'R91', 'J59', 'J60'), 
+                                                              labels = c(
+                                                                  "Creative, arts and entertainment activities (NACE, R90)",
+                                                                 "Other professional, scientific and technical activities \n(NACE, M74.1, M74.2, M74.3)",
+                                                                  "Printing and reproduction of record media (NACE,\nC18)",
+                                                                  "Selected publishing activities (NACE, part of J58)",
+                                                                 "Libraries, archives, museums and other cultural\nactivities (NACE, R91)",
+                                                                 "Motion picture, video and television programme\nproduction, sound recording and music publishing\nactivities (NACE, J59)",
+                                                                 "Programming and broadcasting activities (NACE, J60)"))
+
+# Plot
+cult_emp_n2 %>%
+  ggplot( aes(x=time, y= values, group= nace_r2, color=nace_r2)) +
+  geom_line(size = 1.5) +
+  # scale_color_viridis(discrete = TRUE) +
+#  ggtitle("Evolution of cultural employment by selected NACE Rev. 2 activities, EU, 2012-2022", "(thousands)") + 
+  labs(title = "Evolution of cultural employment by selected NACE Rev. 2 activities, EU, 2012-2022", 
+       subtitle = "(thousands)", 
+       caption = "Note: a break in time series for all countries for which 2021 data are available due to the implementation of the new Regulation (EU)2019/1700, also called the integrated European Social Statistics Framework Regulation (IESS FR) (see LFS metadata)
+Source: Eurostat(online data code: cult_emp_n2") +
+  scale_y_continuous(breaks = seq(0, 1200, by = 200)) +
+  geom_hline(yintercept = seq(0, 1200, by = 200), color = "grey90", linetype = "dashed") +
+  theme(legend.background = element_blank(),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.x.bottom = element_line(),
+        axis.line.x = element_line(),
+        panel.grid = element_line(), 
+        axis.ticks = element_blank(), 
+        panel.background = element_blank(),
+        plot.margin = margin(40, 150, 80, 40),
+        plot.caption=element_text(hjust = 0)
+  ) +
+ annotate("text", x = -Inf, y = -Inf, # x = 0, y = -0.9,  
+           label = 
+           "Note: a break in time series for all countries for which 2021 data are available due to the implementation of the new Regulation (EU)2019/1700, also called the integrated European Social Statistics Framework Regulation (IESS FR) (see LFS metadata)",
+           size = 2, color = "black", hjust = 0, vjust = 0) +
+ annotate("text",  x = Inf, y = -Inf,
+           label = "Source: Eurostat(online data code: cult_emp_n2",
+           size = 2, color = "black", hjust = 0) 
+
 ###################################
-# Table 3
+# Figure 3
 ###################################
 
 
 ###################################
-# Table 4
+# Figure 4 - N. 
 ###################################
 
 
