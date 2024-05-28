@@ -199,7 +199,8 @@ cult_emp_n2 %>%
        subtitle = "(thousands)", 
        caption = "Note: a break in time series for all countries for which 2021 data are available due to the implementation of the new Regulation (EU)2019/1700, also called the integrated European Social Statistics Framework Regulation (IESS FR) (see LFS metadata)
 Source: Eurostat(online data code: cult_emp_n2") +
-  scale_y_continuous(breaks = seq(0, 1200, by = 200)) +
+  scale_y_continuous(breaks = seq(0, 1200, by = 200), expand = c(0, 0)) +
+  scale_x_discrete(expand = c(0, 0)) +
   geom_hline(yintercept = seq(0, 1200, by = 200), color = "grey90", linetype = "dashed") +
   theme(legend.background = element_blank(),
         legend.title = element_blank(),
@@ -211,8 +212,7 @@ Source: Eurostat(online data code: cult_emp_n2") +
         axis.ticks = element_blank(), 
         panel.background = element_blank(),
         plot.margin = margin(40, 150, 80, 40),
-        plot.caption=element_text(hjust = 0)
-  ) 
+        plot.caption=element_text(hjust = 0)) 
 
 
 
@@ -234,8 +234,41 @@ Source: Eurostat(online data code: cult_emp_n2") +
 ###################################
 
 
+cultural_empl_fig2 <- cultural_empl %>% 
+    filter(time != "2011") %>% 
+    filter(geo %in% "EU27_2020") %>% 
+    filter(unit %in% "THS_PER") %>% 
+    filter(sex != "T")
 
 
+
+
+cultural_empl_fig2$sex <- factor(cultural_empl_fig2$sex, levels = c("M", "F"), 
+       labels = c("Male", "Female"))
+        
+cultural_empl_fig2 %>%
+  ggplot( aes(x=time, y= values, group= sex, color= sex)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 3) +
+  labs(title = "Evolution of cultural employment in the EU by sex, 2012-22", 
+       subtitle = "(thousands)", 
+       caption = "Note: a break in time series for all countries for which 2021 data are available due to the implementation of the new Regulation (EU)2019/1700, also called the integrated European Social Statistics Framework Regulation (IESS FR) (see LFS metadata)
+Source: Eurostat(online data code: cult_emp_sex") +
+  scale_y_continuous(breaks = seq(2500, 4500, by = 200), limits = c(2500, 4500), expand = c(0, 0)) +
+  scale_x_discrete(expand = c(0, 0)) +
+  geom_hline(yintercept = seq(2500, 4500, by = 200), color = "grey90", linetype = "dashed") +
+  theme(legend.background = element_blank(),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.x.bottom = element_line(),
+        axis.line.x = element_line(),
+        panel.grid = element_line(), 
+        axis.ticks = element_blank(), 
+        panel.background = element_blank(),
+        plot.margin = margin(40, 150, 80, 40),
+        plot.caption=element_text(hjust = 0)) # +
+       # coord_cartesian(xlim = c(2012, 2022), clip = 'off')
 
 ###################################
 # Table 2
