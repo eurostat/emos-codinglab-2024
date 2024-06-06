@@ -1,0 +1,305 @@
+---
+title: "Maripaz6Graphs"
+format: html
+editor: visual
+---
+
+# Libraries
+
+```{r}
+library(restatapi)
+library(ggplot2)
+library(restatapi)
+library(giscoR) 
+library(data.table)
+library(chron) 
+library(reshape2)
+library(kableExtra)
+#library(tmap) 
+library(highcharter)
+library(plotly)
+library(dplyr)
+```
+
+# Countries - Code and name
+
+```{r}
+countries <- as.factor(c("EU27_2020","BE", "BG","CZ","DK", "DE", "EE","IE","EL","ES","FR",
+                         "HR", "IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO",
+                         "SI","SK","FI","SE","UK","IS","LI","NO","CH","ME", "MK", "AL", "RS","TR"))
+
+cntr <- as.factor(c("EU-27", "Belgium", "Bulgaria", "Czechia", "Denmark", "Germany", "Estonia", "Ireland",
+                    "Greece", "Spain", "France", "Croatia", "Italy", "Cyprus", "Latvia", "Lithuania",
+                    "Luxembourg", "Hungary", "Malta", "Netherlands", "Austria", "Poland","Portugal", "Romania",
+                    "Slovenia", "Slovakia", "Finland", "Sweden","United Kingdom", "Iceland", "Liechtenstein",
+                    "Norway", "Switzerland", "Montenegro", "North Macedonia", "Albania", "Serbia", "Turkey"))
+```
+
+# Population reporting noise from neighbours or from the street, EU (1), 2011-2020
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment>
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,>*EU*(%C2%B9)\_,*2011-2020*(%25).png
+
+## Data
+
+```{r}
+idenv="ilc_mddw01"
+dates=2011:2020
+
+env=get_eurostat_data(idenv, filters = list(hhtyp="TOTAL", incgrp="TOTAL", geo="EU27_2020", time=dates))
+```
+
+## Graph
+
+```{r}
+#Title
+tit=paste0("Population reporting noise from neighbours or from the street, \n EU(\U00B9)",dates[1],"-",dates[length(dates)])
+
+#Subtitle
+subtit=paste("(%)")
+
+#Caption
+cap=paste0("(\U00B9) Estimate \n Source: Eurostat (online data code: ",idenv, ")")
+
+#Color
+col="#F8AE21"
+
+ggplot(env, aes(x=time, y=values, group=1)) +
+
+  scale_y_continuous(limits=c(0,20), breaks=seq(0,20,2))+
+  geom_line(color=col, linewidth=1) +
+  theme_minimal()+
+  labs(
+    title=tit,
+    subtitle=subtit,
+    caption=cap)+
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.line.x = element_line(colour = "black",linetype = "solid"),
+        axis.ticks.x= element_line(color = "black",
+                                  linewidth = 0.2),
+        axis.ticks.length.x = unit(0.2,"cm"),
+        plot.caption = element_text(hjust = 0),
+        plot.title = element_text(hjust = 0, face = "bold")
+            )+
+  ylab("")+
+  xlab("")
+```
+
+# Population reporting noise from neighbours or from the street, by income situation, 2020
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment>
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_by_income_situation,>*2020*(%25).png
+
+## Data
+
+```{r}
+idenv2="ilc_mddw01"
+date=2020
+
+env2=get_eurostat_data(idenv2, filters = list(incgrp=c("B_MD60", "TOTAL"), hhtyp="TOTAL",time=date, geo=countries))
+
+env2$incgrp=relevel(env2$incgrp, ref="TOTAL")
+```
+
+## Graph
+
+```{r}
+#Title
+tit=paste0("Population reporting noise from neighbours or from the street by, \n income situation, ", date)
+
+#Subtitle
+subtit=paste("(%)")
+
+#Caption
+cap=paste0("(\U00B9) Estimate.
+           \n(\U00B2) People living below the national poverty treshold (60% of median equivalised income).
+           \n(\U00B3) Break in series.
+           \n(\U2074) Low reliability.
+           \n(\U2075) 2019 instead of 2020.
+           \n(\U2076) 2018 instead of 2022.
+           \nSource: Eurostat (online data code: ",idenv2, ")")
+
+ggplot(data=env2, aes(x=geo, y=values, fill=incgrp)) +
+  scale_y_continuous(limits=c(0,40), breaks=seq(0,40,5))+
+  geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
+  theme_minimal()+
+   labs(title=tit,
+    subtitle=subtit,
+  caption=cap)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank(),
+        axis.line.y = element_blank(),
+        plot.caption = element_text(hjust=0),
+        legend.position="bottom",
+        legend.title=element_blank(),
+        axis.text.x = element_text(angle = 90))+
+        scale_fill_manual(labels= c("Total population", "Population at-risk-of-poverty(\U00B2)"), values=c("#F8AE21", "#003776"))
+  
+```
+
+# People who used the internet for civic or political participation, 2022.
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world>
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_3_People_who_used_the_internet_for_civic_or_political_participation,>*2022_order_by_young_people_aged_16-29_years*(%25).png
+
+## Data
+
+```{r}
+iddw1="isoc_ci_ac_i"
+dw=get_eurostat_data(iddw1, filters = list(time="2022", indic_is="I_IUCPP", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=countries ))
+dw1=get_eurostat_data(iddw1, filters = list(time="2021", indic_is="I_IUCPP", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo="CH" ))
+
+dw=rbind(dw, dw1)
+
+dw$ind_type=relevel(dw$ind_type, ref="Y16_29")
+```
+
+## Graph
+
+```{r}
+#title
+tit=paste0("People who used the internet for civic or political participation, \n 2022")
+
+#subtitle
+subtit=paste0("order by young people aged 16-29 years \n(%)")
+
+#caption
+cap=paste0("Note: for example, expressing opinions on civic or political issues or taking part in online consultations or voting to
+          \ndefine civic or political issues
+           \n(\U00B9) Break in time series.
+           \n(\U00B2) Low reliability for young people.
+           \n(\U00B3) Data from 2021.
+           \nSource: Eurostat (online data code: ",iddw1, ")")
+  
+ggplot(data=dw, aes(x=geo, y=values, fill=ind_type)) +
+  scale_y_continuous(limits=c(0,55), breaks=seq(0,55,5))+
+  geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
+  theme_minimal()+
+ labs(title=tit,
+    subtitle=subtit,
+caption=cap)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank(),
+        axis.line.y = element_blank(),
+        plot.caption = element_text(hjust=0),
+        legend.position="bottom",
+        legend.title=element_blank(),
+        axis.text.x = element_text(angle = 90))+
+        scale_fill_manual(labels= c("Young people aged 16-29 years", "Adult population"), values=c("#003776", "#F8AE21"))
+```
+
+# People who used the internet for doing an online course
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world>
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Fig_4_People_who_used_the_internet_for_doing_an_online_course,>*2022_order_by_young_people_aged_16-29_years*(%25).png
+
+## Data
+
+```{r}
+iddw2="isoc_ci_ac_i"
+dw2=get_eurostat_data(iddw2, filters = list(time="2021", indic_is="I_IUOLC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=countries ))
+dw22=get_eurostat_data(iddw2, filters = list(time="2021", indic_is="I_IUOLC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=c("CH", "IS", "MK")))
+
+dw2=rbind(dw2, dw22)
+
+dw2$ind_type=relevel(dw2$ind_type, ref="Y16_29")
+```
+
+## Graph
+
+```{r}
+#Title
+tit=paste0("People who used the internet for doing an online course, 2022")
+  
+#Subtitle
+subtit=paste0("order by young people aged 16-29 years \n(%)")
+  
+#caption
+cap=paste0("\n(\U00B9) Low reliability for young population
+           \n(\U00B2) Data from 2021.
+           \nSource: Eurostat (online data code: ",iddw2, ")")
+  
+ggplot(data=dw2, aes(x=geo, y=values, fill=ind_type)) +
+  scale_y_continuous(limits=c(0,70), breaks=seq(0,70,5))+
+  geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
+  theme_minimal()+
+ labs(title=tit,
+    subtitle=subtit,
+caption=cap)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank(),
+        axis.line.y = element_blank(),
+        plot.caption = element_text(hjust=0),
+        legend.position="bottom",
+        legend.title=element_blank(),
+        axis.text.x = element_text(angle = 90))+
+        scale_fill_manual(labels= c("Young people aged 16-29 years", "Adult population"), values=c("#003776", "#F8AE21"))
+```
+
+# People who have verified the information or content found on internet, 2021
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world>
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_5_Percentage_of_individuals_who_have_verified_the_information_or_content_found_on_internet,>*2021_order_by_young_people_aged_16-29_years*(%25).png
+
+## Data
+
+```{r}
+iddw3="isoc_sk_edic_i21"
+date="2021"
+
+dw3=get_eurostat_data(iddw3, filters = list(time=date, indic_is="I_TIC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=countries ))
+
+dw3$ind_type=relevel(dw3$ind_type, ref="Y16_29")
+```
+
+## Graph
+
+```{r}
+#Title
+tit=paste0("Percentage of individual who have verified the information or content \nfound on internet, ", date)
+
+#Subtitle
+subtit=paste0("order by young people aged 16-29 years \n(%)")
+
+#Caption
+cap=paste0("\n(\U00B9) Low reliability for young population
+          \nSource: Eurostat (online data code: ",iddw3, ")")
+
+ggplot(data=dw3, aes(x=geo, y=values, fill=ind_type)) +
+  scale_y_continuous(limits=c(0,100), breaks=seq(0,100,10))+
+  geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
+  theme_minimal()+
+ labs(title=tit,
+    subtitle=subtit,
+caption=cap)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y=element_blank(),
+        panel.grid.major.x=element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank(),
+        axis.line.y = element_blank(),
+        plot.caption = element_text(hjust=0),
+        legend.position="bottom",
+        legend.title=element_blank(),
+        axis.text.x = element_text(angle = 90))+
+        scale_fill_manual(labels= c("Young people aged 16-29 years", "Adult population"), values=c("#003776", "#F8AE21"))
+```
