@@ -51,7 +51,7 @@ eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
 efta_cc<-c("CH","NO","IS","LI")
 
 data7 = get_eurostat_data(
-  id2, 
+  id7, 
   filters = list(
     incgrp = c("TOTAL","B_MD60"),
     freq = "Annual",
@@ -65,7 +65,7 @@ data7 = get_eurostat_data(
   stringsAsFactors=F,
   force_local_filter=T)
 
-dsd<-as.data.table(get_eurostat_dsd(id2))[concept=="geo",c("code","name")]
+dsd<-as.data.table(get_eurostat_dsd(id7))[concept=="geo",c("code","name")]
 
 datafig2<-merge(data7, dsd, 
              by.x="geo",by.y="name", 
@@ -121,5 +121,3 @@ datafig7 <- datafig7 |>
 
 
 ```
-
-

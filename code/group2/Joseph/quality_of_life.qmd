@@ -107,9 +107,9 @@ p1 <- ggplot(data = data1, aes(x = time, y = exp, group = 1)) +
             axis.text.x = element_text(hjust = 1.5)
             )
 
-ggsave("figures/p1.png", plot = p1, width = 8, height = 6, 
+ggsave("quality_figures/p1.png", plot = p1, width = 8, height = 6, 
        dpi = 1000, create.dir = T)
-knitr::include_graphics("figures/p1.png")
+knitr::include_graphics("quality_figures/p1.png")
 
 # axis.title.x = theme_text(vjust=-0.5)
 ```
@@ -141,11 +141,15 @@ data2 = get_eurostat_data(
 
 dsd<-as.data.table(get_eurostat_dsd(id2))[concept=="geo",c("code","name")]
 
-datafig2<-merge(data2, dsd, 
-             by.x="geo",by.y="name", 
-             all.x=T, all.y = F)
+datafig2<-merge(data2,
+                dsd,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
 
-datafig2 <- datafig2[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+datafig2 <- datafig2[!code %in% c("EA19", "EA18", "EA", 
+                                  "EU28", "EU27_2007", "EU")]
 
 datafig2$geo<-gsub(" \\(.*\\)","",datafig2$geo)
 
@@ -236,8 +240,8 @@ p2 = ggplot(data = datafig2, aes(x = geo, y = values, fill = incgrp))+
                      "\nSource: Eurostat (online data code: ",id2,")"))
 
 
-ggsave("figures/p2.png", plot = p2, width = 8, height = 8, dpi = 1000)
-knitr::include_graphics("figures/p2.png")
+ggsave("quality_figures/p2.png", plot = p2, width = 8, height = 8, dpi = 1000)
+knitr::include_graphics("quality_figures/p2.png")
 ```
 
 ## Figure 3
@@ -362,6 +366,6 @@ p3 = ggplot(data = datafig3, aes(x = geo, y = values, fill = deg_urb))+
                          "\nSource: Eurostat (online data code: ",id3,")"))
 
 
-ggsave("figures/p3.png", plot = p3, width = 8, height = 6, dpi = 1000)
-knitr::include_graphics("figures/p3.png")
+ggsave("quality_figures/p3.png", plot = p3, width = 8, height = 6, dpi = 1000)
+knitr::include_graphics("quality_figures/p3.png")
 ```
