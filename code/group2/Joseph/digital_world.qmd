@@ -2,10 +2,11 @@
 title: "Young people - digital world"
 author: "Joseph"
 editor: visual
-toc: true
-toc-location: left
+# toc: true
+# toc-location: left
 code-link: true
 code-line-numbers: true
+code-fold: true
 linkcolor: blue
 output-file: "Digital World"
 ---
@@ -123,7 +124,8 @@ datafig7 <- datafig7 |>
 
 datafig7$geo <- factor(datafig7$geo,levels = rev(name_ord))
 
-datafig7$ind_type <- factor(datafig7$ind_type, levels = c("Young males", "Young females"))
+datafig7$ind_type <- factor(datafig7$ind_type, 
+                            levels = c("Young males", "Young females"))
 
 datafig7 = datafig7 |> 
   mutate(geo = recode(geo,
@@ -132,6 +134,8 @@ datafig7 = datafig7 |>
                       "Albania" = "Albania (\U00B9)"))
 
 ```
+
+### Plot
 
 ```{r}
 p7 = ggplot(data = datafig7, aes(x = geo, y = values, fill = ind_type))+
@@ -157,12 +161,143 @@ p7 = ggplot(data = datafig7, aes(x = geo, y = values, fill = ind_type))+
     legend.title = element_blank()
   )+
   labs(
-    title = paste0("Young people with at least basic digital skills by gender, ",date7),
+    title = paste0("Young people with at least basic digital skills by gender, ",tail(date7, n = 1)),
     subtitle = "(%)",
     caption = paste0("\n(\U00B9) Data from 2021",
                      "\nSource: Eurostat (online data code: ",id7,")"))
 
 ggsave("digital_figures/p7.png", plot = p7, width = 12, height = 8, dpi = 1000)
 knitr::include_graphics("digital_figures/p7.png")
+
+```
+
+## Figure 8
+
+### Retrieving data
+
+```{r}
+id8 <- "isoc_sk_cskl_i21"
+date8 = 2021:2023
+
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+
+efta_cc<-c("CH","NO","IS","LI")
+
+data8 = get_eurostat_data(
+  id8, 
+  filters = list(
+    ind_type = c("M_Y16_29", "F_Y16_29"),
+    indic_is = "I_CPRG2",
+    freq = "A",
+    unit = "PC_IND"
+  ),
+  date_filter = eval(date8),
+  label=T,
+  ignore.case=T,
+  exact_match=F,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+
+data8 = data8 |> 
+  filter(unit == "Percentage of individuals") |> 
+  filter(time == 2023 | (time == 2021 & geo %in% c("Iceland", 
+                                                   #"North Macedonia",
+                                                   "Albania")))
+  
+
+
+
+dsd<-as.data.table(get_eurostat_dsd(id8))[concept=="geo",c("code","name")]
+
+datafig8<-merge(data8, dsd, 
+                by.x="geo",by.y="name", 
+                all.x=T, all.y = F)
+
+datafig8 <- datafig8[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+datafig8$geo<-gsub(" \\(.*\\)","",datafig8$geo)
+
+datafig8$geo<-gsub("^Eu.*","EU",datafig8$geo)
+
+datafig8$ind_type <- gsub(".*(Females|Males).*", "\\1", datafig8$ind_type)
+
+#gsub(".*(Females|Males).*", "\\1", "Males, 16 to 29 years old")
+
+name_ord <- datafig8[(code %in% eu_cc) & (unit == "Percentage of individuals") & (ind_type == "Females")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-datafig8[(code %in% efta_cc) & (unit == "Percentage of individuals") & (ind_type == "Females")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-datafig8[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (unit == "Percentage of individuals") & (ind_type == "Females")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+
+datafig8 <- datafig8 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Females" = "Young females",
+                         "Males" = "Young males")) |> 
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      ind_type = rep("Young females", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+datafig8$geo <- factor(datafig8$geo,levels = rev(name_ord))
+
+datafig8$ind_type <- factor(datafig8$ind_type, 
+                            levels = c("Young males", "Young females"))
+
+datafig8 = datafig8 |> 
+  mutate(geo = recode(geo,
+                      "Iceland" = "Iceland (\U00B9)",
+                      #"North Macedonia" = "North Macedonia (\U00B9)",
+                      "Albania" = "Albania (\U00B9)"))
+
+```
+
+### Plot
+
+```{r}
+p8 = ggplot(data = datafig8, aes(x = geo, y = values, fill = ind_type))+
+  geom_bar(stat = "identity", position = "dodge", width = 0.5)+
+  scale_fill_manual(values = c("#B09120", "#2644A7"))+ 
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(data8$values)+5),
+                     breaks = seq(0, max(data8$values)+5, 5))+
+  theme_bw()+
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y=element_blank(),
+    panel.grid.major.x=element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black",linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  )+
+  labs(
+    title = paste0("Individuals who wrote code in a programming language, ",tail(date8, n = 1)),
+    subtitle = "(%)",
+    caption = paste0("\n(\U00B9) Data from 2021",
+                     "\nSource: Eurostat (online data code: ",id8,")"))
+
+ggsave("digital_figures/p8.png", plot = p8, width = 12, height = 8, dpi = 1000)
+knitr::include_graphics("digital_figures/p8.png")
 
 ```
