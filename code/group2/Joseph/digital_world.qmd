@@ -36,6 +36,8 @@ require(tmap)
 
 require(highcharter)
 require(plotly)
+
+conflicts_prefer(dplyr::filter)
 ```
 
 ## Figure 7
@@ -44,7 +46,7 @@ require(plotly)
 
 ```{r}
 id7<-"isoc_sk_dskl_i21"
-date7 = 2020
+date7 = 2021:2023
 
 eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
 
@@ -53,11 +55,12 @@ efta_cc<-c("CH","NO","IS","LI")
 data7 = get_eurostat_data(
   id7, 
   filters = list(
-    incgrp = c("TOTAL","B_MD60"),
+    ind_type = c("M_Y16_29", "F_Y16_29"),
+    indic_is = "I_DSK2_BAB",
     freq = "Annual",
-    hhtyp = "TOTAL",
-    unit = "Percentage"
-  ),date_filter = eval(date2),
+    unit = c("PC_IND")
+  ),
+  date_filter = eval(date7),
   label=T,
   ignore.case=T,
   exact_match=F,
@@ -65,59 +68,101 @@ data7 = get_eurostat_data(
   stringsAsFactors=F,
   force_local_filter=T)
 
+data7 = data7 |> 
+  filter(unit == "Percentage of individuals") |> 
+  filter(time == 2023 | (time == 2021 & geo %in% c("Iceland", 
+                                                   "North Macedonia", "Albania")))
+  
+
+
+
 dsd<-as.data.table(get_eurostat_dsd(id7))[concept=="geo",c("code","name")]
 
-datafig2<-merge(data7, dsd, 
-             by.x="geo",by.y="name", 
-             all.x=T, all.y = F)
+datafig7<-merge(data7, dsd, 
+                by.x="geo",by.y="name", 
+                all.x=T, all.y = F)
 
 datafig7 <- datafig7[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
 
 datafig7$geo<-gsub(" \\(.*\\)","",datafig7$geo)
 
-
-
-
 datafig7$geo<-gsub("^Eu.*","EU",datafig7$geo)
 
+datafig7$ind_type <- gsub(".*(Females|Males).*", "\\1", datafig7$ind_type)
 
-name_ord <- datafig7[(code %in% eu_cc) & (incgrp == "Total")]
+#gsub(".*(Females|Males).*", "\\1", "Males, 16 to 29 years old")
+
+name_ord <- datafig7[(code %in% eu_cc) & (unit == "Percentage of individuals") & (ind_type == "Females")]
 
 name_ord_eu<-name_ord[order(values)]$geo
 
-name_ord<-datafig7[(code %in% efta_cc) & (incgrp == "Total")]
+name_ord<-datafig7[(code %in% efta_cc) & (unit == "Percentage of individuals") & (ind_type == "Females")]
 
 name_ord_efta<-name_ord[order(values)]$geo
 
-name_ord<-datafig7[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (incgrp == "Total")]
+name_ord<-datafig7[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (unit == "Percentage of individuals") & (ind_type == "Females")]
 
 name_ord_othr<-name_ord[order(values)]$geo
 
 name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
 
+
 datafig7 <- datafig7 |>
-  select(geo, incgrp, values) |>
-  mutate(incgrp = recode(incgrp,
-                         "Below 60% of median equivalised income" = "Population at-risk-of-poverty (\U00B2)")) |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Females" = "Young females",
+                         "Males" = "Young males")) |> 
   (\(df){
     dt_sep <- data.table::data.table(
       geo = c(" ", "  ", "   "),
-      incgrp = rep("Total", 3),
+      ind_type = rep("Young females", 3),
       values = rep(NA, 3)
     )
     rbind(df, dt_sep)
   })()
 
 datafig7$geo <- factor(datafig7$geo,levels = rev(name_ord))
-datafig7$incgrp <- factor(datafig7$incgrp, levels = c("Total", "Population at-risk-of-poverty (\U00B2)"))
 
-datafig7 <- datafig7 |>
+datafig7$ind_type <- factor(datafig7$ind_type, levels = c("Young males", "Young females"))
+
+datafig7 = datafig7 |> 
   mutate(geo = recode(geo,
-                      "France" = "France (\U00B3)",
-                      "Luxembourg" = "Luxembourg (\U00B3)",
-                      "Germany" = "Germany (\U00B3)(\U2075)",
-                      "Ireland" = "Ireland (\U00B3)",
-                      "EU" = "EU (\U00B9)"))
+                      "Iceland" = "Iceland (\U00B9)",
+                      "North Macedonia" = "North Macedonia (\U00B9)",
+                      "Albania" = "Albania (\U00B9)"))
 
+```
+
+```{r}
+p7 = ggplot(data = datafig7, aes(x = geo, y = values, fill = ind_type))+
+  geom_bar(stat = "identity", position = "dodge", width = 0.5)+
+  scale_fill_manual(values = c("#B09120", "#2644A7"))+ 
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(data7$values)+5),
+                     breaks = seq(0, max(data7$values)+5, 10))+
+  theme_bw()+
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y=element_blank(),
+    panel.grid.major.x=element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black",linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  )+
+  labs(
+    title = paste0("Young people with at least basic digital skills by gender, ",date7),
+    subtitle = "(%)",
+    caption = paste0("\n(\U00B9) Data from 2021",
+                     "\nSource: Eurostat (online data code: ",id7,")"))
+
+ggsave("digital_figures/p7.png", plot = p7, width = 12, height = 8, dpi = 1000)
+knitr::include_graphics("digital_figures/p7.png")
 
 ```

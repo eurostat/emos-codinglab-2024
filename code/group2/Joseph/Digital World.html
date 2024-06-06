@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.554">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Joseph">
-
 <title>Young people - digital world</title>
 <style>
 code{white-space: pre-wrap;}
@@ -21,8 +18,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="digital_world_files/libs/clipboard/clipboard.min.js"></script>
 <script src="digital_world_files/libs/quarto-html/quarto.js"></script>
@@ -34,28 +64,27 @@ ul.task-list li input[type="checkbox"] {
 <script src="digital_world_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="digital_world_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="digital_world_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-
-
 </head>
-
 <body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+  <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#article-source" id="toc-article-source" class="nav-link active" data-scroll-target="#article-source">Article Source</a></li>
+<li><a href="#article-source" id="toc-article-source" class="nav-link active" data-scroll-target="#article-source">Article Source</a></li>
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">Loading Packages</a></li>
+  <li>
+<a href="#figure-7" id="toc-figure-7" class="nav-link" data-scroll-target="#figure-7">Figure 7</a>
+  <ul class="collapse">
+<li><a href="#retrieving-data" id="toc-retrieving-data" class="nav-link" data-scroll-target="#retrieving-data">Retrieving data</a></li>
   </ul>
-</nav>
+</li>
+  </ul></nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
 </div>
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">Young people - digital world</h1>
 </div>
 
@@ -76,18 +105,162 @@ ul.task-list li input[type="checkbox"] {
   
 
 
-</header>
-
-
-<section id="article-source" class="level2">
-<h2 class="anchored" data-anchor-id="article-source">Article Source</h2>
-<p>The figures here are replicated from <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world">Young people - digital world</a>.<br>
-</p>
-</section>
-
-</main>
-<!-- /main column -->
-<script id="quarto-html-after-body" type="application/javascript">
+</header><section id="article-source" class="level2"><h2 class="anchored" data-anchor-id="article-source">Article Source</h2>
+<p>The figures here are replicated from <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world">Young people - digital world</a>.</p>
+</section><section id="loading-packages" class="level2"><h2 class="anchored" data-anchor-id="loading-packages">Loading Packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">require</span>(conflicted)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">require</span>(restatapi)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">require</span>(giscoR)</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">require</span>(chron)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">require</span>(reshape2)</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">require</span>(kableExtra)</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="fu">require</span>(tmap)</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">require</span>(highcharter)</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="fu">require</span>(plotly)</span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>filter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="figure-7" class="level2"><h2 class="anchored" data-anchor-id="figure-7">Figure 7</h2>
+<section id="retrieving-data" class="level3"><h3 class="anchored" data-anchor-id="retrieving-data">Retrieving data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>id7<span class="ot">&lt;-</span><span class="st">"isoc_sk_dskl_i21"</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>date7 <span class="ot">=</span> <span class="dv">2021</span><span class="sc">:</span><span class="dv">2023</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>eu_cc<span class="ot">&lt;-</span><span class="fu">get</span>(<span class="st">"cc"</span>,<span class="at">envir=</span>.restatapi_env)<span class="sc">$</span>EU27_2020</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>efta_cc<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"CH"</span>,<span class="st">"NO"</span>,<span class="st">"IS"</span>,<span class="st">"LI"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a>data7 <span class="ot">=</span> <span class="fu">get_eurostat_data</span>(</span>
+<span id="cb2-9"><a href="#cb2-9"></a>  id7, </span>
+<span id="cb2-10"><a href="#cb2-10"></a>  <span class="at">filters =</span> <span class="fu">list</span>(</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="at">ind_type =</span> <span class="fu">c</span>(<span class="st">"M_Y16_29"</span>, <span class="st">"F_Y16_29"</span>),</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    <span class="at">indic_is =</span> <span class="st">"I_DSK2_BAB"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="at">freq =</span> <span class="st">"Annual"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14"></a>    <span class="at">unit =</span> <span class="fu">c</span>(<span class="st">"PC_IND"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15"></a>  ),</span>
+<span id="cb2-16"><a href="#cb2-16"></a>  <span class="at">date_filter =</span> <span class="fu">eval</span>(date7),</span>
+<span id="cb2-17"><a href="#cb2-17"></a>  <span class="at">label=</span>T,</span>
+<span id="cb2-18"><a href="#cb2-18"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb2-19"><a href="#cb2-19"></a>  <span class="at">exact_match=</span>F,</span>
+<span id="cb2-20"><a href="#cb2-20"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb2-21"><a href="#cb2-21"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb2-22"><a href="#cb2-22"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>data7 <span class="ot">=</span> data7 <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">filter</span>(unit <span class="sc">==</span> <span class="st">"Percentage of individuals"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="dv">2023</span> <span class="sc">|</span> (time <span class="sc">==</span> <span class="dv">2021</span> <span class="sc">&amp;</span> geo <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Iceland"</span>, </span>
+<span id="cb4-4"><a href="#cb4-4"></a>                                                   <span class="st">"North Macedonia"</span>, <span class="st">"Albania"</span>)))</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  </span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a>dsd<span class="ot">&lt;-</span><span class="fu">as.data.table</span>(<span class="fu">get_eurostat_dsd</span>(id7))[concept<span class="sc">==</span><span class="st">"geo"</span>,<span class="fu">c</span>(<span class="st">"code"</span>,<span class="st">"name"</span>)]</span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>datafig7<span class="ot">&lt;-</span><span class="fu">merge</span>(data7, dsd, </span>
+<span id="cb4-12"><a href="#cb4-12"></a>                <span class="at">by.x=</span><span class="st">"geo"</span>,<span class="at">by.y=</span><span class="st">"name"</span>, </span>
+<span id="cb4-13"><a href="#cb4-13"></a>                <span class="at">all.x=</span>T, <span class="at">all.y =</span> F)</span>
+<span id="cb4-14"><a href="#cb4-14"></a></span>
+<span id="cb4-15"><a href="#cb4-15"></a>datafig7 <span class="ot">&lt;-</span> datafig7[<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"EA19"</span>, <span class="st">"EA18"</span>, <span class="st">"EA"</span>, <span class="st">"EU28"</span>, <span class="st">"EU27_2007"</span>, <span class="st">"EU"</span>)]</span>
+<span id="cb4-16"><a href="#cb4-16"></a></span>
+<span id="cb4-17"><a href="#cb4-17"></a>datafig7<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">" </span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,datafig7<span class="sc">$</span>geo)</span>
+<span id="cb4-18"><a href="#cb4-18"></a></span>
+<span id="cb4-19"><a href="#cb4-19"></a>datafig7<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">"^Eu.*"</span>,<span class="st">"EU"</span>,datafig7<span class="sc">$</span>geo)</span>
+<span id="cb4-20"><a href="#cb4-20"></a></span>
+<span id="cb4-21"><a href="#cb4-21"></a>datafig7<span class="sc">$</span>ind_type <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".*(Females|Males).*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, datafig7<span class="sc">$</span>ind_type)</span>
+<span id="cb4-22"><a href="#cb4-22"></a></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="co">#gsub(".*(Females|Males).*", "\\1", "Males, 16 to 29 years old")</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a></span>
+<span id="cb4-25"><a href="#cb4-25"></a>name_ord <span class="ot">&lt;-</span> datafig7[(code <span class="sc">%in%</span> eu_cc) <span class="sc">&amp;</span> (unit <span class="sc">==</span> <span class="st">"Percentage of individuals"</span>) <span class="sc">&amp;</span> (ind_type <span class="sc">==</span> <span class="st">"Females"</span>)]</span>
+<span id="cb4-26"><a href="#cb4-26"></a></span>
+<span id="cb4-27"><a href="#cb4-27"></a>name_ord_eu<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb4-28"><a href="#cb4-28"></a></span>
+<span id="cb4-29"><a href="#cb4-29"></a>name_ord<span class="ot">&lt;-</span>datafig7[(code <span class="sc">%in%</span> efta_cc) <span class="sc">&amp;</span> (unit <span class="sc">==</span> <span class="st">"Percentage of individuals"</span>) <span class="sc">&amp;</span> (ind_type <span class="sc">==</span> <span class="st">"Females"</span>)]</span>
+<span id="cb4-30"><a href="#cb4-30"></a></span>
+<span id="cb4-31"><a href="#cb4-31"></a>name_ord_efta<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb4-32"><a href="#cb4-32"></a></span>
+<span id="cb4-33"><a href="#cb4-33"></a>name_ord<span class="ot">&lt;-</span>datafig7[<span class="sc">!</span>(code <span class="sc">%in%</span> <span class="fu">c</span>(efta_cc,eu_cc,<span class="st">"EU27_2020"</span>)) <span class="sc">&amp;</span> (unit <span class="sc">==</span> <span class="st">"Percentage of individuals"</span>) <span class="sc">&amp;</span> (ind_type <span class="sc">==</span> <span class="st">"Females"</span>)]</span>
+<span id="cb4-34"><a href="#cb4-34"></a></span>
+<span id="cb4-35"><a href="#cb4-35"></a>name_ord_othr<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb4-36"><a href="#cb4-36"></a></span>
+<span id="cb4-37"><a href="#cb4-37"></a>name_ord<span class="ot">&lt;-</span><span class="fu">c</span>(name_ord_othr, <span class="st">" "</span> ,name_ord_efta, <span class="st">"  "</span> ,name_ord_eu, <span class="st">"   "</span>, <span class="st">"EU"</span>)</span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a></span>
+<span id="cb4-40"><a href="#cb4-40"></a>datafig7 <span class="ot">&lt;-</span> datafig7 <span class="sc">|&gt;</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a>  <span class="fu">select</span>(geo, ind_type, values) <span class="sc">|&gt;</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a>  <span class="fu">mutate</span>(<span class="at">ind_type =</span> <span class="fu">recode</span>(ind_type,</span>
+<span id="cb4-43"><a href="#cb4-43"></a>                         <span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"Young females"</span>,</span>
+<span id="cb4-44"><a href="#cb4-44"></a>                         <span class="st">"Males"</span> <span class="ot">=</span> <span class="st">"Young males"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-45"><a href="#cb4-45"></a>  (\(df){</span>
+<span id="cb4-46"><a href="#cb4-46"></a>    dt_sep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(</span>
+<span id="cb4-47"><a href="#cb4-47"></a>      <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">" "</span>, <span class="st">"  "</span>, <span class="st">"   "</span>),</span>
+<span id="cb4-48"><a href="#cb4-48"></a>      <span class="at">ind_type =</span> <span class="fu">rep</span>(<span class="st">"Young females"</span>, <span class="dv">3</span>),</span>
+<span id="cb4-49"><a href="#cb4-49"></a>      <span class="at">values =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>)</span>
+<span id="cb4-50"><a href="#cb4-50"></a>    )</span>
+<span id="cb4-51"><a href="#cb4-51"></a>    <span class="fu">rbind</span>(df, dt_sep)</span>
+<span id="cb4-52"><a href="#cb4-52"></a>  })()</span>
+<span id="cb4-53"><a href="#cb4-53"></a></span>
+<span id="cb4-54"><a href="#cb4-54"></a>datafig7<span class="sc">$</span>geo <span class="ot">&lt;-</span> <span class="fu">factor</span>(datafig7<span class="sc">$</span>geo,<span class="at">levels =</span> <span class="fu">rev</span>(name_ord))</span>
+<span id="cb4-55"><a href="#cb4-55"></a></span>
+<span id="cb4-56"><a href="#cb4-56"></a>datafig7<span class="sc">$</span>ind_type <span class="ot">&lt;-</span> <span class="fu">factor</span>(datafig7<span class="sc">$</span>ind_type, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Young males"</span>, <span class="st">"Young females"</span>))</span>
+<span id="cb4-57"><a href="#cb4-57"></a></span>
+<span id="cb4-58"><a href="#cb4-58"></a>datafig7 <span class="ot">=</span> datafig7 <span class="sc">|&gt;</span> </span>
+<span id="cb4-59"><a href="#cb4-59"></a>  <span class="fu">mutate</span>(<span class="at">geo =</span> <span class="fu">recode</span>(geo,</span>
+<span id="cb4-60"><a href="#cb4-60"></a>                      <span class="st">"Iceland"</span> <span class="ot">=</span> <span class="st">"Iceland (\U00B9)"</span>,</span>
+<span id="cb4-61"><a href="#cb4-61"></a>                      <span class="st">"North Macedonia"</span> <span class="ot">=</span> <span class="st">"North Macedonia (\U00B9)"</span>,</span>
+<span id="cb4-62"><a href="#cb4-62"></a>                      <span class="st">"Albania"</span> <span class="ot">=</span> <span class="st">"Albania (\U00B9)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>p7 <span class="ot">=</span> <span class="fu">ggplot</span>(<span class="at">data =</span> datafig7, <span class="fu">aes</span>(<span class="at">x =</span> geo, <span class="at">y =</span> values, <span class="at">fill =</span> ind_type))<span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#B09120"</span>, <span class="st">"#2644A7"</span>))<span class="sc">+</span> </span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb5-5"><a href="#cb5-5"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(data7<span class="sc">$</span>values)<span class="sc">+</span><span class="dv">5</span>),</span>
+<span id="cb5-6"><a href="#cb5-6"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(data7<span class="sc">$</span>values)<span class="sc">+</span><span class="dv">5</span>, <span class="dv">10</span>))<span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">60</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb5-12"><a href="#cb5-12"></a>    <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb5-13"><a href="#cb5-13"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-14"><a href="#cb5-14"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-15"><a href="#cb5-15"></a>    <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-16"><a href="#cb5-16"></a>    <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-17"><a href="#cb5-17"></a>    <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>,<span class="at">linetype =</span> <span class="st">"solid"</span>),</span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb5-19"><a href="#cb5-19"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb5-20"><a href="#cb5-20"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb5-22"><a href="#cb5-22"></a>  )<span class="sc">+</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-24"><a href="#cb5-24"></a>    <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Young people with at least basic digital skills by gender, "</span>,date7),</span>
+<span id="cb5-25"><a href="#cb5-25"></a>    <span class="at">subtitle =</span> <span class="st">"(%)"</span>,</span>
+<span id="cb5-26"><a href="#cb5-26"></a>    <span class="at">caption =</span> <span class="fu">paste0</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B9) Data from 2021"</span>,</span>
+<span id="cb5-27"><a href="#cb5-27"></a>                     <span class="st">"</span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,id7,<span class="st">")"</span>))</span>
+<span id="cb5-28"><a href="#cb5-28"></a></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="fu">ggsave</span>(<span class="st">"digital_figures/p7.png"</span>, <span class="at">plot =</span> p7, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"digital_figures/p7.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="digital_figures/p7.png" class="img-fluid figure-img" width="6000"></p>
+</figure>
+</div>
+</div>
+</div>
+</section></section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -497,7 +670,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
 
 
 
