@@ -325,8 +325,6 @@ datafig3 <- datafig3 |>
 
 ```
 
-
-
 ```{r}
 
 p3 = ggplot(data = datafig3, aes(x = geo, y = values, fill = deg_urb))+
