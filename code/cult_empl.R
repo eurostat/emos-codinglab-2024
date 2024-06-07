@@ -237,6 +237,10 @@ ggplot(cult_empl_fig1 , aes(x = geo, y = rate_of_change, fill = time)) +
 ###################################
 
 
+
+
+
+
 ###################################
 # Figure 2: nearly finished
 ####################################
@@ -312,7 +316,7 @@ Source: Eurostat(online data code: cult_emp_n2") +
 
 
 ###################################
-# Figure 3
+# Figure 3: not finished
 ###################################
 lfsa_egan2 <- get_eurostat_data("lfsa_egan2")
 cult_emp_age <- get_eurostat_data("cult_emp_age")
