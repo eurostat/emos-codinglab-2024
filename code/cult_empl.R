@@ -181,7 +181,7 @@ desired_order <- c("EU27_2020", "CY", "LU", "IE", "SE", "NL", "PL", "LT",
 cult_empl_fig1$geo <- factor(cult_empl_fig1$geo, levels = desired_order)
 
 # Barplot
-ggplot(cult_empl_fig1 , aes(x = geo, y = rate_of_change, fill = time)) + 
+fig1 <- ggplot(cult_empl_fig1 , aes(x = geo, y = rate_of_change, fill = time)) + 
   geom_bar(stat = "identity", position = position_dodge()) +
   geom_hline(yintercept = seq(-22, 18, by = 5), color = "black", linetype = "solid" )+
   labs(title = "Cultural employment ‒ annual rates of change, 2020-2022",
@@ -267,7 +267,7 @@ cult_emp_n2$nace_r2 <- factor(cult_emp_n2$nace_r2, levels = c('R90', 'M74', 'C18
                                                                  "Programming and broadcasting activities (NACE, J60)"))
 
 # Plot
-cult_emp_n2 %>%
+fig2 <- cult_emp_n2 %>%
   ggplot( aes(x=time, y= values, group= nace_r2, color=nace_r2)) +
   geom_line(size = 2) +
   # scale_color_viridis(discrete = TRUE) +
@@ -338,7 +338,7 @@ lfsa_egaed_22 <- lfsa_egaed %>% filter(time == 2022, geo %in% "EU27_2020")
 tot_empl_fig3 <- 
 
 
-ggplot(cult_emp_sex_fig3, aes(x = "", y = values, fill = sex)) +
+fig3 <- ggplot(cult_emp_sex_fig3, aes(x = "", y = values, fill = sex)) +
   geom_bar(stat = "identity", width = 0.5)
 
 # momentary challenge: which dataset do I use to get the total employment values? 
@@ -350,7 +350,7 @@ ggplot(cult_emp_sex_fig3, aes(x = "", y = values, fill = sex)) +
 ###################################
 
 # filter for needed variables 
-cultural_empl_fig2 <- cult_empl_sex %>% 
+cultural_empl_fig4 <- cult_empl_sex %>% 
     filter(time != "2011") %>% 
     filter(geo %in% "EU27_2020") %>% 
     filter(unit %in% "THS_PER") %>% 
@@ -358,12 +358,12 @@ cultural_empl_fig2 <- cult_empl_sex %>%
 
 
 # create factor for sex with the right order and labels
-cultural_empl_fig2$sex <- factor(cultural_empl_fig2$sex, levels = c("M", "F"), 
+cultural_empl_fig4$sex <- factor(cultural_empl_fig2$sex, levels = c("M", "F"), 
        labels = c("Male", "Female"))
 
 
 # the line plot
-cultural_empl_fig2 %>%
+fig4 <- cultural_empl_fig4 %>%
   ggplot( aes(x=time, y= values, group= sex, color= sex)) +
   geom_line(size = 2) +
   geom_point(size = 3) +
