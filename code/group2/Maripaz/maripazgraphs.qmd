@@ -1,7 +1,12 @@
 ---
-title: "Maripaz6Graphs"
-format: html
-editor: visual
+
+---
+
+---
+title: "emos"
+author: "Maripaz Venegas"
+date: "2024-04-22"
+output: html
 ---
 
 # Libraries
@@ -22,18 +27,6 @@ library(dplyr)
 ```
 
 # Countries - Code and name
-
-```{r}
-countries <- as.factor(c("EU27_2020","BE", "BG","CZ","DK", "DE", "EE","IE","EL","ES","FR",
-                         "HR", "IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO",
-                         "SI","SK","FI","SE","UK","IS","LI","NO","CH","ME", "MK", "AL", "RS","TR"))
-
-cntr <- as.factor(c("EU-27", "Belgium", "Bulgaria", "Czechia", "Denmark", "Germany", "Estonia", "Ireland",
-                    "Greece", "Spain", "France", "Croatia", "Italy", "Cyprus", "Latvia", "Lithuania",
-                    "Luxembourg", "Hungary", "Malta", "Netherlands", "Austria", "Poland","Portugal", "Romania",
-                    "Slovenia", "Slovakia", "Finland", "Sweden","United Kingdom", "Iceland", "Liechtenstein",
-                    "Norway", "Switzerland", "Montenegro", "North Macedonia", "Albania", "Serbia", "Turkey"))
-```
 
 # Population reporting noise from neighbours or from the street, EU (1), 2011-2020
 
@@ -74,14 +67,18 @@ ggplot(env, aes(x=time, y=values, group=1)) +
     title=tit,
     subtitle=subtit,
     caption=cap)+
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        axis.line.x = element_line(colour = "black",linetype = "solid"),
-        axis.ticks.x= element_line(color = "black",
-                                  linewidth = 0.2),
-        axis.ticks.length.x = unit(0.2,"cm"),
-        plot.caption = element_text(hjust = 0),
-        plot.title = element_text(hjust = 0, face = "bold")
+        theme_bw()+
+      theme(axis.title.x = element_blank(),
+            axis.title.y=element_blank(),
+            panel.grid.major.x=element_blank(),
+            panel.grid.minor.x = element_blank(),
+            panel.grid.minor.y = element_blank(),
+            panel.border = element_blank(),
+            axis.line.y = element_blank(),
+            axis.line.x = element_line(colour = "black",linetype = "solid"),
+            plot.caption = element_text(hjust = 0),
+            plot.title = element_text(hjust = 0, face = "bold"),
+            axis.text.x = element_text(hjust = 1.5)
             )+
   ylab("")+
   xlab("")
@@ -99,14 +96,96 @@ ggplot(env, aes(x=time, y=values, group=1)) +
 idenv2="ilc_mddw01"
 date=2020
 
-env2=get_eurostat_data(idenv2, filters = list(incgrp=c("B_MD60", "TOTAL"), hhtyp="TOTAL",time=date, geo=countries))
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
 
-env2$incgrp=relevel(env2$incgrp, ref="TOTAL")
+env2=get_eurostat_data(idenv2, filters = list(incgrp=c("B_MD60", "TOTAL"), hhtyp="TOTAL",time=date),  label=T,
+  ignore.case=T,
+  exact_match=F,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+env2a=get_eurostat_data(idenv2, filters = list(incgrp=c("B_MD60", "TOTAL"), hhtyp="TOTAL",time=2019, geo="Poland"),  label=T,
+  ignore.case=T,
+  exact_match=F,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+env2b=get_eurostat_data(idenv2, filters = list(incgrp=c("B_MD60", "TOTAL"), hhtyp="TOTAL",time=2018, geo="Iceland"),  label=T,
+  ignore.case=T,
+  exact_match=F,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+env2=rbind(env2, env2a, env2b)
+
+
+dsd<-as.data.table(get_eurostat_dsd(idenv2))[concept=="geo",c("code","name")]
+
+env2<-merge(env2,
+                dsd,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+env2 <- env2[!code %in% c("EA19", "EA18", "EA", 
+                                  "EU28", "EU27_2007", "EU")]
+
+env2$geo<-gsub(" \\(.*\\)","",env2$geo)
+
+
+env2$geo<-gsub("^Eu.*","EU",env2$geo)
+
+name_ord <- env2[(code %in% eu_cc) & (incgrp == "Total")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-env2[(code %in% efta_cc) & (incgrp == "Total")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-env2[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (incgrp == "Total")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+env2 <- env2 |>
+  select(geo, incgrp, values) |>
+  mutate(incgrp = recode(incgrp,
+                         "Below 60% of median equivalised income" = "Population at-risk-of-poverty (\U00B2)")) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      incgrp = rep("Total", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+env2$geo <- factor(env2$geo,levels = rev(name_ord))
+env2$incgrp <- factor(env2$incgrp, levels = c("Total", "Population at-risk-of-poverty (\U00B2)"))
+
+env2 <- env2 |>
+  mutate(geo = recode(geo,
+                      "EU" = "EU (\U00B9)",
+                      "Germany" = "Germany (\U00B3)(\U2074)",
+                      "France" = "France (\U00B3)",
+                      "Luxembourg" = "Luxembourg (\U00B3)",
+                      "Poland"="Poland(\U2075)",
+                      "Iceland" = "Iceland (\U2076)",
+                      
+))
 ```
 
 ## Graph
 
 ```{r}
+#Colors
+col1="#F8AE21"
+col2="#003776"
+
 #Title
 tit=paste0("Population reporting noise from neighbours or from the street by, \n income situation, ", date)
 
@@ -119,28 +198,34 @@ cap=paste0("(\U00B9) Estimate.
            \n(\U00B3) Break in series.
            \n(\U2074) Low reliability.
            \n(\U2075) 2019 instead of 2020.
-           \n(\U2076) 2018 instead of 2022.
+           \n(\U2076) 2018 instead of 2020.
            \nSource: Eurostat (online data code: ",idenv2, ")")
 
 ggplot(data=env2, aes(x=geo, y=values, fill=incgrp)) +
-  scale_y_continuous(limits=c(0,40), breaks=seq(0,40,5))+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(env2$values, na.rm = TRUE)+5),
+                     breaks = seq(0, max(env2$values,na.rm = TRUE)+5, 5))+
   geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
-  theme_minimal()+
+  theme_bw()+
    labs(title=tit,
     subtitle=subtit,
   caption=cap)+
-  theme(axis.title.x = element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid.major.x=element_blank(),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        panel.border = element_blank(),
-        axis.line.y = element_blank(),
-        plot.caption = element_text(hjust=0),
-        legend.position="bottom",
-        legend.title=element_blank(),
-        axis.text.x = element_text(angle = 90))+
-        scale_fill_manual(labels= c("Total population", "Population at-risk-of-poverty(\U00B2)"), values=c("#F8AE21", "#003776"))
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y=element_blank(),
+    panel.grid.major.x=element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black",linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  )+
+        scale_fill_manual(values=c(col1, col2))
   
 ```
 
@@ -154,19 +239,97 @@ ggplot(data=env2, aes(x=geo, y=values, fill=incgrp)) +
 
 ```{r}
 iddw1="isoc_ci_ac_i"
-dw=get_eurostat_data(iddw1, filters = list(time="2022", indic_is="I_IUCPP", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=countries ))
-dw1=get_eurostat_data(iddw1, filters = list(time="2021", indic_is="I_IUCPP", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo="CH" ))
+date=2022
 
-dw=rbind(dw, dw1)
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
 
-dw$ind_type=relevel(dw$ind_type, ref="Y16_29")
+dw=get_eurostat_data(iddw1, filters = list(time=2022, indic_is="I_IUCPP", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND"),
+label=T,
+  ignore.case=T,
+  exact_match=T,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+dwa=get_eurostat_data(iddw1, filters = list(time=2021, indic_is="I_IUCPP", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo="CH" ), 
+                      label=T,
+  ignore.case=T,
+  exact_match=T,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+
+dw=rbind(dw, dwa)
+
+dsd<-as.data.table(get_eurostat_dsd(idenv2))[concept=="geo",c("code","name")]
+
+dw<-merge(dw,
+                dsd,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+dw <- dw[!code %in% c("EA19", "EA18", "EA", 
+                                  "EU28", "EU27_2007", "EU")]
+
+dw$geo<-gsub(" \\(.*\\)","",dw$geo)
+
+
+dw$geo<-gsub("^Eu.*","EU",dw$geo)
+
+name_ord <- dw[(code %in% eu_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-dw[(code %in% efta_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-dw[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+dw <- dw |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      ind_type = rep("Young people aged 16-29 years", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+dw$geo <- factor(dw$geo,levels = rev(name_ord))
+dw$ind_type <- factor(dw$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+dw <- dw |>
+  mutate(geo = recode(geo,
+                      "EU" = "EU (\U00B9)",
+                      "Ireland" = "Ireland (\U00B9)(\U00B2)",
+                      "Germany"= "Germany (\U00B9)",
+                      "Iceland" = "Iceland (\U00B3)",
+                      "Switzerland" = "Switzerland (\U00B3)",
+                      "Albania"="Albania (\U00B3)",
+                      "North Macedonia" = "North Macedonia(\U00B3)",
+                      
+))
 ```
 
 ## Graph
 
 ```{r}
+#Colors
+col1="#F8AE21"
+col2="#003776"
+
 #title
-tit=paste0("People who used the internet for civic or political participation, \n 2022")
+tit=paste0("People who used the internet for civic or political participation, \n ", date)
 
 #subtitle
 subtit=paste0("order by young people aged 16-29 years \n(%)")
@@ -180,7 +343,9 @@ cap=paste0("Note: for example, expressing opinions on civic or political issues 
            \nSource: Eurostat (online data code: ",iddw1, ")")
   
 ggplot(data=dw, aes(x=geo, y=values, fill=ind_type)) +
-  scale_y_continuous(limits=c(0,55), breaks=seq(0,55,5))+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(dw$values, na.rm = TRUE)+5),
+                     breaks = seq(0, max(dw$values,na.rm = TRUE)+5, 5))+
   geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
   theme_minimal()+
  labs(title=tit,
@@ -196,8 +361,8 @@ caption=cap)+
         plot.caption = element_text(hjust=0),
         legend.position="bottom",
         legend.title=element_blank(),
-        axis.text.x = element_text(angle = 90))+
-        scale_fill_manual(labels= c("Young people aged 16-29 years", "Adult population"), values=c("#003776", "#F8AE21"))
+        axis.text.x = element_text(angle = 90, hjust=1))+
+        scale_fill_manual(values=c(col1, col2))
 ```
 
 # People who used the internet for doing an online course
@@ -210,19 +375,96 @@ caption=cap)+
 
 ```{r}
 iddw2="isoc_ci_ac_i"
-dw2=get_eurostat_data(iddw2, filters = list(time="2021", indic_is="I_IUOLC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=countries ))
-dw22=get_eurostat_data(iddw2, filters = list(time="2021", indic_is="I_IUOLC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=c("CH", "IS", "MK")))
+date=2022
 
-dw2=rbind(dw2, dw22)
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
 
-dw2$ind_type=relevel(dw2$ind_type, ref="Y16_29")
+
+dw2=get_eurostat_data(iddw2, filters = list(time=2022, indic_is="I_IUOLC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND"),
+label=T,
+  ignore.case=T,
+  exact_match=T,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+dw2a=get_eurostat_data(iddw2, filters = list(time="2021", indic_is="I_IUOLC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=c("CH", "IS", "MK")),
+                       label=T,
+  ignore.case=T,
+  exact_match=T,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+
+dw2=rbind(dw2, dw2a)
+
+dsd<-as.data.table(get_eurostat_dsd(idenv2))[concept=="geo",c("code","name")]
+
+dw2<-merge(dw2,
+                dsd,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+dw2 <- dw2[!code %in% c("EA19", "EA18", "EA", 
+                                  "EU28", "EU27_2007", "EU")]
+
+dw2$geo<-gsub(" \\(.*\\)","",dw2$geo)
+
+
+dw2$geo<-gsub("^Eu.*","EU",dw2$geo)
+
+name_ord <- dw2[(code %in% eu_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-dw2[(code %in% efta_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-dw2[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+dw2 <- dw2 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      ind_type = rep("Young people aged 16-29 years", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+dw2$geo <- factor(dw2$geo,levels = rev(name_ord))
+dw2$ind_type <- factor(dw2$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+dw2 <- dw2 |>
+  mutate(geo = recode(geo,
+                      "Ireland" = "Ireland (\U00B9)",
+                      "Iceland" = "Iceland (\U00B2)",
+                      "Switzerland" = "Switzerland (\U00B2)",
+                      "Albania"="Albania (\U00B2)",
+                      "North Macedonia" = "North Macedonia(\U00B2)"
+                      
+))
 ```
 
 ## Graph
 
 ```{r}
+#Colors
+col1="#F8AE21"
+col2="#003776"
+
 #Title
-tit=paste0("People who used the internet for doing an online course, 2022")
+tit=paste0("People who used the internet for doing an online course, ", date)
   
 #Subtitle
 subtit=paste0("order by young people aged 16-29 years \n(%)")
@@ -233,7 +475,9 @@ cap=paste0("\n(\U00B9) Low reliability for young population
            \nSource: Eurostat (online data code: ",iddw2, ")")
   
 ggplot(data=dw2, aes(x=geo, y=values, fill=ind_type)) +
-  scale_y_continuous(limits=c(0,70), breaks=seq(0,70,5))+
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(dw2$values, na.rm = TRUE)+5),
+                     breaks = seq(0, max(dw2$values,na.rm = TRUE)+5, 5))+
   geom_bar(stat="identity", position=position_dodge(), width = 0.5)+
   theme_minimal()+
  labs(title=tit,
@@ -249,8 +493,8 @@ caption=cap)+
         plot.caption = element_text(hjust=0),
         legend.position="bottom",
         legend.title=element_blank(),
-        axis.text.x = element_text(angle = 90))+
-        scale_fill_manual(labels= c("Young people aged 16-29 years", "Adult population"), values=c("#003776", "#F8AE21"))
+        axis.text.x = element_text(angle = 90, hjust=1))+
+        scale_fill_manual(values=c(col1, col2))
 ```
 
 # People who have verified the information or content found on internet, 2021
@@ -263,16 +507,81 @@ caption=cap)+
 
 ```{r}
 iddw3="isoc_sk_edic_i21"
-date="2021"
+date=2021
 
-dw3=get_eurostat_data(iddw3, filters = list(time=date, indic_is="I_TIC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND", geo=countries ))
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
 
-dw3$ind_type=relevel(dw3$ind_type, ref="Y16_29")
+dw3=get_eurostat_data(iddw3, filters = list(time=date, indic_is="I_TIC", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND"),
+label=T,
+  ignore.case=T,
+  exact_match=T,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+
+dsd<-as.data.table(get_eurostat_dsd(iddw3))[concept=="geo",c("code","name")]
+
+dw3<-merge(dw3,
+                dsd,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+dw3 <- dw3[!code %in% c("EA19", "EA18", "EA", 
+                                  "EU28", "EU27_2007", "EU")]
+
+dw3$geo<-gsub(" \\(.*\\)","",dw3$geo)
+
+
+dw3$geo<-gsub("^Eu.*","EU",dw3$geo)
+
+name_ord <- dw3[(code %in% eu_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-dw3[(code %in% efta_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-dw3[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+dw3 <- dw3 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      ind_type = rep("Young people aged 16-29 years", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+dw3$geo <- factor(dw3$geo,levels = rev(name_ord))
+dw3$ind_type <- factor(dw3$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+dw3 <- dw3 |>
+  mutate(geo = recode(geo,
+                      "Ireland" = "Ireland (\U00B9)"
+                      
+))
+
 ```
 
 ## Graph
 
 ```{r}
+#Colors
+col1="#F8AE21"
+col2="#003776"
+
 #Title
 tit=paste0("Percentage of individual who have verified the information or content \nfound on internet, ", date)
 
@@ -300,6 +609,6 @@ caption=cap)+
         plot.caption = element_text(hjust=0),
         legend.position="bottom",
         legend.title=element_blank(),
-        axis.text.x = element_text(angle = 90))+
-        scale_fill_manual(labels= c("Young people aged 16-29 years", "Adult population"), values=c("#003776", "#F8AE21"))
+        axis.text.x = element_text(angle = 90, hjust=1))+
+        scale_fill_manual(values=c(col1, col2))
 ```
