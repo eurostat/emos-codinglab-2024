@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Maripaz Venegas">
+<meta name="dcterms.date" content="2024-04-22">
 
-<title>Maripaz6Graphs</title>
+<title>maripazgraphs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -79,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Maripaz6Graphs</h1>
+<h1 class="title">emos</h1>
 </div>
 
 
@@ -87,6 +89,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2024-04-22</p>
+    </div>
+  </div>
   
     
   </div>
@@ -96,6 +104,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<hr>
+<hr>
 <section id="libraries" class="level1">
 <h1>Libraries</h1>
 <div class="cell">
@@ -185,17 +195,6 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="countries---code-and-name" class="level1">
 <h1>Countries - Code and name</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>countries <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">c</span>(<span class="st">"EU27_2020"</span>,<span class="st">"BE"</span>, <span class="st">"BG"</span>,<span class="st">"CZ"</span>,<span class="st">"DK"</span>, <span class="st">"DE"</span>, <span class="st">"EE"</span>,<span class="st">"IE"</span>,<span class="st">"EL"</span>,<span class="st">"ES"</span>,<span class="st">"FR"</span>,</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"HR"</span>, <span class="st">"IT"</span>,<span class="st">"CY"</span>,<span class="st">"LV"</span>,<span class="st">"LT"</span>,<span class="st">"LU"</span>,<span class="st">"HU"</span>,<span class="st">"MT"</span>,<span class="st">"NL"</span>,<span class="st">"AT"</span>,<span class="st">"PL"</span>,<span class="st">"PT"</span>,<span class="st">"RO"</span>,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"SI"</span>,<span class="st">"SK"</span>,<span class="st">"FI"</span>,<span class="st">"SE"</span>,<span class="st">"UK"</span>,<span class="st">"IS"</span>,<span class="st">"LI"</span>,<span class="st">"NO"</span>,<span class="st">"CH"</span>,<span class="st">"ME"</span>, <span class="st">"MK"</span>, <span class="st">"AL"</span>, <span class="st">"RS"</span>,<span class="st">"TR"</span>))</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>cntr <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">c</span>(<span class="st">"EU-27"</span>, <span class="st">"Belgium"</span>, <span class="st">"Bulgaria"</span>, <span class="st">"Czechia"</span>, <span class="st">"Denmark"</span>, <span class="st">"Germany"</span>, <span class="st">"Estonia"</span>, <span class="st">"Ireland"</span>,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Greece"</span>, <span class="st">"Spain"</span>, <span class="st">"France"</span>, <span class="st">"Croatia"</span>, <span class="st">"Italy"</span>, <span class="st">"Cyprus"</span>, <span class="st">"Latvia"</span>, <span class="st">"Lithuania"</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Luxembourg"</span>, <span class="st">"Hungary"</span>, <span class="st">"Malta"</span>, <span class="st">"Netherlands"</span>, <span class="st">"Austria"</span>, <span class="st">"Poland"</span>,<span class="st">"Portugal"</span>, <span class="st">"Romania"</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Slovenia"</span>, <span class="st">"Slovakia"</span>, <span class="st">"Finland"</span>, <span class="st">"Sweden"</span>,<span class="st">"United Kingdom"</span>, <span class="st">"Iceland"</span>, <span class="st">"Liechtenstein"</span>,</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Norway"</span>, <span class="st">"Switzerland"</span>, <span class="st">"Montenegro"</span>, <span class="st">"North Macedonia"</span>, <span class="st">"Albania"</span>, <span class="st">"Serbia"</span>, <span class="st">"Turkey"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 <section id="population-reporting-noise-from-neighbours-or-from-the-street-eu-1-2011-2020" class="level1">
 <h1>Population reporting noise from neighbours or from the street, EU (1), 2011-2020</h1>
@@ -204,51 +203,55 @@ Attaching package: 'dplyr'</code></pre>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>idenv<span class="ot">=</span><span class="st">"ilc_mddw01"</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dates<span class="ot">=</span><span class="dv">2011</span><span class="sc">:</span><span class="dv">2020</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>env<span class="ot">=</span><span class="fu">get_eurostat_data</span>(idenv, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">hhtyp=</span><span class="st">"TOTAL"</span>, <span class="at">incgrp=</span><span class="st">"TOTAL"</span>, <span class="at">geo=</span><span class="st">"EU27_2020"</span>, <span class="at">time=</span>dates))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>idenv<span class="ot">=</span><span class="st">"ilc_mddw01"</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dates<span class="ot">=</span><span class="dv">2011</span><span class="sc">:</span><span class="dv">2020</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>env<span class="ot">=</span><span class="fu">get_eurostat_data</span>(idenv, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">hhtyp=</span><span class="st">"TOTAL"</span>, <span class="at">incgrp=</span><span class="st">"TOTAL"</span>, <span class="at">geo=</span><span class="st">"EU27_2020"</span>, <span class="at">time=</span>dates))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="graph" class="level2">
 <h2 class="anchored" data-anchor-id="graph">Graph</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Population reporting noise from neighbours or from the street, </span><span class="sc">\n</span><span class="st"> EU(\U00B9)"</span>,dates[<span class="dv">1</span>],<span class="st">"-"</span>,dates[<span class="fu">length</span>(dates)])</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste</span>(<span class="st">"(%)"</span>)</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Caption</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"(\U00B9) Estimate </span><span class="sc">\n</span><span class="st"> Source: Eurostat (online data code: "</span>,idenv, <span class="st">")"</span>)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Color</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>col<span class="ot">=</span><span class="st">"#F8AE21"</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(env, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>values, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">20</span>,<span class="dv">2</span>))<span class="sc">+</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color=</span>col, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span>tit,</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption=</span>cap)<span class="sc">+</span></span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>,<span class="at">linetype =</span> <span class="st">"solid"</span>),</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.x=</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">linewidth =</span> <span class="fl">0.2</span>),</span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.length.x =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>,<span class="st">"cm"</span>),</span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>)</span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>            )<span class="sc">+</span></span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">""</span>)<span class="sc">+</span></span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Population reporting noise from neighbours or from the street, </span><span class="sc">\n</span><span class="st"> EU(\U00B9)"</span>,dates[<span class="dv">1</span>],<span class="st">"-"</span>,dates[<span class="fu">length</span>(dates)])</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste</span>(<span class="st">"(%)"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Caption</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"(\U00B9) Estimate </span><span class="sc">\n</span><span class="st"> Source: Eurostat (online data code: "</span>,idenv, <span class="st">")"</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Color</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>col<span class="ot">=</span><span class="st">"#F8AE21"</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(env, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>values, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">20</span>,<span class="dv">2</span>))<span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color=</span>col, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span>tit,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption=</span>cap)<span class="sc">+</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>            <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>            <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>,<span class="at">linetype =</span> <span class="st">"solid"</span>),</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">1.5</span>)</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>            )<span class="sc">+</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -262,55 +265,155 @@ Attaching package: 'dplyr'</code></pre>
 <section id="data-1" class="level2">
 <h2 class="anchored" data-anchor-id="data-1">Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>idenv2<span class="ot">=</span><span class="st">"ilc_mddw01"</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>date<span class="ot">=</span><span class="dv">2020</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>env2<span class="ot">=</span><span class="fu">get_eurostat_data</span>(idenv2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">incgrp=</span><span class="fu">c</span>(<span class="st">"B_MD60"</span>, <span class="st">"TOTAL"</span>), <span class="at">hhtyp=</span><span class="st">"TOTAL"</span>,<span class="at">time=</span>date, <span class="at">geo=</span>countries))</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>env2<span class="sc">$</span>incgrp<span class="ot">=</span><span class="fu">relevel</span>(env2<span class="sc">$</span>incgrp, <span class="at">ref=</span><span class="st">"TOTAL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>idenv2<span class="ot">=</span><span class="st">"ilc_mddw01"</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>date<span class="ot">=</span><span class="dv">2020</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>eu_cc<span class="ot">&lt;-</span><span class="fu">get</span>(<span class="st">"cc"</span>,<span class="at">envir=</span>.restatapi_env)<span class="sc">$</span>EU27_2020</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>efta_cc<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"CH"</span>,<span class="st">"NO"</span>,<span class="st">"IS"</span>,<span class="st">"LI"</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>env2<span class="ot">=</span><span class="fu">get_eurostat_data</span>(idenv2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">incgrp=</span><span class="fu">c</span>(<span class="st">"B_MD60"</span>, <span class="st">"TOTAL"</span>), <span class="at">hhtyp=</span><span class="st">"TOTAL"</span>,<span class="at">time=</span>date),  <span class="at">label=</span>T,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>F,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>env2a<span class="ot">=</span><span class="fu">get_eurostat_data</span>(idenv2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">incgrp=</span><span class="fu">c</span>(<span class="st">"B_MD60"</span>, <span class="st">"TOTAL"</span>), <span class="at">hhtyp=</span><span class="st">"TOTAL"</span>,<span class="at">time=</span><span class="dv">2019</span>, <span class="at">geo=</span><span class="st">"Poland"</span>),  <span class="at">label=</span>T,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>F,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>env2b<span class="ot">=</span><span class="fu">get_eurostat_data</span>(idenv2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">incgrp=</span><span class="fu">c</span>(<span class="st">"B_MD60"</span>, <span class="st">"TOTAL"</span>), <span class="at">hhtyp=</span><span class="st">"TOTAL"</span>,<span class="at">time=</span><span class="dv">2018</span>, <span class="at">geo=</span><span class="st">"Iceland"</span>),  <span class="at">label=</span>T,</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>F,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>env2<span class="ot">=</span><span class="fu">rbind</span>(env2, env2a, env2b)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>dsd<span class="ot">&lt;-</span><span class="fu">as.data.table</span>(<span class="fu">get_eurostat_dsd</span>(idenv2))[concept<span class="sc">==</span><span class="st">"geo"</span>,<span class="fu">c</span>(<span class="st">"code"</span>,<span class="st">"name"</span>)]</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>env2<span class="ot">&lt;-</span><span class="fu">merge</span>(env2,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                dsd,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.x=</span><span class="st">"geo"</span>,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.y=</span><span class="st">"name"</span>, </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.x=</span>T, </span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.y =</span> F)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>env2 <span class="ot">&lt;-</span> env2[<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"EA19"</span>, <span class="st">"EA18"</span>, <span class="st">"EA"</span>, </span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"EU28"</span>, <span class="st">"EU27_2007"</span>, <span class="st">"EU"</span>)]</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>env2<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">" </span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,env2<span class="sc">$</span>geo)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>env2<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">"^Eu.*"</span>,<span class="st">"EU"</span>,env2<span class="sc">$</span>geo)</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>name_ord <span class="ot">&lt;-</span> env2[(code <span class="sc">%in%</span> eu_cc) <span class="sc">&amp;</span> (incgrp <span class="sc">==</span> <span class="st">"Total"</span>)]</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>name_ord_eu<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>env2[(code <span class="sc">%in%</span> efta_cc) <span class="sc">&amp;</span> (incgrp <span class="sc">==</span> <span class="st">"Total"</span>)]</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>name_ord_efta<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>env2[<span class="sc">!</span>(code <span class="sc">%in%</span> <span class="fu">c</span>(efta_cc,eu_cc,<span class="st">"EU27_2020"</span>)) <span class="sc">&amp;</span> (incgrp <span class="sc">==</span> <span class="st">"Total"</span>)]</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>name_ord_othr<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span><span class="fu">c</span>(name_ord_othr, <span class="st">" "</span> ,name_ord_efta, <span class="st">"  "</span> ,name_ord_eu, <span class="st">"   "</span>, <span class="st">"EU"</span>)</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>env2 <span class="ot">&lt;-</span> env2 <span class="sc">|&gt;</span></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(geo, incgrp, values) <span class="sc">|&gt;</span></span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">incgrp =</span> <span class="fu">recode</span>(incgrp,</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Below 60% of median equivalised income"</span> <span class="ot">=</span> <span class="st">"Population at-risk-of-poverty (\U00B2)"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>  (\(df){</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>    dt_sep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">" "</span>, <span class="st">"  "</span>, <span class="st">"   "</span>),</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">incgrp =</span> <span class="fu">rep</span>(<span class="st">"Total"</span>, <span class="dv">3</span>),</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">values =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>)</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(df, dt_sep)</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>  })()</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>env2<span class="sc">$</span>geo <span class="ot">&lt;-</span> <span class="fu">factor</span>(env2<span class="sc">$</span>geo,<span class="at">levels =</span> <span class="fu">rev</span>(name_ord))</span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>env2<span class="sc">$</span>incgrp <span class="ot">&lt;-</span> <span class="fu">factor</span>(env2<span class="sc">$</span>incgrp, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Total"</span>, <span class="st">"Population at-risk-of-poverty (\U00B2)"</span>))</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>env2 <span class="ot">&lt;-</span> env2 <span class="sc">|&gt;</span></span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geo =</span> <span class="fu">recode</span>(geo,</span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"EU"</span> <span class="ot">=</span> <span class="st">"EU (\U00B9)"</span>,</span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Germany"</span> <span class="ot">=</span> <span class="st">"Germany (\U00B3)(\U2074)"</span>,</span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"France"</span> <span class="ot">=</span> <span class="st">"France (\U00B3)"</span>,</span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Luxembourg"</span> <span class="ot">=</span> <span class="st">"Luxembourg (\U00B3)"</span>,</span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Poland"</span><span class="ot">=</span><span class="st">"Poland(\U2075)"</span>,</span>
+<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Iceland"</span> <span class="ot">=</span> <span class="st">"Iceland (\U2076)"</span>,</span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="graph-1" class="level2">
 <h2 class="anchored" data-anchor-id="graph-1">Graph</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Population reporting noise from neighbours or from the street by, </span><span class="sc">\n</span><span class="st"> income situation, "</span>, date)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste</span>(<span class="st">"(%)"</span>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Caption</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"(\U00B9) Estimate.</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B2) People living below the national poverty treshold (60% of median equivalised income).</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B3) Break in series.</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U2074) Low reliability.</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U2075) 2019 instead of 2020.</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U2076) 2018 instead of 2022.</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,idenv2, <span class="st">")"</span>)</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>env2, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>incgrp)) <span class="sc">+</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">40</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">40</span>,<span class="dv">5</span>))<span class="sc">+</span></span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption=</span>cap)<span class="sc">+</span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>))<span class="sc">+</span></span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">"Total population"</span>, <span class="st">"Population at-risk-of-poverty(\U00B2)"</span>), <span class="at">values=</span><span class="fu">c</span>(<span class="st">"#F8AE21"</span>, <span class="st">"#003776"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Colors</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>col1<span class="ot">=</span><span class="st">"#F8AE21"</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>col2<span class="ot">=</span><span class="st">"#003776"</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Population reporting noise from neighbours or from the street by, </span><span class="sc">\n</span><span class="st"> income situation, "</span>, date)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste</span>(<span class="st">"(%)"</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Caption</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"(\U00B9) Estimate.</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B2) People living below the national poverty treshold (60% of median equivalised income).</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B3) Break in series.</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U2074) Low reliability.</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U2075) 2019 instead of 2020.</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U2076) 2018 instead of 2020.</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,idenv2, <span class="st">")"</span>)</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>env2, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>incgrp)) <span class="sc">+</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(env2<span class="sc">$</span>values, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">+</span><span class="dv">5</span>),</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(env2<span class="sc">$</span>values,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">+</span><span class="dv">5</span>, <span class="dv">5</span>))<span class="sc">+</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption=</span>cap)<span class="sc">+</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">60</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>,<span class="at">linetype =</span> <span class="st">"solid"</span>),</span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(col1, col2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values (`geom_bar()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -324,55 +427,143 @@ Attaching package: 'dplyr'</code></pre>
 <section id="data-2" class="level2">
 <h2 class="anchored" data-anchor-id="data-2">Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>iddw1<span class="ot">=</span><span class="st">"isoc_ci_ac_i"</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dw<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw1, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="st">"2022"</span>, <span class="at">indic_is=</span><span class="st">"I_IUCPP"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>, <span class="at">geo=</span>countries ))</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>dw1<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw1, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="st">"2021"</span>, <span class="at">indic_is=</span><span class="st">"I_IUCPP"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>, <span class="at">geo=</span><span class="st">"CH"</span> ))</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>dw<span class="ot">=</span><span class="fu">rbind</span>(dw, dw1)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>dw<span class="sc">$</span>ind_type<span class="ot">=</span><span class="fu">relevel</span>(dw<span class="sc">$</span>ind_type, <span class="at">ref=</span><span class="st">"Y16_29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>iddw1<span class="ot">=</span><span class="st">"isoc_ci_ac_i"</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>date<span class="ot">=</span><span class="dv">2022</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>eu_cc<span class="ot">&lt;-</span><span class="fu">get</span>(<span class="st">"cc"</span>,<span class="at">envir=</span>.restatapi_env)<span class="sc">$</span>EU27_2020</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>efta_cc<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"CH"</span>,<span class="st">"NO"</span>,<span class="st">"IS"</span>,<span class="st">"LI"</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>dw<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw1, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="dv">2022</span>, <span class="at">indic_is=</span><span class="st">"I_IUCPP"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>),</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="at">label=</span>T,</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>T,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>dwa<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw1, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="dv">2021</span>, <span class="at">indic_is=</span><span class="st">"I_IUCPP"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>, <span class="at">geo=</span><span class="st">"CH"</span> ), </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">label=</span>T,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>T,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>dw<span class="ot">=</span><span class="fu">rbind</span>(dw, dwa)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>dsd<span class="ot">&lt;-</span><span class="fu">as.data.table</span>(<span class="fu">get_eurostat_dsd</span>(idenv2))[concept<span class="sc">==</span><span class="st">"geo"</span>,<span class="fu">c</span>(<span class="st">"code"</span>,<span class="st">"name"</span>)]</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>dw<span class="ot">&lt;-</span><span class="fu">merge</span>(dw,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>                dsd,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.x=</span><span class="st">"geo"</span>,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.y=</span><span class="st">"name"</span>, </span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.x=</span>T, </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.y =</span> F)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>dw <span class="ot">&lt;-</span> dw[<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"EA19"</span>, <span class="st">"EA18"</span>, <span class="st">"EA"</span>, </span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"EU28"</span>, <span class="st">"EU27_2007"</span>, <span class="st">"EU"</span>)]</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>dw<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">" </span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,dw<span class="sc">$</span>geo)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>dw<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">"^Eu.*"</span>,<span class="st">"EU"</span>,dw<span class="sc">$</span>geo)</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>name_ord <span class="ot">&lt;-</span> dw[(code <span class="sc">%in%</span> eu_cc) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>name_ord_eu<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>dw[(code <span class="sc">%in%</span> efta_cc) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>name_ord_efta<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>dw[<span class="sc">!</span>(code <span class="sc">%in%</span> <span class="fu">c</span>(efta_cc,eu_cc,<span class="st">"EU27_2020"</span>)) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>name_ord_othr<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span><span class="fu">c</span>(name_ord_othr, <span class="st">" "</span> ,name_ord_efta, <span class="st">"  "</span> ,name_ord_eu, <span class="st">"   "</span>, <span class="st">"EU"</span>)</span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>dw <span class="ot">&lt;-</span> dw <span class="sc">|&gt;</span></span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(geo, ind_type, values) <span class="sc">|&gt;</span></span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ind_type =</span> <span class="fu">recode</span>(ind_type,</span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Individuals, 16 to 29 years old"</span> <span class="ot">=</span> <span class="st">"Young people aged 16-29 years"</span>, <span class="st">"All Individuals"</span><span class="ot">=</span><span class="st">"Adult population"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>  (\(df){</span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>    dt_sep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(</span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">" "</span>, <span class="st">"  "</span>, <span class="st">"   "</span>),</span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">ind_type =</span> <span class="fu">rep</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="dv">3</span>),</span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">values =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>)</span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(df, dt_sep)</span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>  })()</span>
+<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>dw<span class="sc">$</span>geo <span class="ot">&lt;-</span> <span class="fu">factor</span>(dw<span class="sc">$</span>geo,<span class="at">levels =</span> <span class="fu">rev</span>(name_ord))</span>
+<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a>dw<span class="sc">$</span>ind_type <span class="ot">&lt;-</span> <span class="fu">factor</span>(dw<span class="sc">$</span>ind_type, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="st">"Adult population"</span>))</span>
+<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a>dw <span class="ot">&lt;-</span> dw <span class="sc">|&gt;</span></span>
+<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geo =</span> <span class="fu">recode</span>(geo,</span>
+<span id="cb36-52"><a href="#cb36-52" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"EU"</span> <span class="ot">=</span> <span class="st">"EU (\U00B9)"</span>,</span>
+<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Ireland"</span> <span class="ot">=</span> <span class="st">"Ireland (\U00B9)(\U00B2)"</span>,</span>
+<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Germany"</span><span class="ot">=</span> <span class="st">"Germany (\U00B9)"</span>,</span>
+<span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Iceland"</span> <span class="ot">=</span> <span class="st">"Iceland (\U00B3)"</span>,</span>
+<span id="cb36-56"><a href="#cb36-56" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Switzerland"</span> <span class="ot">=</span> <span class="st">"Switzerland (\U00B3)"</span>,</span>
+<span id="cb36-57"><a href="#cb36-57" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Albania"</span><span class="ot">=</span><span class="st">"Albania (\U00B3)"</span>,</span>
+<span id="cb36-58"><a href="#cb36-58" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"North Macedonia"</span> <span class="ot">=</span> <span class="st">"North Macedonia(\U00B3)"</span>,</span>
+<span id="cb36-59"><a href="#cb36-59" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb36-60"><a href="#cb36-60" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="graph-2" class="level2">
 <h2 class="anchored" data-anchor-id="graph-2">Graph</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#title</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"People who used the internet for civic or political participation, </span><span class="sc">\n</span><span class="st"> 2022"</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#subtitle</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"order by young people aged 16-29 years </span><span class="sc">\n</span><span class="st">(%)"</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">#caption</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Note: for example, expressing opinions on civic or political issues or taking part in online consultations or voting to</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="st">          </span><span class="sc">\n</span><span class="st">define civic or political issues</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B9) Break in time series.</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B2) Low reliability for young people.</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B3) Data from 2021.</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,iddw1, <span class="st">")"</span>)</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dw, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>ind_type)) <span class="sc">+</span></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">55</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">55</span>,<span class="dv">5</span>))<span class="sc">+</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="at">caption=</span>cap)<span class="sc">+</span></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>))<span class="sc">+</span></span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="st">"Adult population"</span>), <span class="at">values=</span><span class="fu">c</span>(<span class="st">"#003776"</span>, <span class="st">"#F8AE21"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Colors</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>col1<span class="ot">=</span><span class="st">"#F8AE21"</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>col2<span class="ot">=</span><span class="st">"#003776"</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">#title</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"People who used the internet for civic or political participation, </span><span class="sc">\n</span><span class="st"> "</span>, date)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="co">#subtitle</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"order by young people aged 16-29 years </span><span class="sc">\n</span><span class="st">(%)"</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co">#caption</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Note: for example, expressing opinions on civic or political issues or taking part in online consultations or voting to</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="st">          </span><span class="sc">\n</span><span class="st">define civic or political issues</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B9) Break in time series.</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B2) Low reliability for young people.</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B3) Data from 2021.</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,iddw1, <span class="st">")"</span>)</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dw, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>ind_type)) <span class="sc">+</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(dw<span class="sc">$</span>values, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">+</span><span class="dv">5</span>),</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(dw<span class="sc">$</span>values,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">+</span><span class="dv">5</span>, <span class="dv">5</span>))<span class="sc">+</span></span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a><span class="at">caption=</span>cap)<span class="sc">+</span></span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust=</span><span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(col1, col2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values (`geom_bar()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -386,52 +577,139 @@ Attaching package: 'dplyr'</code></pre>
 <section id="data-3" class="level2">
 <h2 class="anchored" data-anchor-id="data-3">Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>iddw2<span class="ot">=</span><span class="st">"isoc_ci_ac_i"</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>dw2<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="st">"2021"</span>, <span class="at">indic_is=</span><span class="st">"I_IUOLC"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>, <span class="at">geo=</span>countries ))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>dw22<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="st">"2021"</span>, <span class="at">indic_is=</span><span class="st">"I_IUOLC"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>, <span class="at">geo=</span><span class="fu">c</span>(<span class="st">"CH"</span>, <span class="st">"IS"</span>, <span class="st">"MK"</span>)))</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>dw2<span class="ot">=</span><span class="fu">rbind</span>(dw2, dw22)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>dw2<span class="sc">$</span>ind_type<span class="ot">=</span><span class="fu">relevel</span>(dw2<span class="sc">$</span>ind_type, <span class="at">ref=</span><span class="st">"Y16_29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>iddw2<span class="ot">=</span><span class="st">"isoc_ci_ac_i"</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>date<span class="ot">=</span><span class="dv">2022</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>eu_cc<span class="ot">&lt;-</span><span class="fu">get</span>(<span class="st">"cc"</span>,<span class="at">envir=</span>.restatapi_env)<span class="sc">$</span>EU27_2020</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>efta_cc<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"CH"</span>,<span class="st">"NO"</span>,<span class="st">"IS"</span>,<span class="st">"LI"</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>dw2<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="dv">2022</span>, <span class="at">indic_is=</span><span class="st">"I_IUOLC"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>),</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="at">label=</span>T,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>T,</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>dw2a<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw2, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span><span class="st">"2021"</span>, <span class="at">indic_is=</span><span class="st">"I_IUOLC"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>, <span class="at">geo=</span><span class="fu">c</span>(<span class="st">"CH"</span>, <span class="st">"IS"</span>, <span class="st">"MK"</span>)),</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">label=</span>T,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>T,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>dw2<span class="ot">=</span><span class="fu">rbind</span>(dw2, dw2a)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>dsd<span class="ot">&lt;-</span><span class="fu">as.data.table</span>(<span class="fu">get_eurostat_dsd</span>(idenv2))[concept<span class="sc">==</span><span class="st">"geo"</span>,<span class="fu">c</span>(<span class="st">"code"</span>,<span class="st">"name"</span>)]</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>dw2<span class="ot">&lt;-</span><span class="fu">merge</span>(dw2,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>                dsd,</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.x=</span><span class="st">"geo"</span>,</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.y=</span><span class="st">"name"</span>, </span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.x=</span>T, </span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.y =</span> F)</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>dw2 <span class="ot">&lt;-</span> dw2[<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"EA19"</span>, <span class="st">"EA18"</span>, <span class="st">"EA"</span>, </span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"EU28"</span>, <span class="st">"EU27_2007"</span>, <span class="st">"EU"</span>)]</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>dw2<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">" </span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,dw2<span class="sc">$</span>geo)</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>dw2<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">"^Eu.*"</span>,<span class="st">"EU"</span>,dw2<span class="sc">$</span>geo)</span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>name_ord <span class="ot">&lt;-</span> dw2[(code <span class="sc">%in%</span> eu_cc) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>name_ord_eu<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>dw2[(code <span class="sc">%in%</span> efta_cc) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>name_ord_efta<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>dw2[<span class="sc">!</span>(code <span class="sc">%in%</span> <span class="fu">c</span>(efta_cc,eu_cc,<span class="st">"EU27_2020"</span>)) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a>name_ord_othr<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span><span class="fu">c</span>(name_ord_othr, <span class="st">" "</span> ,name_ord_efta, <span class="st">"  "</span> ,name_ord_eu, <span class="st">"   "</span>, <span class="st">"EU"</span>)</span>
+<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-34"><a href="#cb43-34" aria-hidden="true" tabindex="-1"></a>dw2 <span class="ot">&lt;-</span> dw2 <span class="sc">|&gt;</span></span>
+<span id="cb43-35"><a href="#cb43-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(geo, ind_type, values) <span class="sc">|&gt;</span></span>
+<span id="cb43-36"><a href="#cb43-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ind_type =</span> <span class="fu">recode</span>(ind_type,</span>
+<span id="cb43-37"><a href="#cb43-37" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Individuals, 16 to 29 years old"</span> <span class="ot">=</span> <span class="st">"Young people aged 16-29 years"</span>, <span class="st">"All Individuals"</span><span class="ot">=</span><span class="st">"Adult population"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb43-38"><a href="#cb43-38" aria-hidden="true" tabindex="-1"></a>  (\(df){</span>
+<span id="cb43-39"><a href="#cb43-39" aria-hidden="true" tabindex="-1"></a>    dt_sep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(</span>
+<span id="cb43-40"><a href="#cb43-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">" "</span>, <span class="st">"  "</span>, <span class="st">"   "</span>),</span>
+<span id="cb43-41"><a href="#cb43-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">ind_type =</span> <span class="fu">rep</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="dv">3</span>),</span>
+<span id="cb43-42"><a href="#cb43-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">values =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>)</span>
+<span id="cb43-43"><a href="#cb43-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb43-44"><a href="#cb43-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(df, dt_sep)</span>
+<span id="cb43-45"><a href="#cb43-45" aria-hidden="true" tabindex="-1"></a>  })()</span>
+<span id="cb43-46"><a href="#cb43-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-47"><a href="#cb43-47" aria-hidden="true" tabindex="-1"></a>dw2<span class="sc">$</span>geo <span class="ot">&lt;-</span> <span class="fu">factor</span>(dw2<span class="sc">$</span>geo,<span class="at">levels =</span> <span class="fu">rev</span>(name_ord))</span>
+<span id="cb43-48"><a href="#cb43-48" aria-hidden="true" tabindex="-1"></a>dw2<span class="sc">$</span>ind_type <span class="ot">&lt;-</span> <span class="fu">factor</span>(dw2<span class="sc">$</span>ind_type, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="st">"Adult population"</span>))</span>
+<span id="cb43-49"><a href="#cb43-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-50"><a href="#cb43-50" aria-hidden="true" tabindex="-1"></a>dw2 <span class="ot">&lt;-</span> dw2 <span class="sc">|&gt;</span></span>
+<span id="cb43-51"><a href="#cb43-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geo =</span> <span class="fu">recode</span>(geo,</span>
+<span id="cb43-52"><a href="#cb43-52" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Ireland"</span> <span class="ot">=</span> <span class="st">"Ireland (\U00B9)"</span>,</span>
+<span id="cb43-53"><a href="#cb43-53" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Iceland"</span> <span class="ot">=</span> <span class="st">"Iceland (\U00B2)"</span>,</span>
+<span id="cb43-54"><a href="#cb43-54" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Switzerland"</span> <span class="ot">=</span> <span class="st">"Switzerland (\U00B2)"</span>,</span>
+<span id="cb43-55"><a href="#cb43-55" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Albania"</span><span class="ot">=</span><span class="st">"Albania (\U00B2)"</span>,</span>
+<span id="cb43-56"><a href="#cb43-56" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"North Macedonia"</span> <span class="ot">=</span> <span class="st">"North Macedonia(\U00B2)"</span></span>
+<span id="cb43-57"><a href="#cb43-57" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb43-58"><a href="#cb43-58" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="graph-3" class="level2">
 <h2 class="anchored" data-anchor-id="graph-3">Graph</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"People who used the internet for doing an online course, 2022"</span>)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"order by young people aged 16-29 years </span><span class="sc">\n</span><span class="st">(%)"</span>)</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">#caption</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B9) Low reliability for young population</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B2) Data from 2021.</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,iddw2, <span class="st">")"</span>)</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dw2, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>ind_type)) <span class="sc">+</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">70</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">70</span>,<span class="dv">5</span>))<span class="sc">+</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="at">caption=</span>cap)<span class="sc">+</span></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>))<span class="sc">+</span></span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="st">"Adult population"</span>), <span class="at">values=</span><span class="fu">c</span>(<span class="st">"#003776"</span>, <span class="st">"#F8AE21"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Colors</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>col1<span class="ot">=</span><span class="st">"#F8AE21"</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>col2<span class="ot">=</span><span class="st">"#003776"</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"People who used the internet for doing an online course, "</span>, date)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"order by young people aged 16-29 years </span><span class="sc">\n</span><span class="st">(%)"</span>)</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co">#caption</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B9) Low reliability for young population</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">(\U00B2) Data from 2021.</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="st">           </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,iddw2, <span class="st">")"</span>)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dw2, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>ind_type)) <span class="sc">+</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(dw2<span class="sc">$</span>values, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">+</span><span class="dv">5</span>),</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(dw2<span class="sc">$</span>values,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">+</span><span class="dv">5</span>, <span class="dv">5</span>))<span class="sc">+</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a><span class="at">caption=</span>cap)<span class="sc">+</span></span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
+<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
+<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb44-35"><a href="#cb44-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust=</span><span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb44-36"><a href="#cb44-36" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(col1, col2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values (`geom_bar()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -445,50 +723,119 @@ Attaching package: 'dplyr'</code></pre>
 <section id="data-4" class="level2">
 <h2 class="anchored" data-anchor-id="data-4">Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>iddw3<span class="ot">=</span><span class="st">"isoc_sk_edic_i21"</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>date<span class="ot">=</span><span class="st">"2021"</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>dw3<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw3, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span>date, <span class="at">indic_is=</span><span class="st">"I_TIC"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>, <span class="at">geo=</span>countries ))</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>dw3<span class="sc">$</span>ind_type<span class="ot">=</span><span class="fu">relevel</span>(dw3<span class="sc">$</span>ind_type, <span class="at">ref=</span><span class="st">"Y16_29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>iddw3<span class="ot">=</span><span class="st">"isoc_sk_edic_i21"</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>date<span class="ot">=</span><span class="dv">2021</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>eu_cc<span class="ot">&lt;-</span><span class="fu">get</span>(<span class="st">"cc"</span>,<span class="at">envir=</span>.restatapi_env)<span class="sc">$</span>EU27_2020</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>efta_cc<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"CH"</span>,<span class="st">"NO"</span>,<span class="st">"IS"</span>,<span class="st">"LI"</span>)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>dw3<span class="ot">=</span><span class="fu">get_eurostat_data</span>(iddw3, <span class="at">filters =</span> <span class="fu">list</span>(<span class="at">time=</span>date, <span class="at">indic_is=</span><span class="st">"I_TIC"</span>, <span class="at">ind_type=</span><span class="fu">c</span>(<span class="st">"IND_TOTAL"</span>,<span class="st">"Y16_29"</span>), <span class="at">unit=</span><span class="st">"PC_IND"</span>),</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="at">label=</span>T,</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ignore.case=</span>T,</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact_match=</span>T,</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">perl=</span>T,</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors=</span>F,</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">force_local_filter=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Forcing to apply filter locally. The whole dataset will be downloaded through the raw download and then the filters are applied locally.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>dsd<span class="ot">&lt;-</span><span class="fu">as.data.table</span>(<span class="fu">get_eurostat_dsd</span>(iddw3))[concept<span class="sc">==</span><span class="st">"geo"</span>,<span class="fu">c</span>(<span class="st">"code"</span>,<span class="st">"name"</span>)]</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>dw3<span class="ot">&lt;-</span><span class="fu">merge</span>(dw3,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>                dsd,</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.x=</span><span class="st">"geo"</span>,</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">by.y=</span><span class="st">"name"</span>, </span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.x=</span>T, </span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">all.y =</span> F)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>dw3 <span class="ot">&lt;-</span> dw3[<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"EA19"</span>, <span class="st">"EA18"</span>, <span class="st">"EA"</span>, </span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"EU28"</span>, <span class="st">"EU27_2007"</span>, <span class="st">"EU"</span>)]</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>dw3<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">" </span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>,<span class="st">""</span>,dw3<span class="sc">$</span>geo)</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>dw3<span class="sc">$</span>geo<span class="ot">&lt;-</span><span class="fu">gsub</span>(<span class="st">"^Eu.*"</span>,<span class="st">"EU"</span>,dw3<span class="sc">$</span>geo)</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>name_ord <span class="ot">&lt;-</span> dw3[(code <span class="sc">%in%</span> eu_cc) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>name_ord_eu<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>dw3[(code <span class="sc">%in%</span> efta_cc) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>name_ord_efta<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span>dw3[<span class="sc">!</span>(code <span class="sc">%in%</span> <span class="fu">c</span>(efta_cc,eu_cc,<span class="st">"EU27_2020"</span>)) <span class="sc">&amp;</span> (ind_type<span class="sc">==</span><span class="st">"Individuals, 16 to 29 years old"</span>)]</span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>name_ord_othr<span class="ot">&lt;-</span>name_ord[<span class="fu">order</span>(values)]<span class="sc">$</span>geo</span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>name_ord<span class="ot">&lt;-</span><span class="fu">c</span>(name_ord_othr, <span class="st">" "</span> ,name_ord_efta, <span class="st">"  "</span> ,name_ord_eu, <span class="st">"   "</span>, <span class="st">"EU"</span>)</span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>dw3 <span class="ot">&lt;-</span> dw3 <span class="sc">|&gt;</span></span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(geo, ind_type, values) <span class="sc">|&gt;</span></span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ind_type =</span> <span class="fu">recode</span>(ind_type,</span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"Individuals, 16 to 29 years old"</span> <span class="ot">=</span> <span class="st">"Young people aged 16-29 years"</span>, <span class="st">"All Individuals"</span><span class="ot">=</span><span class="st">"Adult population"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>  (\(df){</span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>    dt_sep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(</span>
+<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">" "</span>, <span class="st">"  "</span>, <span class="st">"   "</span>),</span>
+<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">ind_type =</span> <span class="fu">rep</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="dv">3</span>),</span>
+<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">values =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>)</span>
+<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(df, dt_sep)</span>
+<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>  })()</span>
+<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a>dw3<span class="sc">$</span>geo <span class="ot">&lt;-</span> <span class="fu">factor</span>(dw3<span class="sc">$</span>geo,<span class="at">levels =</span> <span class="fu">rev</span>(name_ord))</span>
+<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a>dw3<span class="sc">$</span>ind_type <span class="ot">&lt;-</span> <span class="fu">factor</span>(dw3<span class="sc">$</span>ind_type, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="st">"Adult population"</span>))</span>
+<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a>dw3 <span class="ot">&lt;-</span> dw3 <span class="sc">|&gt;</span></span>
+<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geo =</span> <span class="fu">recode</span>(geo,</span>
+<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Ireland"</span> <span class="ot">=</span> <span class="st">"Ireland (\U00B9)"</span></span>
+<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="graph-4" class="level2">
 <h2 class="anchored" data-anchor-id="graph-4">Graph</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Percentage of individual who have verified the information or content </span><span class="sc">\n</span><span class="st">found on internet, "</span>, date)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"order by young people aged 16-29 years </span><span class="sc">\n</span><span class="st">(%)"</span>)</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Caption</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B9) Low reliability for young population</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="st">          </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,iddw3, <span class="st">")"</span>)</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dw3, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>ind_type)) <span class="sc">+</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>))<span class="sc">+</span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="at">caption=</span>cap)<span class="sc">+</span></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>))<span class="sc">+</span></span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">"Young people aged 16-29 years"</span>, <span class="st">"Adult population"</span>), <span class="at">values=</span><span class="fu">c</span>(<span class="st">"#003776"</span>, <span class="st">"#F8AE21"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Colors</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>col1<span class="ot">=</span><span class="st">"#F8AE21"</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>col2<span class="ot">=</span><span class="st">"#003776"</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Title</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>tit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"Percentage of individual who have verified the information or content </span><span class="sc">\n</span><span class="st">found on internet, "</span>, date)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Subtitle</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>subtit<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"order by young people aged 16-29 years </span><span class="sc">\n</span><span class="st">(%)"</span>)</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Caption</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>cap<span class="ot">=</span><span class="fu">paste0</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B9) Low reliability for young population</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="st">          </span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>,iddw3, <span class="st">")"</span>)</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dw3, <span class="fu">aes</span>(<span class="at">x=</span>geo, <span class="at">y=</span>values, <span class="at">fill=</span>ind_type)) <span class="sc">+</span></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>))<span class="sc">+</span></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">width =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title=</span>tit,</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span>subtit,</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a><span class="at">caption=</span>cap)<span class="sc">+</span></span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
+<span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span>,</span>
+<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust=</span><span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(col1, col2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values (`geom_bar()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="maripazgraphs_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
