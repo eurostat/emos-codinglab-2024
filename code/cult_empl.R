@@ -70,7 +70,6 @@ malta_map <- ggplot(malta) +
         panel.grid = element_blank(), 
         axis.ticks = element_blank(), 
         legend.position = "none") 
-  
 
 
 # create a map of Europe

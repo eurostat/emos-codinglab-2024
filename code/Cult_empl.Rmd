@@ -9,7 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Original Article
 
+The following is a replicate of this statistics explained article: <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Culture_statistics_-_cultural_employment#Cultural_employment_.E2.80.93_current_state_and_latest_developments>
 
 ```{r}
 # install and load packages
@@ -21,7 +23,6 @@ pacman::p_load(restatapi,     # for Eurostat data
         # eurostat, 
         cowplot       # for layering maps with "ggdraw"
         )
-
 ```
 
 
@@ -143,57 +144,93 @@ ggdraw(europe_map) +
 
 
 ```{r}
-cult_empl_fig1 <- cult_empl_sex %>% filter(time %in% 2019:2022, sex == "T", 
-                                       #  geo != "EU27_2020", 
-                                           unit == "THS_PER")
+
+# read in data
+id1 <- "cult_emp_sex"
+date1 <- 2019:2022
+
+cult_empl_fig1 <- get_eurostat_data(id1, filters = list(time = date1, sex = "T", unit = "THS_PER", label = T))
 
 
 
 # calculate the rate of change: (value_currentyear−value_previousyear)/value_previousyear*100
 
 cult_empl_fig1 <-  cult_empl_fig1 %>%
-                           # dplyr::arrange(geo, year) %>%
                             group_by(geo) %>%
                             mutate(rate_of_change = (values - lag(values)) / lag(values) * 100) %>%
-                            filter(!is.na(rate_of_change))
+                            filter(!is.na(rate_of_change)) %>% ungroup()
+
+# add NA lines for North Macedonia, Turkey and Montenegro
+NA_fig1 <- data.frame(
+  geo = c("MK", "MK", "TR", "TR", "ME", "ME"),
+  unit = "THS_PERS",
+  sex = "T", 
+  time = c(2021, 2022, 2021, 2022, 2021, 2022),
+  values = NA, 
+  rate_of_change = NA)
+
+NA_fig1[, 1:4] <- lapply(NA_fig1[, 1:4], factor)
+
+cult_empl_fig1 <- bind_rows(NA_fig1, cult_empl_fig1)
 
 
 # Specify the desired order of countries
-desired_order <- c("EU27_2020", "CY", "LU", "IE", "SE", "NL", "PL", "LT", 
+desired_order <- c("EU27_2020", "     ", "CY", "LU", "IE", "SE", "NL", "PL", "LT", 
                    "DE", "IT", "RO", "PT", "MT", "FR", "AT", "FI", "DK", 
                    "SK", "ES", "EL",
                    "BE", "SI", "HU", "LV", "EE", "HR", 
-                   "CZ", "BG", "NO", "IS", "CH", "RS", "MK", "TR", "ME")
+                   "CZ", "BG", "     ", "NO", "IS", "CH", "RS", "MK", "TR", "ME")
+
 
 # Reorder the 'geo' variable
 cult_empl_fig1$geo <- factor(cult_empl_fig1$geo, levels = desired_order)
 
+
+# add country labels 
+geo_labels <- c("EU27_2020" = "EU", " " = " ", "CY" = "Cyprus", "LU" = "Luxemburg", 
+                "IE" = "Ireland", "SE" = "Sweden", "NL" = "Netherlands", 
+                "PL" = "Poland", "LT" = "Lithuania", 
+                "DE" = "Germany (')", "IT" = "Italy", "RO" = "Romania", 
+                "PT" = "Portugal", "MT" = "Malta", "FR" = "France (')", 
+                "AT" = "Austria", "FI" = "Finland", "DK" = "Denmark", 
+                "SK" = "Slovakia", "ES" = "Spain (')", "EL" = "Greece",
+                "BE" = "Belgium", "SI" = "Slovenia", "HU" = "Hungary",
+                "LV" = "Latvia", "EE" = "Estonia", "HR" = "Croatia", 
+                "CZ" = "Czechia", "BG" = "Bulgaria"," " = " ", "NO" = "Norway", 
+                "IS" = "Iceland (')", "CH" = "Switzerland", "RS" = "Serbia", 
+                "MK" = "North Macedonia", "TR" = "Turkiye", "ME" = "Montenegro")
+
+
+# add placeholders for spaces in graphic
+
+placeholder_df <- data.frame(
+  geo = c("       ", "       "),
+  unit = "THS_PERS",
+  sex = "T", 
+  time = c(2021, 2022),
+  values = NA, 
+  rate_of_change = NA
+)
+placeholder_df[, 1:4] <- lapply(placeholder_df[, 1:4], factor)
+
+cult_empl_fig1 <- bind_rows(NA_fig1, placeholder_df, cult_empl_fig1)
+
 # Barplot
 fig1 <- ggplot(cult_empl_fig1 , aes(x = geo, y = rate_of_change, fill = time)) + 
   geom_bar(stat = "identity", position = position_dodge()) +
-  geom_hline(yintercept = seq(-22, 18, by = 5), color = "black", linetype = "solid" )+
-  labs(title = "Cultural employment ‒ annual rates of change, 2020-2022",
+  geom_hline(yintercept = seq(-22, 18, by = 5), color = "gray", linetype = "dashed",linewidth = 0.1)+
+  labs(title = paste0("Cultural employment ‒ annual rates of change, ",
+                       date1[2],"-",date1[length(date1)]), 
        subtitle = "(%)",
-       x = "Country",
-       y = "Rate of Change (%)",
-       fill = "Year") +
+        caption = paste0("Figure 1: Cultural employment ‒ annual rates of change, 2020-2022", "\n",
+                         "\n(%)", "\n",
+                         "\nSource: Eurostat (online data code: ",id1,")"),
+        fill = "Year") +
   scale_y_continuous(breaks = seq(-22, 18, by = 5)) +
-  scale_x_discrete(labels = c("EU27_2020" = "EU", "CY" = "Cyprus", "LU" = "Luxemburg", 
-                              "IE" = "Ireland", "SE" = "Sweden", "NL" = "Netherlands", 
-                              "PL" = "Poland", "LT" = "Lithuania", 
-                              "DE" = "Germany (')", "IT" = "Italy", "RO" = "Romania", 
-                              "PT" = "Portugal", "MT" = "Malta", "FR" = "France (')", 
-                              "AT" = "Austria", "FI" = "Finland", "DK" = "Denmark", 
-                              "SK" = "Slovakia", "ES" = "Spain (')", "EL" = "Greece",
-                              "BE" = "Belgium", "SI" = "Slovenia", "HU" = "Hungary",
-                              "LV" = "Latvia", "EE" = "Estonia", "HR" = "Croatia", 
-                              "CZ" = "Czechia", "BG" = "Bulgaria", "NO" = "Norway", 
-                              "IS" = "Iceland (')", "CH" = "Switzerland", "RS" = "Serbia", 
-                              "MK" = "North Macedonia", "TR" = "Turkiye", "ME" = "Montenegro"
-  )) + 
+  scale_x_discrete(labels = geo_labels) + 
   scale_fill_manual(values = c("2020" = "#B09120", "2021" = "#2644A7", "2022" = "#E04040"), 
                     labels = c("2020" = "2019-2020", "2021" = "2020-2021", "2022" = "2021-2022")) +
-  theme_minimal() +
+  theme_bw() +
   theme(legend.background = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(face = "bold", size = 12),
@@ -204,17 +241,17 @@ fig1 <- ggplot(cult_empl_fig1 , aes(x = geo, y = rate_of_change, fill = time)) +
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
        # axis.ticks.x.bottom = element_line(),
       #  axis.line.x = element_line(),
-        panel.grid = element_line(), 
+        panel.grid = element_blank(), 
         axis.ticks = element_blank(), 
         panel.background = element_blank(),
         #plot.margin = margin(40, 150, 80, 40),
-       # plot.caption=element_text(hjust = 0)
+        plot.caption=element_text(hjust = 0), 
+      panel.border = element_blank()
       ) 
 
-
+fig1
 
 # to do: 
-# adjust for missing values
 # spacing between countries
 # layout details --> fonts, sizes, etc.
 # footnotes 
