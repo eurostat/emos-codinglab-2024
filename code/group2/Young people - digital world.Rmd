@@ -1,0 +1,79 @@
+---
+title: "Young people - digital world"
+author: "Maripaz Venegas"
+date: "2024-06-21"
+output: html_document
+---
+
+# Young People - digital world
+
+## Figure 1
+People who used the internet on a daily basis, 2023
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:People_who_used_the_internet_on_a_daily_basis,_2023_(%25).png
+```{r}
+#Wendy
+```
+
+
+## Figure 2
+People who participated on social networking sites, 2023
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_2_People_who_participated_in_social_networks,_2023_(%25).png
+```{r}
+#Wendy
+```
+
+
+## Figure 3
+People who used the internet for civic or political participation, 2023
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_3_People_who_used_the_internet_for_civic_or_political_participation,_2023_(%25).png
+```{r}
+#Maripaz
+```
+
+
+## Figure 4
+People who used the internet for doing an online course, 2023
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:People_who_used_the_internet_for_doing_an_online_course,_2023_order_by_young_people_aged_16-29_years_(%25).png
+```{r}
+#Maripaz
+```
+
+
+## Figure 5
+Percentage of individuals who have verified the information or content found on internet, 2023 order by young people aged 16-29 years
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_5_Percentage_of_individuals_who_have_verified_the_information_or_content_found_on_the_internet,_2023_(%25).png
+```{r}
+#Maripaz
+```
+
+
+## Figure 6
+Young people's internet use in the EU, selected indicators 2014-2023
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_6_Young_people%27s_internet_use_in_the_EU,_selected_activity_indicators,_2014-2023_(%25)_.png
+```{r}
+#Wendy
+```
+
+
+## Map 1
+Digital skills of young Europeans in 2023: Share of young people (16-29) with basic or above digital skills, 
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Digital_skills_map.png
+```{r}
+#pending
+```
+
+
+## Figure 7
+Young people with at least basic digital skills by gender, 2023
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Young_people_with_at_least_basic_digital_skills_by_gender,_2023_(%25).png
+```{r}
+#Joseph
+```
+
+## Figure 8
+Individuals who wrote code in a programming language, 2023 order by young males
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Individuals_who_wrote_code_in_a_programming_language,_2023_(%25).png
+```{r}
+#Joseph
+```
+
