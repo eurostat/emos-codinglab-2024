@@ -6,6 +6,7 @@ output: html_document
 ---
 
 # Young People - digital world
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
 
 ## Figure 1
 People who used the internet on a daily basis, 2023
