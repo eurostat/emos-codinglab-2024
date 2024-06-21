@@ -1,0 +1,448 @@
+---
+title: "Code"
+author: "Wendy"
+---
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators\_-\_natural_and_living_environment
+
+# Nature and Living Environment
+
+```{r}
+require(conflicted)
+
+require(restatapi)
+require(giscoR)
+
+require(data.table)
+require(chron)
+require(reshape2)
+
+require(kableExtra)
+require(tidyverse)
+require(tmap)
+
+require(highcharter)
+require(plotly)
+require(ggplot2)
+require(dplyr)
+```
+
+# 1. Quality of Life Indicators: Reported Noise from Neighbours grouped by income
+
+```{r}
+id="ilc_mddw04"
+date=2020
+```
+
+```{r}
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+
+efta_cc<-c("CH","NO","IS")
+
+data <- get_eurostat_data(
+  id, 
+  filters = list(
+    incgrp = c("TOTAL"),
+    freq = "A",
+    deg_urb = c("DEG1", "DEG2", "DEG3"),
+    unit = "PC"
+  ),
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = TRUE, 
+  verbose = FALSE
+)
+
+dsd<-as.data.table(get_eurostat_dsd(id))[concept=="geo",c("code","name")]
+
+data<-merge(data,
+                dsd,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+data<- data[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+data$geo<-gsub(" \\(.*\\)","",data$geo)
+
+
+data$geo<-gsub("^Eu.*","EU",data$geo)
+
+# Order the names within the EU
+ordered_name <- data[(code %in% eu_cc) &  (deg_urb == "Cities")]
+ordered_name_eu <- ordered_name[order(-values)]$geo
+
+# Order the names within EFTA
+ordered_name <- data[(code %in% efta_cc) & (deg_urb == "Cities")]
+ordered_name_efta <- ordered_name[order(-values)]$geo
+
+# Order the names for other countries
+ordered_name <- data[!(code %in% c(efta_cc, eu_cc, "EU27_2020")) & (deg_urb == "Cities")]
+ordered_name_other <- ordered_name[order(-values)]$geo
+
+# Combine the ordered names into a single vector
+ordered_name <- c("EU", " ", ordered_name_eu, "  ", ordered_name_efta, "   ", ordered_name_other)
+
+# Ensure ordered_name contains unique values
+ordered_name <- unique(ordered_name)
+
+ordered_name <- unique(ordered_name)
+
+
+data$geo <- factor(data$geo, levels = rev(ordered_name))
+
+data <- data %>%
+  select(geo, deg_urb, values) %>%
+  mutate(
+    geo = factor(geo, levels = rev(ordered_name))
+  )
+
+data <- data |>
+  select(geo, deg_urb, values) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      deg_urb = rep("Cities", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+data$geo <- factor(data$geo,
+                       levels = ordered_name)
+data$deg_urb <- factor(data$deg_urb, 
+                           levels = c("Cities", 
+                                      "Towns and suburbs",
+                                      "Rural areas"))
+```
+
+```{r}
+ggplot(data = data, aes(x = geo, y = values, fill = deg_urb)) +  
+  theme_minimal() +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = c("#B09120", "#2644A7", "#E04040"), 
+                    labels = c("Cities", "Towns and Suburbs", "Rural Areas")) +
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(data$values, na.rm = TRUE) + 5),
+                     breaks = seq(0, max(data$values, na.rm = TRUE) + 5, 5)) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = "Population reporting noise from neighbours or from the street, by degree of urbanisation, 2020",
+    caption = "\nEU: Estimate\nDE: Low Reliability\nPL: 2019 instead of 2020\nIS: 2018 instead of 2020\nSource: Eurostat (online data code: ilc_mddw04)"
+  ) +
+  theme(
+    legend.title = element_blank(),  # Remove legend title
+    legend.position = "bottom",  # Place legend below the plot
+    plot.caption = element_text(hjust = 0, face = "italic")
+  )
+
+```
+
+# Digital World
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world>
+
+```{r}
+id1<-"isoc_ci_ac_i"
+date1 = 2014:2023
+
+data1 <- get_eurostat_data(
+  id = id1,
+  filters = list(
+    indic_is = c("I_IUSNET", "I_IUNW1", "I_IUBK", "I_IUCPP", "I_IUOLC"),
+    ind_type = "IND_TOTAL",
+    geo = "EU27_2020",
+    time = date1,
+    unit = "PC_IND"
+  ),
+  label = TRUE
+)
+
+data1 <- data1 %>%
+  group_by(indic_is) %>%
+  arrange(time) %>%
+  ungroup()
+
+data1
+
+```
+
+```{r}
+
+indic_is_colors <- c("#2644A7", "#B09120", "#E04040", "#208486", "#388AE2")
+
+plot1 <- ggplot(data = data1, aes(x = time, y = values, color = indic_is)) +
+   geom_point(size = 1) +  
+  geom_line(size = 1, aes(group = indic_is)) +
+  labs(
+    title = paste("Young people's internet use in the EU, selected activity indicators (", min(date1), "-", max(date1), ")"),
+    subtitle = "(%)",
+    caption = "\nData for 2020 are estimates\n2021: Break in Time Series\nSource: Eurostat (online data code: isoc_ci_ac_i)",
+    color = "Indicator",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_bw() + 
+   theme(
+    legend.position = "bottom", 
+    legend.box = "vertical", 
+    panel.grid.major = element_blank(),
+    panel.grid.minor.x = element_line(linetype = "grey"),
+    plot.title = element_text(hjust = 0, size = 14, face = "bold"),
+    plot.subtitle = element_text(hjust = 0, size = 12),
+    plot.caption = element_text(hjust = 0, margin = margin(t = 10, unit = "pt"))
+  ) + 
+  ylim(0, 100) +
+  guides(color = guide_legend(ncol = 1)) +
+  scale_color_manual(values = indic_is_colors) +
+   labs(color = NULL)
+
+print(plot1)
+```
+
+# Figure 3: People who used Internet on a Daily basis
+
+```{r}
+id3="isoc_ci_ifp_fu"
+date2=2023
+
+u_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
+
+
+data3=get_eurostat_data(id3, filters = list(time=date2, indic_is="I_IDAY", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND"),
+label=T,
+  ignore.case=T,
+  exact_match=T,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+
+
+dsd3<-as.data.table(get_eurostat_dsd(id3))[concept=="geo",c("code","name")]
+
+data3<-merge(data3,
+                dsd3,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+data3 <- data3[!code %in% c("EA19", "EA18", "EA", 
+                                  "EU28", "EU27_2007", "EU")]
+
+data3$geo<-gsub(" \\(.*\\)","",data3$geo)
+
+
+data3$geo<-gsub("^Eu.*","EU",data3$geo)
+
+name_ord <- data3[(code %in% eu_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-data3[(code %in% efta_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-data3[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+data3 <- data3 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      ind_type = rep("Young people aged 16-29 years", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+data3$geo <- factor(data3$geo,levels = rev(name_ord))
+data3$ind_type <- factor(data3$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+data3 <- data3 %>%
+  mutate(
+    geo = recode(
+      geo,
+      "Iceland" = "Iceland (\U00B9)",
+      "North Macedonia" = "North Macedonia (\U00B9)"
+    )
+  )
+                    
+```
+
+```{r}
+ggplot(data = data3, aes(x = geo, y = values, fill = ind_type)) +  
+  theme_minimal() +
+   geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = c("#B09120", "#2644A7"), 
+                    labels = c("Young people aged 16-29 years", "Adult population")) +
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(data3$values, na.rm = TRUE) + 5),
+                     breaks = seq(0, max(data3$values, na.rm = TRUE) + 5, 5)) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = "People who used the internet on a daily basis, 2023",
+    caption = "\n(\U00B9) Data from 2021 \n(\U00B9) Data from 2022 \nSource: Eurostat (online data code: isoc_ci_ifp_fu)"
+  ) +
+  theme(
+    legend.title = element_blank(),  # Remove legend title
+    legend.position = "bottom",  # Place legend below the plot
+    plot.caption = element_text(hjust = 0, face = "italic")
+  )
+```
+
+#### I cannot figure out how to add the footnote
+
+# Figure 4: People who particpated on social networking sites
+
+```{r}
+id4="isoc_ci_ac_i"
+date3=2023
+
+u_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
+
+
+data4=get_eurostat_data(id4, filters = list(time=date3, indic_is="I_IUSNET", ind_type=c("IND_TOTAL","Y16_29"), unit="PC_IND"),
+label=T,
+  ignore.case=T,
+  exact_match=T,
+  perl=T,
+  stringsAsFactors=F,
+  force_local_filter=T)
+
+
+dsd4<-as.data.table(get_eurostat_dsd(id4))[concept=="geo",c("code","name")]
+
+data4<-merge(data4,
+                dsd4,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+data4 <- data4[!code %in% c("EA19", "EA18", "EA", 
+                                  "EU28", "EU27_2007", "EU")]
+
+data4$geo<-gsub(" \\(.*\\)","",data4$geo)
+
+
+data4$geo<-gsub("^Eu.*","EU",data4$geo)
+
+name_ord <- data4[(code %in% eu_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_eu<-name_ord[order(values)]$geo
+
+name_ord<-data4[(code %in% efta_cc) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_efta<-name_ord[order(values)]$geo
+
+name_ord<-data4[!(code %in% c(efta_cc,eu_cc,"EU27_2020")) & (ind_type=="Individuals, 16 to 29 years old")]
+
+name_ord_othr<-name_ord[order(values)]$geo
+
+name_ord<-c(name_ord_othr, " " ,name_ord_efta, "  " ,name_ord_eu, "   ", "EU")
+
+data4 <- data4 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      ind_type = rep("Young people aged 16-29 years", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+data4$geo <- factor(data4$geo,levels = rev(name_ord))
+data4$ind_type <- factor(data4$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+data4 <- data4 %>%
+  mutate(
+    geo = recode(
+      geo,
+      "Iceland" = "Iceland (\U00B9)",
+      "Albania" = "Albania (\U00B9)"
+    )
+  )
+                    
+```
+
+```{r}
+ggplot(data = data4, aes(x = geo, y = values, fill = ind_type)) +  
+  theme_minimal() +
+   geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = c("#B09120", "#2644A7"), 
+                    labels = c("Young people aged 16-29 years", "Adult population")) +
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(data3$values, na.rm = TRUE) + 5),
+                     breaks = seq(0, max(data3$values, na.rm = TRUE) + 5, 5)) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = "People who participated in social networks, 2023",
+    caption = "\n Note: for example, created a user profile, posted messages or other contributions; Social networks include, for example, Facebook, Youtube, Instagram, Tiktok, X (former Twitter \n(\U00B9) Data from 2021 \n(\U00B9) Data from 2022 \nSource: Eurostat (online data code: isoc_ci_ac_i)"
+  ) +
+  theme(
+    legend.title = element_blank(),  # Remove legend title
+    legend.position = "bottom",  # Place legend below the plot
+    plot.caption = element_text(hjust = 0, face = "italic")
+  )
+```

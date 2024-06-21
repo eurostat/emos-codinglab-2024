@@ -1,0 +1,67 @@
+---
+title: "Quality of Life - Pollution"
+---
+
+## https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators\_-\_natural_and_living_environment
+
+# Nature and Living Environment
+
+## necessary packages
+
+```{r}
+library(data.table)
+library(chron)
+library(reshape2)
+
+library(kableExtra)
+library(ggplot2)
+library(tmap)
+
+library(highcharter)
+library(plotly)
+library(restatapi)
+```
+
+# 1. Population reporting noise from neighbours
+
+Retrieving Data
+
+```{r}
+#Quality of Life Indicators: Reported Noise from Neighbours grouped by income
+
+id <- get_eurostat_data("ilc_mddw04",date_filter=2020,flags=T)
+names(id)
+
+#ordering and filtering of data
+id <- subset(id, !(geo %in% c("EA18", "EA19")))
+id <- id[order(-id$values), ]
+id$geo <- factor(id$geo, levels = unique(id$geo))
+id <- id[!(id$incgrp %in% "A_MD60"), ]
+
+```
+
+Plot
+
+```{r}
+
+ggplot(id, aes(x = geo, y = values, fill = deg_urb)) +
+  theme_minimal() +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = c("#B09120", "#2644A7", "#E04040"), 
+                    labels = c("Cities", "Towns and Suburbs", "Rural Areas")) +
+  theme_bw() +
+  labs(
+    title = paste0("Population reporting noise from neighbours or from the street, by degree of urbanisation, 2020"),
+    caption = paste0("\nEU: Estimate", "\nDE: Low Reliability", "\nPL: 2019 instead of 2020", "IS:2018 instead of 2020",
+                     "\nSource: Eurostat (online data code: ilc_mddw04)")
+  ) +
+  theme(
+    legend.title = element_blank(),  # Remove legend title
+    legend.position = "bottom",  # Place legend below the plot
+    plot.caption = element_text(hjust = 0, face = "italic")
+  )
+
+
+```
+
+Comment: Still need to do some re-ordering and grouping (and do the other graphs, will do them the next coming days)
