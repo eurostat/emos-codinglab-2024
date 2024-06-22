@@ -70,7 +70,7 @@ data7 <- get_eurostat_data(
   exact_match = FALSE,
   perl = TRUE,
   stringsAsFactors = FALSE,
-  force_local_filter = TRUE,
+  force_local_filter = F,
   keep_flags = T
 )
 
@@ -237,7 +237,7 @@ data8 <- get_eurostat_data(
   exact_match = FALSE,
   perl = TRUE,
   stringsAsFactors = FALSE,
-  force_local_filter = TRUE,
+  force_local_filter = F,
   keep_flags = TRUE
 )
 
