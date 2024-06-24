@@ -32,7 +32,7 @@ pacman::p_load(restatapi,     # for Eurostat data
 
 ```{r}
 # color palette
-clrs <- read.csv("C:\\Users\\User\\Documents\\emos-codinglab-2024\\code\\estat_colour_themes.txt",sep="\t",stringsAsFactors = F)
+clrs <- read.csv("estat_colour_themes.txt",sep="\t",stringsAsFactors = F)
 image(c(1:6),c(1:nrow(clrs)),matrix(1:(6*nrow(clrs)),6,nrow(clrs)),col=as.vector(t(apply(as.matrix(clrs[,c(3:8)]),2,rev))), xlab = "", ylab = "", xaxt = "n", yaxt = "n", bty = "n",
       main = "Eurostat colour palettes")
 text(c(0.5), c(1:nrow(clrs)), adj=c(0,1),rev(clrs$theme_desc), col = clrs$text_light)
@@ -62,11 +62,14 @@ cult_emp_map <- cult_emp_map %>%
 
 # 1. first possibility with nuts data
 # get nuts data
-nuts <- gisco_get_nuts(year = 2021, nuts_level = 0, resolution = "1")
+# nuts <- gisco_get_nuts(year = 2021, nuts_level = 0, resolution = "1")
+nuts <- gisco_get_countries(year = 2020,  resolution = "10")
 
 # merge the nuts data with the cultural employment data
 merged_data <- merge(nuts, cult_emp_map, 
-                     by.x = "geo", by.y = "geo", all.x = TRUE)
+                     by.x = "CNTR_ID", by.y = "geo", all.x = TRUE)
+
+data.table::setnames(merged_data,c("geo",colnames(merged_data)[2:14]))
 
 # create a data frame with only Malta for augmentation
 malta <- merged_data[merged_data$geo == "MT", ]
@@ -75,7 +78,7 @@ malta <- merged_data[merged_data$geo == "MT", ]
 # create a map that shows Malta only
 malta_map <- ggplot(malta) +
   geom_sf(aes(fill = values)) + 
-  scale_fill_gradientn( colours = col, breaks = c(3.45, 3.75, 4.05, 4.35, 4.65)) +
+  scale_fill_gradientn( colours = col[2:3], breaks = c(3.45, 3.75, 4.05, 4.35, 4.65)) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.text.y = element_blank(),
@@ -89,7 +92,7 @@ malta_map <- ggplot(malta) +
 # create a map of Europe
 europe_map <- ggplot(merged_data) +
   geom_sf(aes(fill = values)) +
-  scale_fill_gradientn( colours = col, breaks = c(3.45, 3.75, 4.05, 4.35, 4.65),
+  scale_fill_gradientn( colours = col[2:3], breaks = c(3.45, 3.75, 4.05, 4.35, 4.65),
                       labels = c("≥ 4.6", "4.1 -< 4.6","4 -< 4.1", "3.5 -< 4", "< 3.5"),
                       na.value = "lightgrey") +
   coord_sf(crs = 3035, xlim = c(2377294, 7453440), ylim = c(1313597, 5628510)) +
@@ -191,14 +194,18 @@ NA_fig1 <- data.frame(
 
 NA_fig1[, 1:4] <- lapply(NA_fig1[, 1:4], factor)
 
-cult_empl_fig1 <- bind_rows(NA_fig1, cult_empl_fig1)
+dt_sep<-data.table::data.table(geo=c(" ","  ","   "),unit = "THS_PERS", sex="T",time = c(2020, 2021, 2022),values=rep(NA,3),rate_of_change=rep(NA,3))
+
+dt_sep$time<-as.factor(dt_sep$time)
+
+cult_empl_fig1 <- bind_rows(NA_fig1, cult_empl_fig1,dt_sep)
 
 # Specify the desired order of countries
-desired_order <- c("EU27_2020", "CY", "LU", "IE", "SE", "NL", "PL", "LT", 
+desired_order <- c("EU27_2020"," ","CY", "LU", "IE", "SE", "NL", "PL", "LT", 
                    "DE", "IT", "RO", "PT", "MT", "FR", "AT", "FI", "DK", 
                    "SK", "ES", "EL",
                    "BE", "SI", "HU", "LV", "EE", "HR", 
-                   "CZ", "BG", "NO", "IS", "CH", "RS", "MK", "TR", "ME")
+                   "CZ", "BG","  ", "NO", "IS", "CH", "   ", "RS", "MK", "TR", "ME")
 
 
 # Reorder the 'geo' variable with 'desired order'
@@ -206,7 +213,7 @@ cult_empl_fig1$geo <- factor(cult_empl_fig1$geo, levels = desired_order)
 
 
 # add country labels 
-geo_labels <- c("EU27_2020" = "EU", "CY" = "Cyprus", "LU" = "Luxemburg", 
+geo_labels <- c("EU27_2020" = "EU"," "=" " , "CY" = "Cyprus", "LU" = "Luxemburg", 
                 "IE" = "Ireland", "SE" = "Sweden", "NL" = "Netherlands", 
                 "PL" = "Poland", "LT" = "Lithuania", 
                 "DE" = "Germany", "IT" = "Italy", "RO" = "Romania", 
@@ -215,8 +222,8 @@ geo_labels <- c("EU27_2020" = "EU", "CY" = "Cyprus", "LU" = "Luxemburg",
                 "SK" = "Slovakia", "ES" = "Spain", "EL" = "Greece",
                 "BE" = "Belgium", "SI" = "Slovenia", "HU" = "Hungary",
                 "LV" = "Latvia", "EE" = "Estonia", "HR" = "Croatia", 
-                "CZ" = "Czechia", "BG" = "Bulgaria", "NO" = "Norway", 
-                "IS" = "Iceland", "CH" = "Switzerland", "RS" = "Serbia", 
+                "CZ" = "Czechia", "BG" = "Bulgaria", "  "="  ","NO" = "Norway", 
+                "IS" = "Iceland", "CH" = "Switzerland", "   "="   ", "RS" = "Serbia", 
                 "MK" = "North Macedonia", "TR" = "Turkiye", "ME" = "Montenegro")
 
 
