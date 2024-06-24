@@ -151,10 +151,24 @@ write_xlsx(merged_data, path = "pdf/data_cult_emp_map1.xlsx")
 
 ```{r}
 
-# read in data
+# specify information outside of plot
 id1 <- "cult_emp_sex"
 date2 <- 2019:2022
+col_fig1 <- clrs[1, 4:6]   # doenst work yet
 
+title_fig1 <-   paste0("Cultural employment ‒ annual rates of change, ",
+                       date2[2],"-",date2[length(date2)]) 
+subtitle_fig1 <-  "(%)"
+caption_fig1 <-  paste0("Break in time series in 2021 for all countries for which data are available due to the implementation of the new Regulation (EU)2019/1700, also called the Integrated European Social Statistics Framework Regulation", 
+                        "\n(IESS FR) (see LFS metadata)",
+                        "\n(\U00B9) 2020: Break in time series.", 
+                        "\n(\U00B2) 2021, 2022: Definition differs (see LFS metadata).", 
+                        "\n",
+                        "\nSource: Eurostat (online data code: ",id1,")")
+
+
+
+# read in data
 cult_empl_fig1 <- get_eurostat_data(id1, filters = list(time = date2, sex = "T", unit = "THS_PER", label = T))
 
 
@@ -195,15 +209,22 @@ cult_empl_fig1$geo <- factor(cult_empl_fig1$geo, levels = desired_order)
 geo_labels <- c("EU27_2020" = "EU", "CY" = "Cyprus", "LU" = "Luxemburg", 
                 "IE" = "Ireland", "SE" = "Sweden", "NL" = "Netherlands", 
                 "PL" = "Poland", "LT" = "Lithuania", 
-                "DE" = "Germany (')", "IT" = "Italy", "RO" = "Romania", 
-                "PT" = "Portugal", "MT" = "Malta", "FR" = "France (*)", 
+                "DE" = "Germany", "IT" = "Italy", "RO" = "Romania", 
+                "PT" = "Portugal", "MT" = "Malta", "FR" = "France", 
                 "AT" = "Austria", "FI" = "Finland", "DK" = "Denmark", 
-                "SK" = "Slovakia", "ES" = "Spain (*)", "EL" = "Greece",
+                "SK" = "Slovakia", "ES" = "Spain", "EL" = "Greece",
                 "BE" = "Belgium", "SI" = "Slovenia", "HU" = "Hungary",
                 "LV" = "Latvia", "EE" = "Estonia", "HR" = "Croatia", 
                 "CZ" = "Czechia", "BG" = "Bulgaria", "NO" = "Norway", 
-                "IS" = "Iceland (')", "CH" = "Switzerland", "RS" = "Serbia", 
+                "IS" = "Iceland", "CH" = "Switzerland", "RS" = "Serbia", 
                 "MK" = "North Macedonia", "TR" = "Turkiye", "ME" = "Montenegro")
+
+
+# Rename specific countries
+geo_labels["DE"] <- "Germany (\U00B9)"
+geo_labels["FR"] <- "France (\U00B2)"
+geo_labels["ES"] <- "Spain (\U00B2)"
+geo_labels["IS"] <- "Iceland (\U00B9)"
 
 
 
@@ -211,17 +232,15 @@ geo_labels <- c("EU27_2020" = "EU", "CY" = "Cyprus", "LU" = "Luxemburg",
 fig1 <- ggplot(cult_empl_fig1 , aes(x = geo, y = rate_of_change, fill = time)) + 
   geom_bar(stat = "identity", position = position_dodge()) +
   geom_hline(yintercept = seq(-22, 18, by = 5), color = "gray", linetype = "dashed",linewidth = 0.1)+
-  labs(title = paste0("Cultural employment ‒ annual rates of change, ",
-                       date2[2],"-",date2[length(date2)]), 
-       subtitle = "(%)",
-        caption = paste0("Break in time series in 2021 for all countries for which data are available due to the implementation of the new Regulation (EU)2019/1700, also called the Integrated European Social Statistics Framework Regulation", "\n(IESS FR) (see LFS metadata)",
-                         "\n(') 2020: Break in time series.", "\n(*) 2021, 2022: Definition differs (see LFS metadata).", "\n",
-                         "\nSource: Eurostat (online data code: ",id1,")"),
+  labs(title = title_fig1, 
+       subtitle = subtitle_fig1,
+       caption = caption_fig1,
         fill = "Year") +
   scale_y_continuous(breaks = seq(-22, 18, by = 5)) +
   scale_x_discrete(labels = geo_labels) + 
-  scale_fill_manual(values = c("2020" = "#B09120", "2021" = "#2644A7", "2022" = "#E04040"), 
-                    labels = c("2020" = "2019-2020", "2021" = "2020-2021", "2022" = "2021-2022")) +
+ scale_fill_manual(values = c("2020" = "#B09120", "2021" = "#2644A7", "2022" = "#E04040"), 
+ # scale_fill_manual(values = c(date[2] = col_fig1[1], date[3] = col_fig1[2], date[4] = col_fig1[3]), # doesnt work like this
+                    labels = c("2020" = "2019-2020", "2021" = "2020-2021", "2022" = "2021-2022")) +   # take the years out somehow? 
   theme_bw() +
   theme(legend.background = element_blank(),
         legend.title = element_blank(),
@@ -255,9 +274,8 @@ write_xlsx(cult_empl_fig1, path = "pdf/data_cult_empl_fig.xlsx")
 # to do: 
 # spacing between countries
 # layout details --> fonts, sizes, etc.
-# posibillities to automise footnotes?
 # right coloring scheme 
-# export png and data
+
 
 ```
 
@@ -395,6 +413,7 @@ write_xlsx(tab1, path = "pdf/tab1.xlsx")
 # read in data
 id2 <- "cult_emp_n2"
 date4 <- 2012:2022
+# col_fig2 <-             # i need 7 colours but there are only 6 per line? 
 
 
 cult_emp_n2 <- get_eurostat_data(id2, filters = list(time = date4,nace_r2 = c("C18", "J58", "J59", "J60", "M74", "R90", "R91"), geo = "EU27_2020", label = T))
