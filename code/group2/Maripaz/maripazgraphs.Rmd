@@ -1,7 +1,8 @@
 ---
-title: "maripazgraphs"
-format: html
-editor: visual
+title: "emos"
+author: "Maripaz Venegas"
+date: "2024-04-22"
+output: html_document
 ---
 
 # Packages
@@ -25,19 +26,17 @@ require(plotly)
 
 conflicts_prefer(dplyr::filter)
 ```
-
 #Environment
 
 ## Figure 4
 
 Population reporting noise from neighbours or from the street, EU (1), 2011-2020
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment>
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,>*EU*(%C2%B9)\_,*2011-2020*(%25).png
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_EU_(%C2%B9)_,_2011-2020_(%25).png
 
 ### Data
-
 ```{r}
 #| eval: true
 
@@ -67,7 +66,6 @@ data4 <- get_eurostat_data(
 ```
 
 ### Plot
-
 ```{r}
 #| eval: true
 
@@ -121,9 +119,9 @@ knitr::include_graphics(output_file)
 
 Population reporting noise from neighbours or from the street, by income situation, 2020
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment>
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_by_income_situation,>*2020*(%25).png
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_by_income_situation,_2020_(%25).png
 
 ### Data
 
@@ -229,7 +227,6 @@ datafig5 <- datafig5 |>
 ```
 
 ### Plot
-
 ```{r}
 #| eval: true
 
@@ -291,12 +288,12 @@ knitr::include_graphics(output_file)
 
 ## Figure 3
 
-People who used the internet for civic or political participation, 2022. <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world>
+People who used the internet for civic or political participation, 2022.
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_3_People_who_used_the_internet_for_civic_or_political_participation,>*2022_order_by_young_people_aged_16-29_years*(%25).png
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_3_People_who_used_the_internet_for_civic_or_political_participation,_2022_order_by_young_people_aged_16-29_years_(%25).png
 
 ### Data
-
 ```{r}
 
 #| eval: true
@@ -401,8 +398,8 @@ datafig3 <- datafig3 |>
 ))
 ```
 
-### Plot
 
+### Plot
 ```{r}
 #| eval: true
 
@@ -465,12 +462,11 @@ knitr::include_graphics(output_file)
 
 People who used the internet for doing an online course
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world>
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Fig_4_People_who_used_the_internet_for_doing_an_online_course,>*2022_order_by_young_people_aged_16-29_years*(%25).png
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Fig_4_People_who_used_the_internet_for_doing_an_online_course,_2022_order_by_young_people_aged_16-29_years_(%25).png
 
 ### Data
-
 ```{r}
 
 #| eval: true
@@ -571,8 +567,8 @@ datafig4 <- datafig4 |>
 ))
 ```
 
-### Plot
 
+### Plot
 ```{r}
 #| eval: true
 
@@ -626,16 +622,15 @@ ggsave(filename = output_file, plot = p4, width = 12, height = 8, dpi = 1000)
 knitr::include_graphics(output_file)
 ```
 
-## Figure 5
+## Figure 5 
 
 People who have verified the information or content found on internet, 2021
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world>
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
 
-<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_5_Percentage_of_individuals_who_have_verified_the_information_or_content_found_on_internet,>*2021_order_by_young_people_aged_16-29_years*(%25).png
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_5_Percentage_of_individuals_who_have_verified_the_information_or_content_found_on_internet,_2021_order_by_young_people_aged_16-29_years_(%25).png
 
 ### Data
-
 ```{r}
 #| eval: true
 
@@ -728,7 +723,6 @@ datafig4 <- datafig4 |>
 ```
 
 ### Plot
-
 ```{r}
 #| eval: true
 
