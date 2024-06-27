@@ -4,7 +4,7 @@ author: "Joseph"
 format: html
 editor: visual
 toc: true
-# toc-location: left
+toc-location: left
 code-link: true
 code-line-numbers: true
 # code-fold: true
@@ -434,7 +434,7 @@ p3 <- ggplot(data = datafig3, aes(x = geo, y = values, fill = deg_urb)) +
 
 # Save the plot
 output_file <- "quality_figures/p3.png"
-ggsave(filename = output_file, plot = p3, width = 8, height = 6, dpi = 1000)
+ggsave(filename = output_file, plot = p3, width = 8, height = 8, dpi = 1000)
 
 # Include the plot in the document
 knitr::include_graphics(output_file)

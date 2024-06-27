@@ -22,24 +22,13 @@ The figures here are replicated from [Young people - digital world](https://ec.e
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = F,
                       message = F)
-```
 
-```{r}
-require(conflicted)
-
-require(restatapi)
-require(giscoR)
-
-require(data.table)
-require(chron)
-require(reshape2)
-
-require(kableExtra)
-require(tidyverse)
-require(tmap)
-
-require(highcharter)
-require(plotly)
+# Load required packages using pacman
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  restatapi, tidyverse, tmap, giscoR, sf, classInt, conflicted, data.table,
+  chron, kableExtra, highcharter, plotly, tmap, reshape2
+)
 
 conflicts_prefer(dplyr::filter)
 ```
@@ -373,3 +362,157 @@ ggsave(filename = output_file, plot = p8, width = 12, height = 8, dpi = 1000)
 knitr::include_graphics(output_file)
 
 ```
+
+## Map 1
+
+### Retrieve Data
+
+```{r}
+
+# GET NUTS & COUNTRY BOUNDARIES
+nuts3_sf <- giscoR::gisco_get_nuts(
+  nuts_level = "0",
+  resolution = "3",
+  year = "2021"
+)
+
+countries_sf <- giscoR::gisco_get_countries(
+  resolution = "3",
+  region = c("Asia", "Europe")
+)
+
+# FILTER COUNTRIES
+non_eu_list <- c(
+  "AM", "AZ", "BA",
+  "BY", "GE", "MD",
+  "RU", "UA", "XK"
+)
+
+eu_list <- unique(nuts3_sf$CNTR_CODE)
+
+eu_sf <- countries_sf %>%
+  dplyr::filter(CNTR_ID %in% eu_list)
+
+non_eu_sf <- countries_sf %>%
+  dplyr::filter(CNTR_ID %in% non_eu_list)
+
+# DIGITAL SKILLS DATA
+indicator_df <- get_eurostat_data(
+  "ISOC_SK_DSKL_I21",
+  filters = list(
+    ind_type = c("Y16_29"),
+    indic_is = "I_DSK2_BAB",
+    freq = "Annual",
+    unit = c("PC_IND"),
+    date_filter = c(2021:2023)
+  ),
+  label = FALSE,
+  ignore.case = TRUE,
+  exact_match = TRUE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = FALSE,
+  keep_flags = TRUE
+)
+
+# DATA
+indicator_filtered_df <- indicator_df %>%
+  dplyr::select(geo, time, values) %>%
+  dplyr::rename("NUTS_ID" = "geo")
+
+# DF TO WIDE FORMAT
+indicator_wide_df <- indicator_filtered_df %>%
+  tidyr::pivot_wider(names_from = time, values_from = values)
+
+# REPLACE MISSING VALUES
+indicator_df_final <- indicator_wide_df %>%
+  dplyr::mutate(values = dplyr::if_else(is.na(`2023`), `2021`, `2023`)) %>%
+  dplyr::select(NUTS_ID, values)
+
+# MERGE NUTS3 SF AND DF
+mapping_sf <- nuts3_sf %>%
+  dplyr::left_join(indicator_df_final, by = "NUTS_ID")
+
+# BREAKS, COLOR & BOUNDING BOX
+ni <- classInt::classIntervals(mapping_sf$values, n = 6, style = "equal")$brks
+brk <- ni %>%
+  append(max(mapping_sf$values)) %>%
+  head(-1)
+breaks <- c(min(mapping_sf$values), brk) %>%
+  tail(-1)
+
+cols <- hcl.colors(n = 7, palette = "Greens", rev = TRUE)
+
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(sf::st_polygon(list(cbind(
+  c(xmin, xmax, xmax, xmin, xmin),
+  c(ymin, ymin, ymax, ymax, ymin)
+))), crs = 4326)
+
+lambert_bbox <- sf::st_transform(bbox, crs = crs_lambert)
+bb <- sf::st_bbox(lambert_bbox)
+
+```
+
+
+
+### Plot
+
+```{r}
+# MAP
+p <- ggplot(data = mapping_sf) +
+  geom_sf(data = subset(eu_sf, CNTR_ID == "RS"), 
+          fill = "grey80", color = "black", size = .15) +
+  geom_sf(mapping = aes(fill = values), 
+          color = NA, size = 0) +
+  geom_sf(data = eu_sf, color = "black",
+          size = .15, fill = "transparent") +
+  geom_sf(data = non_eu_sf, color = "black", 
+          size = .15, fill = "grey80") +
+  coord_sf(crs = crs_lambert, xlim = c(bb["xmin"], bb["xmax"]), ylim = c(bb["ymin"], bb["ymax"])) +
+  scale_fill_gradientn(
+    colors = cols,
+    breaks = breaks,
+    labels = round(breaks, 0),
+    limits = c(min(mapping_sf$values), max(mapping_sf$values)),
+    na.value = "grey80"
+  ) +
+  guides(
+    fill = guide_colorbar(
+      direction = "horizontal",
+      barheight = unit(2.5, units = "mm"),
+      barwidth = unit(50, units = "mm"),
+      label.position = "bottom",
+      label.hjust = 0,
+      nrow = 1,
+      byrow = TRUE
+    )
+  ) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 10, color = "grey10"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    caption = "Source Data: Eurostat",
+    title = "Digital Skills of Young Europeans in 2023",
+    subtitle = "Share of 16-29 year olds with basic or above digital skills (%)"
+  )
+
+# Save the plot
+output_file <- "digital_figures/map1.png"
+ggsave(filename = output_file, plot = p, width = 13, height = 9, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+```
+

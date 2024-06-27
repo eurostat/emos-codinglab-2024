@@ -25,19 +25,27 @@ library(dplyr)
 idmap="ISOC_SK_DSKL_I21"
 date=2023
 
-app_tot=get_eurostat_data(idmap, filters = list( ind_type="Y16_29", time=date, unit="PC_IND", indic_is="I_DSK2_BAB"),
+app_tot=get_eurostat_data(idmap, 
+                          filters = list( ind_type="Y16_29", 
+                                          time=date, unit="PC_IND", 
+                                          indic_is="I_DSK2_BAB"),
   ignore.case=T,
   exact_match=T,
   perl=T,
   stringsAsFactors=F,
-  force_local_filter=T)
+  force_local_filter=F)
 
-app_tot1=get_eurostat_data(idmap, filters = list(time=2021, geo=c("IS", "MK"), indic_is="I_DSK2_BAB", ind_type="Y16_29", unit="PC_IND"),
-  ignore.case=T,
-  exact_match=T,
-  perl=T,
-  stringsAsFactors=F,
-  force_local_filter=T)
+app_tot1=get_eurostat_data(idmap, 
+                           filters = list(time=2021, 
+                                          geo=c("IS", "MK"), 
+                                          indic_is="I_DSK2_BAB", 
+                                          ind_type="Y16_29",
+                                          unit="PC_IND"),
+                           ignore.case=T,
+                           exact_match=T,
+                           perl=T,
+                           stringsAsFactors=F,
+                           force_local_filter=F)
 
 app_tot=rbind(app_tot,app_tot1)
 ```
@@ -48,9 +56,9 @@ app_tot=rbind(app_tot,app_tot1)
 ```{r}
 options(timeout=300)
 map <- gisco_get_nuts(
-  resolution = "60",
+  resolution = "01",
   nuts_level = "0",
-  year = "2016"
+  year = "2021"
 )
 app_map <- app_tot[geo!="EU27_2020",]
 app_map$values2=round(app_map$values, digits=0)
@@ -58,11 +66,13 @@ app_map$values2=round(app_map$values, digits=0)
 
 
 options(repr.plot.width=9, repr.plot.height=9,repr.plot.res=400)
-map <- dplyr::left_join(map, app_map, by=c("NUTS_ID"="geo"))%>%
-  tm_shape(  projection = "EPSG:3035",
+
+map <- dplyr::left_join(map, 
+                        app_map, 
+                        by=c("NUTS_ID"="geo"))%>%
+  tm_shape(projection = "EPSG:3035",
   xlim = c(1600000, 7800000),
-  ylim = c(1320000, 5650000)
-) +
+  ylim = c(1320000, 5650000)) +
   tm_fill("values",
           popup.vars = c("values","NUTS_ID", "NUTS_NAME"),
           palette = "Greens", 
