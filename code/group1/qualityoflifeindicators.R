@@ -135,7 +135,7 @@ centroids <- st_centroid(merged_data)
 
 
 #create a map for Malta
-malta_data <- merged_data %>% filter(geo == "MT")
+malta_data <- merged_data %>% filter(CNTR_ID == "MT")
 
 malta_data <- st_transform(malta_data, crs = 4326)
 
