@@ -417,149 +417,164 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section></section><section id="map-1" class="level2"><h2 class="anchored" data-anchor-id="map-1">Map 1</h2>
 <section id="retrieve-data" class="level3"><h3 class="anchored" data-anchor-id="retrieve-data">Retrieve Data</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># GET NUTS &amp; COUNTRY BOUNDARIES</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>nuts3_sf <span class="ot">&lt;-</span> giscoR<span class="sc">::</span><span class="fu">gisco_get_nuts</span>(</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="at">nuts_level =</span> <span class="st">"0"</span>,</span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="at">resolution =</span> <span class="st">"3"</span>,</span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="at">year =</span> <span class="st">"2021"</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>)</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a>countries_sf <span class="ot">&lt;-</span> giscoR<span class="sc">::</span><span class="fu">gisco_get_countries</span>(</span>
-<span id="cb5-9"><a href="#cb5-9"></a>  <span class="at">resolution =</span> <span class="st">"3"</span>,</span>
-<span id="cb5-10"><a href="#cb5-10"></a>  <span class="at">region =</span> <span class="fu">c</span>(<span class="st">"Asia"</span>, <span class="st">"Europe"</span>)</span>
-<span id="cb5-11"><a href="#cb5-11"></a>)</span>
-<span id="cb5-12"><a href="#cb5-12"></a></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="co"># FILTER COUNTRIES</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>non_eu_list <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb5-15"><a href="#cb5-15"></a>  <span class="st">"AM"</span>, <span class="st">"AZ"</span>, <span class="st">"BA"</span>,</span>
-<span id="cb5-16"><a href="#cb5-16"></a>  <span class="st">"BY"</span>, <span class="st">"GE"</span>, <span class="st">"MD"</span>,</span>
-<span id="cb5-17"><a href="#cb5-17"></a>  <span class="st">"RU"</span>, <span class="st">"UA"</span>, <span class="st">"XK"</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>)</span>
-<span id="cb5-19"><a href="#cb5-19"></a></span>
-<span id="cb5-20"><a href="#cb5-20"></a>eu_list <span class="ot">&lt;-</span> <span class="fu">unique</span>(nuts3_sf<span class="sc">$</span>CNTR_CODE)</span>
-<span id="cb5-21"><a href="#cb5-21"></a></span>
-<span id="cb5-22"><a href="#cb5-22"></a>eu_sf <span class="ot">&lt;-</span> countries_sf <span class="sc">%&gt;%</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(CNTR_ID <span class="sc">%in%</span> eu_list)</span>
-<span id="cb5-24"><a href="#cb5-24"></a></span>
-<span id="cb5-25"><a href="#cb5-25"></a>non_eu_sf <span class="ot">&lt;-</span> countries_sf <span class="sc">%&gt;%</span></span>
-<span id="cb5-26"><a href="#cb5-26"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(CNTR_ID <span class="sc">%in%</span> non_eu_list)</span>
-<span id="cb5-27"><a href="#cb5-27"></a></span>
-<span id="cb5-28"><a href="#cb5-28"></a><span class="co"># DIGITAL SKILLS DATA</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a>indicator_df <span class="ot">&lt;-</span> <span class="fu">get_eurostat_data</span>(</span>
-<span id="cb5-30"><a href="#cb5-30"></a>  <span class="st">"ISOC_SK_DSKL_I21"</span>,</span>
-<span id="cb5-31"><a href="#cb5-31"></a>  <span class="at">filters =</span> <span class="fu">list</span>(</span>
-<span id="cb5-32"><a href="#cb5-32"></a>    <span class="at">ind_type =</span> <span class="fu">c</span>(<span class="st">"Y16_29"</span>),</span>
-<span id="cb5-33"><a href="#cb5-33"></a>    <span class="at">indic_is =</span> <span class="st">"I_DSK2_BAB"</span>,</span>
-<span id="cb5-34"><a href="#cb5-34"></a>    <span class="at">freq =</span> <span class="st">"Annual"</span>,</span>
-<span id="cb5-35"><a href="#cb5-35"></a>    <span class="at">unit =</span> <span class="fu">c</span>(<span class="st">"PC_IND"</span>),</span>
-<span id="cb5-36"><a href="#cb5-36"></a>    <span class="at">date_filter =</span> <span class="fu">c</span>(<span class="dv">2021</span><span class="sc">:</span><span class="dv">2023</span>)</span>
-<span id="cb5-37"><a href="#cb5-37"></a>  ),</span>
-<span id="cb5-38"><a href="#cb5-38"></a>  <span class="at">label =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-39"><a href="#cb5-39"></a>  <span class="at">ignore.case =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-40"><a href="#cb5-40"></a>  <span class="at">exact_match =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-41"><a href="#cb5-41"></a>  <span class="at">perl =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-42"><a href="#cb5-42"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-43"><a href="#cb5-43"></a>  <span class="at">force_local_filter =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-44"><a href="#cb5-44"></a>  <span class="at">keep_flags =</span> <span class="cn">TRUE</span></span>
-<span id="cb5-45"><a href="#cb5-45"></a>)</span>
-<span id="cb5-46"><a href="#cb5-46"></a></span>
-<span id="cb5-47"><a href="#cb5-47"></a><span class="co"># DATA</span></span>
-<span id="cb5-48"><a href="#cb5-48"></a>indicator_filtered_df <span class="ot">&lt;-</span> indicator_df <span class="sc">%&gt;%</span></span>
-<span id="cb5-49"><a href="#cb5-49"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(geo, time, values) <span class="sc">%&gt;%</span></span>
-<span id="cb5-50"><a href="#cb5-50"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"NUTS_ID"</span> <span class="ot">=</span> <span class="st">"geo"</span>)</span>
-<span id="cb5-51"><a href="#cb5-51"></a></span>
-<span id="cb5-52"><a href="#cb5-52"></a><span class="co"># DF TO WIDE FORMAT</span></span>
-<span id="cb5-53"><a href="#cb5-53"></a>indicator_wide_df <span class="ot">&lt;-</span> indicator_filtered_df <span class="sc">%&gt;%</span></span>
-<span id="cb5-54"><a href="#cb5-54"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> time, <span class="at">values_from =</span> values)</span>
-<span id="cb5-55"><a href="#cb5-55"></a></span>
-<span id="cb5-56"><a href="#cb5-56"></a><span class="co"># REPLACE MISSING VALUES</span></span>
-<span id="cb5-57"><a href="#cb5-57"></a>indicator_df_final <span class="ot">&lt;-</span> indicator_wide_df <span class="sc">%&gt;%</span></span>
-<span id="cb5-58"><a href="#cb5-58"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">values =</span> dplyr<span class="sc">::</span><span class="fu">if_else</span>(<span class="fu">is.na</span>(<span class="st">`</span><span class="at">2023</span><span class="st">`</span>), <span class="st">`</span><span class="at">2021</span><span class="st">`</span>, <span class="st">`</span><span class="at">2023</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-59"><a href="#cb5-59"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(NUTS_ID, values)</span>
-<span id="cb5-60"><a href="#cb5-60"></a></span>
-<span id="cb5-61"><a href="#cb5-61"></a><span class="co"># MERGE NUTS3 SF AND DF</span></span>
-<span id="cb5-62"><a href="#cb5-62"></a>mapping_sf <span class="ot">&lt;-</span> nuts3_sf <span class="sc">%&gt;%</span></span>
-<span id="cb5-63"><a href="#cb5-63"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(indicator_df_final, <span class="at">by =</span> <span class="st">"NUTS_ID"</span>)</span>
-<span id="cb5-64"><a href="#cb5-64"></a></span>
-<span id="cb5-65"><a href="#cb5-65"></a><span class="co"># BREAKS, COLOR &amp; BOUNDING BOX</span></span>
-<span id="cb5-66"><a href="#cb5-66"></a>ni <span class="ot">&lt;-</span> classInt<span class="sc">::</span><span class="fu">classIntervals</span>(mapping_sf<span class="sc">$</span>values, <span class="at">n =</span> <span class="dv">6</span>, <span class="at">style =</span> <span class="st">"equal"</span>)<span class="sc">$</span>brks</span>
-<span id="cb5-67"><a href="#cb5-67"></a>brk <span class="ot">&lt;-</span> ni <span class="sc">%&gt;%</span></span>
-<span id="cb5-68"><a href="#cb5-68"></a>  <span class="fu">append</span>(<span class="fu">max</span>(mapping_sf<span class="sc">$</span>values)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-69"><a href="#cb5-69"></a>  <span class="fu">head</span>(<span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb5-70"><a href="#cb5-70"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(mapping_sf<span class="sc">$</span>values), brk) <span class="sc">%&gt;%</span></span>
-<span id="cb5-71"><a href="#cb5-71"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb5-72"><a href="#cb5-72"></a></span>
-<span id="cb5-73"><a href="#cb5-73"></a>cols <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">7</span>, <span class="at">palette =</span> <span class="st">"Greens"</span>, <span class="at">rev =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-74"><a href="#cb5-74"></a></span>
-<span id="cb5-75"><a href="#cb5-75"></a>crs_lambert <span class="ot">&lt;-</span> <span class="st">"+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"</span></span>
-<span id="cb5-76"><a href="#cb5-76"></a></span>
-<span id="cb5-77"><a href="#cb5-77"></a>xmin <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">10.66</span></span>
-<span id="cb5-78"><a href="#cb5-78"></a>ymin <span class="ot">&lt;-</span> <span class="fl">34.5</span></span>
-<span id="cb5-79"><a href="#cb5-79"></a>xmax <span class="ot">&lt;-</span> <span class="dv">45</span></span>
-<span id="cb5-80"><a href="#cb5-80"></a>ymax <span class="ot">&lt;-</span> <span class="dv">71</span></span>
-<span id="cb5-81"><a href="#cb5-81"></a></span>
-<span id="cb5-82"><a href="#cb5-82"></a>bbox <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_sfc</span>(sf<span class="sc">::</span><span class="fu">st_polygon</span>(<span class="fu">list</span>(<span class="fu">cbind</span>(</span>
-<span id="cb5-83"><a href="#cb5-83"></a>  <span class="fu">c</span>(xmin, xmax, xmax, xmin, xmin),</span>
-<span id="cb5-84"><a href="#cb5-84"></a>  <span class="fu">c</span>(ymin, ymin, ymax, ymax, ymin)</span>
-<span id="cb5-85"><a href="#cb5-85"></a>))), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
-<span id="cb5-86"><a href="#cb5-86"></a></span>
-<span id="cb5-87"><a href="#cb5-87"></a>lambert_bbox <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_transform</span>(bbox, <span class="at">crs =</span> crs_lambert)</span>
-<span id="cb5-88"><a href="#cb5-88"></a>bb <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_bbox</span>(lambert_bbox)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>map_id <span class="ot">=</span> <span class="st">"ISOC_SK_DSKL_I21"</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># GET NUTS &amp; COUNTRY BOUNDARIES</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>nuts3_sf <span class="ot">&lt;-</span> giscoR<span class="sc">::</span><span class="fu">gisco_get_nuts</span>(</span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="at">nuts_level =</span> <span class="st">"0"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="at">resolution =</span> <span class="st">"3"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6"></a>  <span class="at">year =</span> <span class="st">"2021"</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a>countries_sf <span class="ot">&lt;-</span> giscoR<span class="sc">::</span><span class="fu">gisco_get_countries</span>(</span>
+<span id="cb5-10"><a href="#cb5-10"></a>  <span class="at">resolution =</span> <span class="st">"3"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11"></a>  <span class="at">region =</span> <span class="fu">c</span>(<span class="st">"Asia"</span>, <span class="st">"Europe"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12"></a>)</span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co"># FILTER COUNTRIES</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>non_eu_list <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-16"><a href="#cb5-16"></a>  <span class="st">"AM"</span>, <span class="st">"AZ"</span>, <span class="st">"BA"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17"></a>  <span class="st">"BY"</span>, <span class="st">"GE"</span>, <span class="st">"MD"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18"></a>  <span class="st">"RU"</span>, <span class="st">"UA"</span>, <span class="st">"XK"</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a>)</span>
+<span id="cb5-20"><a href="#cb5-20"></a></span>
+<span id="cb5-21"><a href="#cb5-21"></a>eu_list <span class="ot">&lt;-</span> <span class="fu">unique</span>(nuts3_sf<span class="sc">$</span>CNTR_CODE)</span>
+<span id="cb5-22"><a href="#cb5-22"></a></span>
+<span id="cb5-23"><a href="#cb5-23"></a>eu_sf <span class="ot">&lt;-</span> countries_sf <span class="sc">%&gt;%</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(CNTR_ID <span class="sc">%in%</span> eu_list)</span>
+<span id="cb5-25"><a href="#cb5-25"></a></span>
+<span id="cb5-26"><a href="#cb5-26"></a>non_eu_sf <span class="ot">&lt;-</span> countries_sf <span class="sc">%&gt;%</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(CNTR_ID <span class="sc">%in%</span> non_eu_list)</span>
+<span id="cb5-28"><a href="#cb5-28"></a></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="co"># DIGITAL SKILLS DATA</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a>indicator_df <span class="ot">&lt;-</span> <span class="fu">get_eurostat_data</span>(</span>
+<span id="cb5-31"><a href="#cb5-31"></a>  map_id,</span>
+<span id="cb5-32"><a href="#cb5-32"></a>  <span class="at">filters =</span> <span class="fu">list</span>(</span>
+<span id="cb5-33"><a href="#cb5-33"></a>    <span class="at">ind_type =</span> <span class="fu">c</span>(<span class="st">"Y16_29"</span>),</span>
+<span id="cb5-34"><a href="#cb5-34"></a>    <span class="at">indic_is =</span> <span class="st">"I_DSK2_BAB"</span>,</span>
+<span id="cb5-35"><a href="#cb5-35"></a>    <span class="at">freq =</span> <span class="st">"Annual"</span>,</span>
+<span id="cb5-36"><a href="#cb5-36"></a>    <span class="at">unit =</span> <span class="fu">c</span>(<span class="st">"PC_IND"</span>),</span>
+<span id="cb5-37"><a href="#cb5-37"></a>    <span class="at">date_filter =</span> <span class="fu">c</span>(<span class="dv">2021</span><span class="sc">:</span><span class="dv">2023</span>)</span>
+<span id="cb5-38"><a href="#cb5-38"></a>  ),</span>
+<span id="cb5-39"><a href="#cb5-39"></a>  <span class="at">label =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-40"><a href="#cb5-40"></a>  <span class="at">ignore.case =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-41"><a href="#cb5-41"></a>  <span class="at">exact_match =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-42"><a href="#cb5-42"></a>  <span class="at">perl =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-43"><a href="#cb5-43"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-44"><a href="#cb5-44"></a>  <span class="at">force_local_filter =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-45"><a href="#cb5-45"></a>  <span class="at">keep_flags =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-46"><a href="#cb5-46"></a>)</span>
+<span id="cb5-47"><a href="#cb5-47"></a></span>
+<span id="cb5-48"><a href="#cb5-48"></a><span class="co"># DATA</span></span>
+<span id="cb5-49"><a href="#cb5-49"></a>indicator_filtered_df <span class="ot">&lt;-</span> indicator_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-50"><a href="#cb5-50"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(geo, time, values) <span class="sc">%&gt;%</span></span>
+<span id="cb5-51"><a href="#cb5-51"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"NUTS_ID"</span> <span class="ot">=</span> <span class="st">"geo"</span>)</span>
+<span id="cb5-52"><a href="#cb5-52"></a></span>
+<span id="cb5-53"><a href="#cb5-53"></a><span class="co"># DF TO WIDE FORMAT</span></span>
+<span id="cb5-54"><a href="#cb5-54"></a>indicator_wide_df <span class="ot">&lt;-</span> indicator_filtered_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-55"><a href="#cb5-55"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> time, <span class="at">values_from =</span> values)</span>
+<span id="cb5-56"><a href="#cb5-56"></a></span>
+<span id="cb5-57"><a href="#cb5-57"></a><span class="co"># REPLACE MISSING VALUES</span></span>
+<span id="cb5-58"><a href="#cb5-58"></a>indicator_df_final <span class="ot">&lt;-</span> indicator_wide_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-59"><a href="#cb5-59"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">values =</span> dplyr<span class="sc">::</span><span class="fu">if_else</span>(<span class="fu">is.na</span>(<span class="st">`</span><span class="at">2023</span><span class="st">`</span>), <span class="st">`</span><span class="at">2021</span><span class="st">`</span>, <span class="st">`</span><span class="at">2023</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-60"><a href="#cb5-60"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(NUTS_ID, values)</span>
+<span id="cb5-61"><a href="#cb5-61"></a></span>
+<span id="cb5-62"><a href="#cb5-62"></a><span class="co"># MERGE NUTS3 SF AND DF</span></span>
+<span id="cb5-63"><a href="#cb5-63"></a>mapping_sf <span class="ot">&lt;-</span> nuts3_sf <span class="sc">%&gt;%</span></span>
+<span id="cb5-64"><a href="#cb5-64"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(indicator_df_final, <span class="at">by =</span> <span class="st">"NUTS_ID"</span>)</span>
+<span id="cb5-65"><a href="#cb5-65"></a></span>
+<span id="cb5-66"><a href="#cb5-66"></a><span class="co"># BREAKS, COLOR &amp; BOUNDING BOX</span></span>
+<span id="cb5-67"><a href="#cb5-67"></a>ni <span class="ot">&lt;-</span> classInt<span class="sc">::</span><span class="fu">classIntervals</span>(mapping_sf<span class="sc">$</span>values, <span class="at">n =</span> <span class="dv">5</span>, <span class="at">style =</span> <span class="st">"equal"</span>)<span class="sc">$</span>brks</span>
+<span id="cb5-68"><a href="#cb5-68"></a>brk <span class="ot">&lt;-</span> ni <span class="sc">%&gt;%</span></span>
+<span id="cb5-69"><a href="#cb5-69"></a>  <span class="fu">append</span>(<span class="fu">max</span>(mapping_sf<span class="sc">$</span>values)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-70"><a href="#cb5-70"></a>  <span class="fu">head</span>(<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb5-71"><a href="#cb5-71"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(mapping_sf<span class="sc">$</span>values), brk) <span class="sc">%&gt;%</span></span>
+<span id="cb5-72"><a href="#cb5-72"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb5-73"><a href="#cb5-73"></a></span>
+<span id="cb5-74"><a href="#cb5-74"></a>cols <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">palette =</span> <span class="st">"Greens"</span>, <span class="at">rev =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-75"><a href="#cb5-75"></a></span>
+<span id="cb5-76"><a href="#cb5-76"></a>crs_lambert <span class="ot">&lt;-</span> <span class="st">"+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"</span></span>
+<span id="cb5-77"><a href="#cb5-77"></a></span>
+<span id="cb5-78"><a href="#cb5-78"></a>xmin <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">10.66</span></span>
+<span id="cb5-79"><a href="#cb5-79"></a>ymin <span class="ot">&lt;-</span> <span class="fl">34.5</span></span>
+<span id="cb5-80"><a href="#cb5-80"></a>xmax <span class="ot">&lt;-</span> <span class="dv">45</span></span>
+<span id="cb5-81"><a href="#cb5-81"></a>ymax <span class="ot">&lt;-</span> <span class="dv">71</span></span>
+<span id="cb5-82"><a href="#cb5-82"></a></span>
+<span id="cb5-83"><a href="#cb5-83"></a>bbox <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_sfc</span>(sf<span class="sc">::</span><span class="fu">st_polygon</span>(<span class="fu">list</span>(<span class="fu">cbind</span>(</span>
+<span id="cb5-84"><a href="#cb5-84"></a>  <span class="fu">c</span>(xmin, xmax, xmax, xmin, xmin),</span>
+<span id="cb5-85"><a href="#cb5-85"></a>  <span class="fu">c</span>(ymin, ymin, ymax, ymax, ymin)</span>
+<span id="cb5-86"><a href="#cb5-86"></a>))), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb5-87"><a href="#cb5-87"></a></span>
+<span id="cb5-88"><a href="#cb5-88"></a>lambert_bbox <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_transform</span>(bbox, <span class="at">crs =</span> crs_lambert)</span>
+<span id="cb5-89"><a href="#cb5-89"></a>bb <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_bbox</span>(lambert_bbox)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="plot-2" class="level3"><h3 class="anchored" data-anchor-id="plot-2">Plot</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># MAP</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> mapping_sf) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">subset</span>(eu_sf, CNTR_ID <span class="sc">==</span> <span class="st">"RS"</span>), </span>
-<span id="cb6-4"><a href="#cb6-4"></a>          <span class="at">fill =</span> <span class="st">"grey80"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> .<span class="dv">15</span>) <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> values), </span>
-<span id="cb6-6"><a href="#cb6-6"></a>          <span class="at">color =</span> <span class="cn">NA</span>, <span class="at">size =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> eu_sf, <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8"></a>          <span class="at">size =</span> .<span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> non_eu_sf, <span class="at">color =</span> <span class="st">"black"</span>, </span>
-<span id="cb6-10"><a href="#cb6-10"></a>          <span class="at">size =</span> .<span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"grey80"</span>) <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a>  <span class="fu">coord_sf</span>(<span class="at">crs =</span> crs_lambert, <span class="at">xlim =</span> <span class="fu">c</span>(bb[<span class="st">"xmin"</span>], bb[<span class="st">"xmax"</span>]), <span class="at">ylim =</span> <span class="fu">c</span>(bb[<span class="st">"ymin"</span>], bb[<span class="st">"ymax"</span>])) <span class="sc">+</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a>  <span class="fu">scale_fill_gradientn</span>(</span>
-<span id="cb6-13"><a href="#cb6-13"></a>    <span class="at">colors =</span> cols,</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    <span class="at">breaks =</span> breaks,</span>
-<span id="cb6-15"><a href="#cb6-15"></a>    <span class="at">labels =</span> <span class="fu">round</span>(breaks, <span class="dv">0</span>),</span>
-<span id="cb6-16"><a href="#cb6-16"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="fu">min</span>(mapping_sf<span class="sc">$</span>values), <span class="fu">max</span>(mapping_sf<span class="sc">$</span>values)),</span>
-<span id="cb6-17"><a href="#cb6-17"></a>    <span class="at">na.value =</span> <span class="st">"grey80"</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a>  ) <span class="sc">+</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a>  <span class="fu">guides</span>(</span>
-<span id="cb6-20"><a href="#cb6-20"></a>    <span class="at">fill =</span> <span class="fu">guide_colorbar</span>(</span>
-<span id="cb6-21"><a href="#cb6-21"></a>      <span class="at">direction =</span> <span class="st">"horizontal"</span>,</span>
-<span id="cb6-22"><a href="#cb6-22"></a>      <span class="at">barheight =</span> <span class="fu">unit</span>(<span class="fl">2.5</span>, <span class="at">units =</span> <span class="st">"mm"</span>),</span>
-<span id="cb6-23"><a href="#cb6-23"></a>      <span class="at">barwidth =</span> <span class="fu">unit</span>(<span class="dv">50</span>, <span class="at">units =</span> <span class="st">"mm"</span>),</span>
-<span id="cb6-24"><a href="#cb6-24"></a>      <span class="at">label.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb6-25"><a href="#cb6-25"></a>      <span class="at">label.hjust =</span> <span class="dv">0</span>,</span>
-<span id="cb6-26"><a href="#cb6-26"></a>      <span class="at">nrow =</span> <span class="dv">1</span>,</span>
-<span id="cb6-27"><a href="#cb6-27"></a>      <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
-<span id="cb6-28"><a href="#cb6-28"></a>    )</span>
-<span id="cb6-29"><a href="#cb6-29"></a>  ) <span class="sc">+</span></span>
-<span id="cb6-30"><a href="#cb6-30"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb6-31"><a href="#cb6-31"></a>  <span class="fu">theme</span>(</span>
-<span id="cb6-32"><a href="#cb6-32"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"grey10"</span>),</span>
-<span id="cb6-33"><a href="#cb6-33"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb6-34"><a href="#cb6-34"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb6-35"><a href="#cb6-35"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb6-36"><a href="#cb6-36"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb6-37"><a href="#cb6-37"></a>  ) <span class="sc">+</span></span>
-<span id="cb6-38"><a href="#cb6-38"></a>  <span class="fu">labs</span>(</span>
-<span id="cb6-39"><a href="#cb6-39"></a>    <span class="at">caption =</span> <span class="st">"Source Data: Eurostat"</span>,</span>
-<span id="cb6-40"><a href="#cb6-40"></a>    <span class="at">title =</span> <span class="st">"Digital Skills of Young Europeans in 2023"</span>,</span>
-<span id="cb6-41"><a href="#cb6-41"></a>    <span class="at">subtitle =</span> <span class="st">"Share of 16-29 year olds with basic or above digital skills (%)"</span></span>
-<span id="cb6-42"><a href="#cb6-42"></a>  )</span>
-<span id="cb6-43"><a href="#cb6-43"></a></span>
-<span id="cb6-44"><a href="#cb6-44"></a><span class="co"># Save the plot</span></span>
-<span id="cb6-45"><a href="#cb6-45"></a>output_file <span class="ot">&lt;-</span> <span class="st">"digital_figures/map1.png"</span></span>
-<span id="cb6-46"><a href="#cb6-46"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> output_file, <span class="at">plot =</span> p, <span class="at">width =</span> <span class="dv">13</span>, <span class="at">height =</span> <span class="dv">9</span>, <span class="at">dpi =</span> <span class="dv">1000</span>)</span>
-<span id="cb6-47"><a href="#cb6-47"></a></span>
-<span id="cb6-48"><a href="#cb6-48"></a><span class="co"># Include the plot in the document</span></span>
-<span id="cb6-49"><a href="#cb6-49"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(output_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># # MAP</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> mapping_sf) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">subset</span>(eu_sf, CNTR_ID <span class="sc">==</span> <span class="st">"RS"</span>), </span>
+<span id="cb6-5"><a href="#cb6-5"></a>          <span class="at">fill =</span> <span class="st">"grey80"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> .<span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> values), </span>
+<span id="cb6-7"><a href="#cb6-7"></a>          <span class="at">color =</span> <span class="cn">NA</span>, <span class="at">size =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> eu_sf, <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9"></a>          <span class="at">size =</span> .<span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> non_eu_sf, <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb6-11"><a href="#cb6-11"></a>          <span class="at">size =</span> .<span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"grey80"</span>) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a>  <span class="fu">geom_sf_text</span>(<span class="at">data =</span> mapping_sf, </span>
+<span id="cb6-13"><a href="#cb6-13"></a>               <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(values, <span class="dv">0</span>)), </span>
+<span id="cb6-14"><a href="#cb6-14"></a>               <span class="at">size =</span> <span class="dv">4</span>, </span>
+<span id="cb6-15"><a href="#cb6-15"></a>               <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb6-16"><a href="#cb6-16"></a>               <span class="at">check_overlap =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb6-17"><a href="#cb6-17"></a>               <span class="at">nudge_y =</span> <span class="fl">0.8</span>,,</span>
+<span id="cb6-18"><a href="#cb6-18"></a>               <span class="at">fontface =</span> <span class="st">"bold"</span>, </span>
+<span id="cb6-19"><a href="#cb6-19"></a>               <span class="at">path =</span> T) <span class="sc">+</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a>  <span class="fu">coord_sf</span>(<span class="at">crs =</span> crs_lambert, <span class="at">xlim =</span> <span class="fu">c</span>(bb[<span class="st">"xmin"</span>], bb[<span class="st">"xmax"</span>]), <span class="at">ylim =</span> <span class="fu">c</span>(bb[<span class="st">"ymin"</span>], bb[<span class="st">"ymax"</span>])) <span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a>  <span class="fu">scale_fill_gradientn</span>(</span>
+<span id="cb6-22"><a href="#cb6-22"></a>    <span class="at">colors =</span> cols,</span>
+<span id="cb6-23"><a href="#cb6-23"></a>    <span class="at">breaks =</span> breaks,</span>
+<span id="cb6-24"><a href="#cb6-24"></a>    <span class="at">labels =</span> <span class="fu">round</span>(breaks, <span class="dv">0</span>),</span>
+<span id="cb6-25"><a href="#cb6-25"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="fu">min</span>(mapping_sf<span class="sc">$</span>values), <span class="fu">max</span>(mapping_sf<span class="sc">$</span>values)),</span>
+<span id="cb6-26"><a href="#cb6-26"></a>    <span class="at">na.value =</span> <span class="st">"grey80"</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a>  <span class="fu">guides</span>(</span>
+<span id="cb6-29"><a href="#cb6-29"></a>    <span class="at">fill =</span> <span class="fu">guide_colorbar</span>(</span>
+<span id="cb6-30"><a href="#cb6-30"></a>      <span class="at">direction =</span> <span class="st">"horizontal"</span>,</span>
+<span id="cb6-31"><a href="#cb6-31"></a>      <span class="at">barheight =</span> <span class="fu">unit</span>(<span class="fl">2.5</span>, <span class="at">units =</span> <span class="st">"mm"</span>),</span>
+<span id="cb6-32"><a href="#cb6-32"></a>      <span class="at">barwidth =</span> <span class="fu">unit</span>(<span class="dv">50</span>, <span class="at">units =</span> <span class="st">"mm"</span>),</span>
+<span id="cb6-33"><a href="#cb6-33"></a>      <span class="at">label.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb6-34"><a href="#cb6-34"></a>      <span class="at">label.hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb6-35"><a href="#cb6-35"></a>      <span class="at">nrow =</span> <span class="dv">1</span>,</span>
+<span id="cb6-36"><a href="#cb6-36"></a>      <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-37"><a href="#cb6-37"></a>    )</span>
+<span id="cb6-38"><a href="#cb6-38"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-39"><a href="#cb6-39"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-41"><a href="#cb6-41"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb6-42"><a href="#cb6-42"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb6-43"><a href="#cb6-43"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">25</span>),</span>
+<span id="cb6-44"><a href="#cb6-44"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">15</span>),</span>
+<span id="cb6-45"><a href="#cb6-45"></a>    <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.6</span>), </span>
+<span id="cb6-46"><a href="#cb6-46"></a>    <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb6-47"><a href="#cb6-47"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb6-48"><a href="#cb6-48"></a>    <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>), </span>
+<span id="cb6-49"><a href="#cb6-49"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"grey10"</span>)</span>
+<span id="cb6-50"><a href="#cb6-50"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-51"><a href="#cb6-51"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-52"><a href="#cb6-52"></a>    <span class="at">caption =</span> <span class="fu">paste0</span>(<span class="st">"Iceland, North Macedonia and Albania: data from 2021."</span>,</span>
+<span id="cb6-53"><a href="#cb6-53"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>, map_id, <span class="st">")</span><span class="sc">\n</span><span class="st">"</span>),</span>
+<span id="cb6-54"><a href="#cb6-54"></a>    <span class="at">title =</span> <span class="st">"Digital Skills of Young Europeans in 2023"</span>,</span>
+<span id="cb6-55"><a href="#cb6-55"></a>    <span class="at">subtitle =</span> <span class="st">"Share of 16-29 year olds with basic or above digital skills (%)</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb6-56"><a href="#cb6-56"></a>  )</span>
+<span id="cb6-57"><a href="#cb6-57"></a></span>
+<span id="cb6-58"><a href="#cb6-58"></a><span class="co"># Save the plot with a specific background setting</span></span>
+<span id="cb6-59"><a href="#cb6-59"></a>output_file <span class="ot">&lt;-</span> <span class="st">"digital_figures/map1.png"</span></span>
+<span id="cb6-60"><a href="#cb6-60"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> output_file, <span class="at">plot =</span> p, <span class="at">width =</span> <span class="dv">20</span>, <span class="at">height =</span> <span class="dv">12</span>, <span class="at">dpi =</span> <span class="dv">1000</span>, <span class="at">bg =</span> <span class="st">"white"</span>)</span>
+<span id="cb6-61"><a href="#cb6-61"></a></span>
+<span id="cb6-62"><a href="#cb6-62"></a><span class="co"># Include the plot in the document</span></span>
+<span id="cb6-63"><a href="#cb6-63"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(output_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="digital_figures/map1.png" class="img-fluid figure-img" width="6500"></p>
+<figure class="figure"><p><img src="digital_figures/map1.png" class="img-fluid figure-img" width="10000"></p>
 </figure>
 </div>
 </div>

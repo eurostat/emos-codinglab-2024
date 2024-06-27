@@ -368,7 +368,7 @@ knitr::include_graphics(output_file)
 ### Retrieve Data
 
 ```{r}
-
+map_id = "ISOC_SK_DSKL_I21"
 # GET NUTS & COUNTRY BOUNDARIES
 nuts3_sf <- giscoR::gisco_get_nuts(
   nuts_level = "0",
@@ -398,7 +398,7 @@ non_eu_sf <- countries_sf %>%
 
 # DIGITAL SKILLS DATA
 indicator_df <- get_eurostat_data(
-  "ISOC_SK_DSKL_I21",
+  map_id,
   filters = list(
     ind_type = c("Y16_29"),
     indic_is = "I_DSK2_BAB",
@@ -434,14 +434,14 @@ mapping_sf <- nuts3_sf %>%
   dplyr::left_join(indicator_df_final, by = "NUTS_ID")
 
 # BREAKS, COLOR & BOUNDING BOX
-ni <- classInt::classIntervals(mapping_sf$values, n = 6, style = "equal")$brks
+ni <- classInt::classIntervals(mapping_sf$values, n = 5, style = "equal")$brks
 brk <- ni %>%
   append(max(mapping_sf$values)) %>%
   head(-1)
 breaks <- c(min(mapping_sf$values), brk) %>%
   tail(-1)
 
-cols <- hcl.colors(n = 7, palette = "Greens", rev = TRUE)
+cols <- hcl.colors(n = 6, palette = "Greens", rev = TRUE)
 
 crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
 
@@ -465,7 +465,8 @@ bb <- sf::st_bbox(lambert_bbox)
 ### Plot
 
 ```{r}
-# MAP
+# # MAP
+
 p <- ggplot(data = mapping_sf) +
   geom_sf(data = subset(eu_sf, CNTR_ID == "RS"), 
           fill = "grey80", color = "black", size = .15) +
@@ -475,6 +476,14 @@ p <- ggplot(data = mapping_sf) +
           size = .15, fill = "transparent") +
   geom_sf(data = non_eu_sf, color = "black", 
           size = .15, fill = "grey80") +
+  geom_sf_text(data = mapping_sf, 
+               aes(label = round(values, 0)), 
+               size = 4, 
+               color = "black", 
+               check_overlap = TRUE, 
+               nudge_y = 0.8,,
+               fontface = "bold", 
+               path = T) +
   coord_sf(crs = crs_lambert, xlim = c(bb["xmin"], bb["xmax"]), ylim = c(bb["ymin"], bb["ymax"])) +
   scale_fill_gradientn(
     colors = cols,
@@ -496,23 +505,29 @@ p <- ggplot(data = mapping_sf) +
   ) +
   theme_void() +
   theme(
-    legend.text = element_text(size = 10, color = "grey10"),
-    plot.caption = element_text(hjust = 0),
-    plot.title = element_text(hjust = 0, face = "bold"),
-    legend.position = "bottom",
-    legend.title = element_blank()
+    plot.background = element_rect(fill = "white", color = NA),
+    plot.caption = element_text(hjust = 0, size = 14),
+    plot.title = element_text(hjust = 0, face = "bold", size = 25),
+    plot.subtitle = element_text(hjust = 0, size = 15),
+    legend.position = c(0, 0.6), 
+    legend.justification = c(0, 0),
+    legend.title = element_blank(), 
+    legend.background = element_rect(fill = "white", color = NA), 
+    legend.text = element_text(size = 10, color = "grey10")
   ) +
   labs(
-    caption = "Source Data: Eurostat",
+    caption = paste0("Iceland, North Macedonia and Albania: data from 2021.",
+                  "\nSource: Eurostat (online data code: ", map_id, ")\n"),
     title = "Digital Skills of Young Europeans in 2023",
-    subtitle = "Share of 16-29 year olds with basic or above digital skills (%)"
+    subtitle = "Share of 16-29 year olds with basic or above digital skills (%)\n"
   )
 
-# Save the plot
+# Save the plot with a specific background setting
 output_file <- "digital_figures/map1.png"
-ggsave(filename = output_file, plot = p, width = 13, height = 9, dpi = 1000)
+ggsave(filename = output_file, plot = p, width = 20, height = 12, dpi = 1000, bg = "white")
 
 # Include the plot in the document
 knitr::include_graphics(output_file)
+
 ```
 
