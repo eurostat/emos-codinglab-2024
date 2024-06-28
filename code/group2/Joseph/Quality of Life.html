@@ -121,25 +121,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><section id="article-source" class="level2"><h2 class="anchored" data-anchor-id="article-source">Article Source</h2>
-<p>The figures here are replicated from <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment">Quality of life indicators - natural and living environment</a>.<br></p>
+<p>The figures here are replicated from <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment">Quality of life indicators - natural and living environment</a>.</p>
 </section><section id="loading-packages" class="level2"><h2 class="anchored" data-anchor-id="loading-packages">Loading Packages</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">require</span>(conflicted)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">require</span>(restatapi)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">require</span>(giscoR)</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">require</span>(data.table)</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">require</span>(chron)</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">require</span>(reshape2)</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">require</span>(kableExtra)</span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">require</span>(tidyverse)</span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="fu">require</span>(tmap)</span>
-<span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">require</span>(highcharter)</span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="fu">require</span>(plotly)</span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>filter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  restatapi, tidyverse, tmap, </span>
+<span id="cb1-3"><a href="#cb1-3"></a>  giscoR, sf, classInt, conflicted, </span>
+<span id="cb1-4"><a href="#cb1-4"></a>  data.table, chron, kableExtra, highcharter, </span>
+<span id="cb1-5"><a href="#cb1-5"></a>  plotly, tmap, reshape2</span>
+<span id="cb1-6"><a href="#cb1-6"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>filter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="figure-1" class="level2"><h2 class="anchored" data-anchor-id="figure-1">Figure 1</h2>
 <section id="retrieving-data" class="level3"><h3 class="anchored" data-anchor-id="retrieving-data">Retrieving data</h3>
@@ -365,13 +357,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-45"><a href="#cb5-45"></a></span>
 <span id="cb5-46"><a href="#cb5-46"></a><span class="co"># Save the plot</span></span>
 <span id="cb5-47"><a href="#cb5-47"></a>output_file <span class="ot">&lt;-</span> <span class="st">"quality_figures/p2.png"</span></span>
-<span id="cb5-48"><a href="#cb5-48"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> output_file, <span class="at">plot =</span> p2, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 3 rows containing missing values or values outside the scale range
-(`geom_bar()`).</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Include the plot in the document</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(output_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-48"><a href="#cb5-48"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> output_file, <span class="at">plot =</span> p2, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">1000</span>)</span>
+<span id="cb5-49"><a href="#cb5-49"></a></span>
+<span id="cb5-50"><a href="#cb5-50"></a><span class="co"># Include the plot in the document</span></span>
+<span id="cb5-51"><a href="#cb5-51"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(output_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="quality_figures/p2.png" class="img-fluid figure-img" width="4000"></p>
@@ -382,148 +371,145 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section></section><section id="figure-3" class="level2"><h2 class="anchored" data-anchor-id="figure-3">Figure 3</h2>
 <section id="retrieving-data-2" class="level3"><h3 class="anchored" data-anchor-id="retrieving-data-2">Retrieving data</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Define parameters</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>id3 <span class="ot">&lt;-</span> <span class="st">"ilc_mddw05"</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>date3 <span class="ot">&lt;-</span> <span class="dv">2020</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co"># Get country codes for EU and EFTA</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a>eu_cc <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">"cc"</span>, <span class="at">envir =</span> .restatapi_env)<span class="sc">$</span>EU27_2020</span>
-<span id="cb8-7"><a href="#cb8-7"></a>efta_cc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CH"</span>, <span class="st">"NO"</span>, <span class="st">"IS"</span>, <span class="st">"LI"</span>)</span>
-<span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># Fetch the data from Eurostat</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a>data3 <span class="ot">&lt;-</span> <span class="fu">get_eurostat_data</span>(</span>
-<span id="cb8-11"><a href="#cb8-11"></a>  id3,</span>
-<span id="cb8-12"><a href="#cb8-12"></a>  <span class="at">filters =</span> <span class="fu">list</span>(</span>
-<span id="cb8-13"><a href="#cb8-13"></a>    <span class="at">incgrp =</span> <span class="st">"Total"</span>,</span>
-<span id="cb8-14"><a href="#cb8-14"></a>    <span class="at">freq =</span> <span class="st">"Annual"</span>,</span>
-<span id="cb8-15"><a href="#cb8-15"></a>    <span class="at">deg_urb =</span> <span class="fu">c</span>(<span class="st">"Cities"</span>, <span class="st">"Towns and suburbs"</span>, <span class="st">"Rural areas"</span>),</span>
-<span id="cb8-16"><a href="#cb8-16"></a>    <span class="at">unit =</span> <span class="st">"Percentage"</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a>  ),</span>
-<span id="cb8-18"><a href="#cb8-18"></a>  <span class="at">date_filter =</span> date3,</span>
-<span id="cb8-19"><a href="#cb8-19"></a>  <span class="at">label =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-20"><a href="#cb8-20"></a>  <span class="at">ignore.case =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-21"><a href="#cb8-21"></a>  <span class="at">exact_match =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb8-22"><a href="#cb8-22"></a>  <span class="at">perl =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-23"><a href="#cb8-23"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb8-24"><a href="#cb8-24"></a>  <span class="at">force_local_filter =</span> F,</span>
-<span id="cb8-25"><a href="#cb8-25"></a>  <span class="at">keep_flags =</span> T</span>
-<span id="cb8-26"><a href="#cb8-26"></a>)</span>
-<span id="cb8-27"><a href="#cb8-27"></a></span>
-<span id="cb8-28"><a href="#cb8-28"></a><span class="co"># Get the data structure definition (DSD) for geographic codes</span></span>
-<span id="cb8-29"><a href="#cb8-29"></a>dsd <span class="ot">&lt;-</span> <span class="fu">get_eurostat_dsd</span>(id3) <span class="sc">|&gt;</span> </span>
-<span id="cb8-30"><a href="#cb8-30"></a>  <span class="fu">as.data.table</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb8-31"><a href="#cb8-31"></a>  <span class="fu">filter</span>(concept <span class="sc">==</span> <span class="st">"geo"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-32"><a href="#cb8-32"></a>  <span class="fu">select</span>(code, name)</span>
-<span id="cb8-33"><a href="#cb8-33"></a></span>
-<span id="cb8-34"><a href="#cb8-34"></a><span class="co"># Merge the main data with DSD to get full names for geos</span></span>
-<span id="cb8-35"><a href="#cb8-35"></a>datafig3 <span class="ot">&lt;-</span> <span class="fu">merge</span>(data3, dsd, <span class="at">by.x =</span> <span class="st">"geo"</span>, <span class="at">by.y =</span> <span class="st">"name"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-36"><a href="#cb8-36"></a></span>
-<span id="cb8-37"><a href="#cb8-37"></a><span class="co"># Filter out unwanted geo codes</span></span>
-<span id="cb8-38"><a href="#cb8-38"></a>datafig3 <span class="ot">&lt;-</span> datafig3[<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"EA19"</span>, <span class="st">"EA18"</span>, <span class="st">"EA"</span>, <span class="st">"EU28"</span>, <span class="st">"EU27_2007"</span>, <span class="st">"EU"</span>)]</span>
-<span id="cb8-39"><a href="#cb8-39"></a></span>
-<span id="cb8-40"><a href="#cb8-40"></a><span class="co"># Clean geo column by removing unwanted text and standardizing EU names</span></span>
-<span id="cb8-41"><a href="#cb8-41"></a>datafig3<span class="sc">$</span>geo <span class="ot">&lt;-</span> datafig3<span class="sc">$</span>geo <span class="sc">%&gt;%</span> </span>
-<span id="cb8-42"><a href="#cb8-42"></a>  <span class="fu">gsub</span>(<span class="st">" </span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>, .) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-43"><a href="#cb8-43"></a>  <span class="fu">gsub</span>(<span class="st">"^Eu.*"</span>, <span class="st">"EU"</span>, .)</span>
-<span id="cb8-44"><a href="#cb8-44"></a></span>
-<span id="cb8-45"><a href="#cb8-45"></a><span class="co"># Order the names for EU, EFTA, and other countries</span></span>
-<span id="cb8-46"><a href="#cb8-46"></a>name_ord_eu <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
-<span id="cb8-47"><a href="#cb8-47"></a>  <span class="fu">filter</span>(code <span class="sc">%in%</span> eu_cc, deg_urb <span class="sc">==</span> <span class="st">"Cities"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-48"><a href="#cb8-48"></a>  <span class="fu">arrange</span>(values) <span class="sc">|&gt;</span></span>
-<span id="cb8-49"><a href="#cb8-49"></a>  <span class="fu">pull</span>(geo)</span>
-<span id="cb8-50"><a href="#cb8-50"></a></span>
-<span id="cb8-51"><a href="#cb8-51"></a>name_ord_efta <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
-<span id="cb8-52"><a href="#cb8-52"></a>  <span class="fu">filter</span>(code <span class="sc">%in%</span> efta_cc, deg_urb <span class="sc">==</span> <span class="st">"Cities"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-53"><a href="#cb8-53"></a>  <span class="fu">arrange</span>(values) <span class="sc">|&gt;</span></span>
-<span id="cb8-54"><a href="#cb8-54"></a>  <span class="fu">pull</span>(geo)</span>
-<span id="cb8-55"><a href="#cb8-55"></a></span>
-<span id="cb8-56"><a href="#cb8-56"></a>name_ord_othr <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
-<span id="cb8-57"><a href="#cb8-57"></a>  <span class="fu">filter</span>(<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(efta_cc, eu_cc, <span class="st">"EU27_2020"</span>), deg_urb <span class="sc">==</span> <span class="st">"Cities"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-58"><a href="#cb8-58"></a>  <span class="fu">arrange</span>(values) <span class="sc">|&gt;</span></span>
-<span id="cb8-59"><a href="#cb8-59"></a>  <span class="fu">pull</span>(geo)</span>
-<span id="cb8-60"><a href="#cb8-60"></a></span>
-<span id="cb8-61"><a href="#cb8-61"></a><span class="co"># Combine the ordered names</span></span>
-<span id="cb8-62"><a href="#cb8-62"></a>name_ord <span class="ot">&lt;-</span> <span class="fu">c</span>(name_ord_othr, <span class="st">" "</span>, name_ord_efta, <span class="st">"  "</span>, name_ord_eu, <span class="st">"   "</span>, <span class="st">"EU"</span>)</span>
-<span id="cb8-63"><a href="#cb8-63"></a></span>
-<span id="cb8-64"><a href="#cb8-64"></a><span class="co"># Prepare the final dataset for plotting</span></span>
-<span id="cb8-65"><a href="#cb8-65"></a>datafig3 <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
-<span id="cb8-66"><a href="#cb8-66"></a>  <span class="fu">select</span>(geo, deg_urb, values) <span class="sc">|&gt;</span></span>
-<span id="cb8-67"><a href="#cb8-67"></a>  <span class="fu">add_row</span>(</span>
-<span id="cb8-68"><a href="#cb8-68"></a>    <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">" "</span>, <span class="st">"  "</span>, <span class="st">"   "</span>),</span>
-<span id="cb8-69"><a href="#cb8-69"></a>    <span class="at">deg_urb =</span> <span class="st">"Cities"</span>,</span>
-<span id="cb8-70"><a href="#cb8-70"></a>    <span class="at">values =</span> <span class="cn">NA</span></span>
-<span id="cb8-71"><a href="#cb8-71"></a>  )</span>
-<span id="cb8-72"><a href="#cb8-72"></a></span>
-<span id="cb8-73"><a href="#cb8-73"></a><span class="co"># Factorize the geo and deg_urb columns</span></span>
-<span id="cb8-74"><a href="#cb8-74"></a>datafig3<span class="sc">$</span>geo <span class="ot">&lt;-</span> <span class="fu">factor</span>(datafig3<span class="sc">$</span>geo, <span class="at">levels =</span> <span class="fu">rev</span>(name_ord))</span>
-<span id="cb8-75"><a href="#cb8-75"></a>datafig3<span class="sc">$</span>deg_urb <span class="ot">&lt;-</span> <span class="fu">factor</span>(datafig3<span class="sc">$</span>deg_urb, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cities"</span>, <span class="st">"Towns and suburbs"</span>, <span class="st">"Rural areas"</span>))</span>
-<span id="cb8-76"><a href="#cb8-76"></a></span>
-<span id="cb8-77"><a href="#cb8-77"></a><span class="co"># Recode specific geo values for the final plot</span></span>
-<span id="cb8-78"><a href="#cb8-78"></a>datafig3 <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
-<span id="cb8-79"><a href="#cb8-79"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb8-80"><a href="#cb8-80"></a>    <span class="at">geo =</span> <span class="fu">recode</span>(geo,</span>
-<span id="cb8-81"><a href="#cb8-81"></a>                 <span class="st">"France"</span> <span class="ot">=</span> <span class="st">"France (\U00B3)"</span>,</span>
-<span id="cb8-82"><a href="#cb8-82"></a>                 <span class="st">"Luxembourg"</span> <span class="ot">=</span> <span class="st">"Luxembourg (\U00B3)"</span>,</span>
-<span id="cb8-83"><a href="#cb8-83"></a>                 <span class="st">"Germany"</span> <span class="ot">=</span> <span class="st">"Germany (\U00B3)(\U2075)"</span>,</span>
-<span id="cb8-84"><a href="#cb8-84"></a>                 <span class="st">"Ireland"</span> <span class="ot">=</span> <span class="st">"Ireland (\U00B3)"</span>,</span>
-<span id="cb8-85"><a href="#cb8-85"></a>                 <span class="st">"EU"</span> <span class="ot">=</span> <span class="st">"EU (\U00B9)"</span>)</span>
-<span id="cb8-86"><a href="#cb8-86"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>id3 <span class="ot">&lt;-</span> <span class="st">"ilc_mddw05"</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>date3 <span class="ot">&lt;-</span> <span class="dv">2020</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># Get country codes for EU and EFTA</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>eu_cc <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">"cc"</span>, <span class="at">envir =</span> .restatapi_env)<span class="sc">$</span>EU27_2020</span>
+<span id="cb6-7"><a href="#cb6-7"></a>efta_cc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CH"</span>, <span class="st">"NO"</span>, <span class="st">"IS"</span>, <span class="st">"LI"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># Fetch the data from Eurostat</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>data3 <span class="ot">&lt;-</span> <span class="fu">get_eurostat_data</span>(</span>
+<span id="cb6-11"><a href="#cb6-11"></a>  id3,</span>
+<span id="cb6-12"><a href="#cb6-12"></a>  <span class="at">filters =</span> <span class="fu">list</span>(</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="at">incgrp =</span> <span class="st">"Total"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14"></a>    <span class="at">freq =</span> <span class="st">"Annual"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    <span class="at">deg_urb =</span> <span class="fu">c</span>(<span class="st">"Cities"</span>, <span class="st">"Towns and suburbs"</span>, <span class="st">"Rural areas"</span>),</span>
+<span id="cb6-16"><a href="#cb6-16"></a>    <span class="at">unit =</span> <span class="st">"Percentage"</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>  ),</span>
+<span id="cb6-18"><a href="#cb6-18"></a>  <span class="at">date_filter =</span> date3,</span>
+<span id="cb6-19"><a href="#cb6-19"></a>  <span class="at">label =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-20"><a href="#cb6-20"></a>  <span class="at">ignore.case =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-21"><a href="#cb6-21"></a>  <span class="at">exact_match =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-22"><a href="#cb6-22"></a>  <span class="at">perl =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-23"><a href="#cb6-23"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-24"><a href="#cb6-24"></a>  <span class="at">force_local_filter =</span> F,</span>
+<span id="cb6-25"><a href="#cb6-25"></a>  <span class="at">keep_flags =</span> T</span>
+<span id="cb6-26"><a href="#cb6-26"></a>)</span>
+<span id="cb6-27"><a href="#cb6-27"></a></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="co"># Get the data structure definition (DSD) for geographic codes</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a>dsd <span class="ot">&lt;-</span> <span class="fu">get_eurostat_dsd</span>(id3) <span class="sc">|&gt;</span> </span>
+<span id="cb6-30"><a href="#cb6-30"></a>  <span class="fu">as.data.table</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb6-31"><a href="#cb6-31"></a>  <span class="fu">filter</span>(concept <span class="sc">==</span> <span class="st">"geo"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-32"><a href="#cb6-32"></a>  <span class="fu">select</span>(code, name)</span>
+<span id="cb6-33"><a href="#cb6-33"></a></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="co"># Merge the main data with DSD to get full names for geos</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a>datafig3 <span class="ot">&lt;-</span> <span class="fu">merge</span>(data3, dsd, <span class="at">by.x =</span> <span class="st">"geo"</span>, <span class="at">by.y =</span> <span class="st">"name"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-36"><a href="#cb6-36"></a></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="co"># Filter out unwanted geo codes</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a>datafig3 <span class="ot">&lt;-</span> datafig3[<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"EA19"</span>, <span class="st">"EA18"</span>, <span class="st">"EA"</span>, <span class="st">"EU28"</span>, <span class="st">"EU27_2007"</span>, <span class="st">"EU"</span>)]</span>
+<span id="cb6-39"><a href="#cb6-39"></a></span>
+<span id="cb6-40"><a href="#cb6-40"></a><span class="co"># Clean geo column by removing unwanted text and standardizing EU names</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a>datafig3<span class="sc">$</span>geo <span class="ot">&lt;-</span> datafig3<span class="sc">$</span>geo <span class="sc">%&gt;%</span> </span>
+<span id="cb6-42"><a href="#cb6-42"></a>  <span class="fu">gsub</span>(<span class="st">" </span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-43"><a href="#cb6-43"></a>  <span class="fu">gsub</span>(<span class="st">"^Eu.*"</span>, <span class="st">"EU"</span>, .)</span>
+<span id="cb6-44"><a href="#cb6-44"></a></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="co"># Order the names for EU, EFTA, and other countries</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a>name_ord_eu <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
+<span id="cb6-47"><a href="#cb6-47"></a>  <span class="fu">filter</span>(code <span class="sc">%in%</span> eu_cc, deg_urb <span class="sc">==</span> <span class="st">"Cities"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a>  <span class="fu">arrange</span>(values) <span class="sc">|&gt;</span></span>
+<span id="cb6-49"><a href="#cb6-49"></a>  <span class="fu">pull</span>(geo)</span>
+<span id="cb6-50"><a href="#cb6-50"></a></span>
+<span id="cb6-51"><a href="#cb6-51"></a>name_ord_efta <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a>  <span class="fu">filter</span>(code <span class="sc">%in%</span> efta_cc, deg_urb <span class="sc">==</span> <span class="st">"Cities"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-53"><a href="#cb6-53"></a>  <span class="fu">arrange</span>(values) <span class="sc">|&gt;</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a>  <span class="fu">pull</span>(geo)</span>
+<span id="cb6-55"><a href="#cb6-55"></a></span>
+<span id="cb6-56"><a href="#cb6-56"></a>name_ord_othr <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
+<span id="cb6-57"><a href="#cb6-57"></a>  <span class="fu">filter</span>(<span class="sc">!</span>code <span class="sc">%in%</span> <span class="fu">c</span>(efta_cc, eu_cc, <span class="st">"EU27_2020"</span>), deg_urb <span class="sc">==</span> <span class="st">"Cities"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-58"><a href="#cb6-58"></a>  <span class="fu">arrange</span>(values) <span class="sc">|&gt;</span></span>
+<span id="cb6-59"><a href="#cb6-59"></a>  <span class="fu">pull</span>(geo)</span>
+<span id="cb6-60"><a href="#cb6-60"></a></span>
+<span id="cb6-61"><a href="#cb6-61"></a><span class="co"># Combine the ordered names</span></span>
+<span id="cb6-62"><a href="#cb6-62"></a>name_ord <span class="ot">&lt;-</span> <span class="fu">c</span>(name_ord_othr, <span class="st">" "</span>, name_ord_efta, <span class="st">"  "</span>, name_ord_eu, <span class="st">"   "</span>, <span class="st">"EU"</span>)</span>
+<span id="cb6-63"><a href="#cb6-63"></a></span>
+<span id="cb6-64"><a href="#cb6-64"></a><span class="co"># Prepare the final dataset for plotting</span></span>
+<span id="cb6-65"><a href="#cb6-65"></a>datafig3 <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
+<span id="cb6-66"><a href="#cb6-66"></a>  <span class="fu">select</span>(geo, deg_urb, values) <span class="sc">|&gt;</span></span>
+<span id="cb6-67"><a href="#cb6-67"></a>  <span class="fu">add_row</span>(</span>
+<span id="cb6-68"><a href="#cb6-68"></a>    <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">" "</span>, <span class="st">"  "</span>, <span class="st">"   "</span>),</span>
+<span id="cb6-69"><a href="#cb6-69"></a>    <span class="at">deg_urb =</span> <span class="st">"Cities"</span>,</span>
+<span id="cb6-70"><a href="#cb6-70"></a>    <span class="at">values =</span> <span class="cn">NA</span></span>
+<span id="cb6-71"><a href="#cb6-71"></a>  )</span>
+<span id="cb6-72"><a href="#cb6-72"></a></span>
+<span id="cb6-73"><a href="#cb6-73"></a><span class="co"># Factorize the geo and deg_urb columns</span></span>
+<span id="cb6-74"><a href="#cb6-74"></a>datafig3<span class="sc">$</span>geo <span class="ot">&lt;-</span> <span class="fu">factor</span>(datafig3<span class="sc">$</span>geo, <span class="at">levels =</span> <span class="fu">rev</span>(name_ord))</span>
+<span id="cb6-75"><a href="#cb6-75"></a>datafig3<span class="sc">$</span>deg_urb <span class="ot">&lt;-</span> <span class="fu">factor</span>(datafig3<span class="sc">$</span>deg_urb, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cities"</span>, <span class="st">"Towns and suburbs"</span>, <span class="st">"Rural areas"</span>))</span>
+<span id="cb6-76"><a href="#cb6-76"></a></span>
+<span id="cb6-77"><a href="#cb6-77"></a><span class="co"># Recode specific geo values for the final plot</span></span>
+<span id="cb6-78"><a href="#cb6-78"></a>datafig3 <span class="ot">&lt;-</span> datafig3 <span class="sc">|&gt;</span></span>
+<span id="cb6-79"><a href="#cb6-79"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-80"><a href="#cb6-80"></a>    <span class="at">geo =</span> <span class="fu">recode</span>(geo,</span>
+<span id="cb6-81"><a href="#cb6-81"></a>                 <span class="st">"France"</span> <span class="ot">=</span> <span class="st">"France (\U00B3)"</span>,</span>
+<span id="cb6-82"><a href="#cb6-82"></a>                 <span class="st">"Luxembourg"</span> <span class="ot">=</span> <span class="st">"Luxembourg (\U00B3)"</span>,</span>
+<span id="cb6-83"><a href="#cb6-83"></a>                 <span class="st">"Germany"</span> <span class="ot">=</span> <span class="st">"Germany (\U00B3)(\U2075)"</span>,</span>
+<span id="cb6-84"><a href="#cb6-84"></a>                 <span class="st">"Ireland"</span> <span class="ot">=</span> <span class="st">"Ireland (\U00B3)"</span>,</span>
+<span id="cb6-85"><a href="#cb6-85"></a>                 <span class="st">"EU"</span> <span class="ot">=</span> <span class="st">"EU (\U00B9)"</span>)</span>
+<span id="cb6-86"><a href="#cb6-86"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="plot-2" class="level3"><h3 class="anchored" data-anchor-id="plot-2">Plot</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Define color palette</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#B09120"</span>, <span class="st">"#2644A7"</span>, <span class="st">"#E04040"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># Define title, subtitle, and caption</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>title <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Population reporting exposure to pollution, grime or other </span><span class="sc">\n</span><span class="st">environmental problems, by degree of urbanisation, "</span>, date3)</span>
-<span id="cb9-6"><a href="#cb9-6"></a>subtitle <span class="ot">&lt;-</span> <span class="st">"(%)"</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a>caption <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B9) Estimate."</span>,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B2) Break in series."</span>,</span>
-<span id="cb9-9"><a href="#cb9-9"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B3) 2019 instead of 2020."</span>,</span>
-<span id="cb9-10"><a href="#cb9-10"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U2074) Low reliability."</span>,</span>
-<span id="cb9-11"><a href="#cb9-11"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U2075) 2018 instead of 2020."</span>,</span>
-<span id="cb9-12"><a href="#cb9-12"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>, id3, <span class="st">")"</span>)</span>
-<span id="cb9-13"><a href="#cb9-13"></a></span>
-<span id="cb9-14"><a href="#cb9-14"></a><span class="co"># Create the plot</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> datafig3, <span class="fu">aes</span>(<span class="at">x =</span> geo, <span class="at">y =</span> values, <span class="at">fill =</span> deg_urb)) <span class="sc">+</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb9-17"><a href="#cb9-17"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> colors) <span class="sc">+</span></span>
-<span id="cb9-18"><a href="#cb9-18"></a>  <span class="fu">scale_y_continuous</span>(</span>
-<span id="cb9-19"><a href="#cb9-19"></a>    <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb9-20"><a href="#cb9-20"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(datafig3<span class="sc">$</span>values, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="dv">5</span>),</span>
-<span id="cb9-21"><a href="#cb9-21"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(datafig3<span class="sc">$</span>values, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="dv">5</span>, <span class="dv">5</span>)</span>
-<span id="cb9-22"><a href="#cb9-22"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-23"><a href="#cb9-23"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb9-24"><a href="#cb9-24"></a>  <span class="fu">theme</span>(</span>
-<span id="cb9-25"><a href="#cb9-25"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">60</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
-<span id="cb9-26"><a href="#cb9-26"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-27"><a href="#cb9-27"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-28"><a href="#cb9-28"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-29"><a href="#cb9-29"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-30"><a href="#cb9-30"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-31"><a href="#cb9-31"></a>    <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-32"><a href="#cb9-32"></a>    <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-33"><a href="#cb9-33"></a>    <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>),</span>
-<span id="cb9-34"><a href="#cb9-34"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb9-35"><a href="#cb9-35"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb9-36"><a href="#cb9-36"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb9-37"><a href="#cb9-37"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb9-38"><a href="#cb9-38"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-39"><a href="#cb9-39"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-40"><a href="#cb9-40"></a>    <span class="at">title =</span> title,</span>
-<span id="cb9-41"><a href="#cb9-41"></a>    <span class="at">subtitle =</span> subtitle,</span>
-<span id="cb9-42"><a href="#cb9-42"></a>    <span class="at">caption =</span> caption</span>
-<span id="cb9-43"><a href="#cb9-43"></a>  )</span>
-<span id="cb9-44"><a href="#cb9-44"></a></span>
-<span id="cb9-45"><a href="#cb9-45"></a><span class="co"># Save the plot</span></span>
-<span id="cb9-46"><a href="#cb9-46"></a>output_file <span class="ot">&lt;-</span> <span class="st">"quality_figures/p3.png"</span></span>
-<span id="cb9-47"><a href="#cb9-47"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> output_file, <span class="at">plot =</span> p3, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 4 rows containing missing values or values outside the scale range
-(`geom_bar()`).</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Include the plot in the document</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(output_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Define color palette</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#B09120"</span>, <span class="st">"#2644A7"</span>, <span class="st">"#E04040"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># Define title, subtitle, and caption</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>title <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Population reporting exposure to pollution, grime or other </span><span class="sc">\n</span><span class="st">environmental problems, by degree of urbanisation, "</span>, date3)</span>
+<span id="cb7-6"><a href="#cb7-6"></a>subtitle <span class="ot">&lt;-</span> <span class="st">"(%)"</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>caption <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B9) Estimate."</span>,</span>
+<span id="cb7-8"><a href="#cb7-8"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B2) Break in series."</span>,</span>
+<span id="cb7-9"><a href="#cb7-9"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U00B3) 2019 instead of 2020."</span>,</span>
+<span id="cb7-10"><a href="#cb7-10"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U2074) Low reliability."</span>,</span>
+<span id="cb7-11"><a href="#cb7-11"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">(\U2075) 2018 instead of 2020."</span>,</span>
+<span id="cb7-12"><a href="#cb7-12"></a>                  <span class="st">"</span><span class="sc">\n</span><span class="st">Source: Eurostat (online data code: "</span>, id3, <span class="st">")"</span>)</span>
+<span id="cb7-13"><a href="#cb7-13"></a></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># Create the plot</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> datafig3, <span class="fu">aes</span>(<span class="at">x =</span> geo, <span class="at">y =</span> values, <span class="at">fill =</span> deg_urb)) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> colors) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb7-19"><a href="#cb7-19"></a>    <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb7-20"><a href="#cb7-20"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(datafig3<span class="sc">$</span>values, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="dv">5</span>),</span>
+<span id="cb7-21"><a href="#cb7-21"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(datafig3<span class="sc">$</span>values, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb7-22"><a href="#cb7-22"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-23"><a href="#cb7-23"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-24"><a href="#cb7-24"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-25"><a href="#cb7-25"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">60</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb7-26"><a href="#cb7-26"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-27"><a href="#cb7-27"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-28"><a href="#cb7-28"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-29"><a href="#cb7-29"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-30"><a href="#cb7-30"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-31"><a href="#cb7-31"></a>    <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-32"><a href="#cb7-32"></a>    <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-33"><a href="#cb7-33"></a>    <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>),</span>
+<span id="cb7-34"><a href="#cb7-34"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb7-35"><a href="#cb7-35"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb7-36"><a href="#cb7-36"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb7-37"><a href="#cb7-37"></a>    <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb7-38"><a href="#cb7-38"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-39"><a href="#cb7-39"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-40"><a href="#cb7-40"></a>    <span class="at">title =</span> title,</span>
+<span id="cb7-41"><a href="#cb7-41"></a>    <span class="at">subtitle =</span> subtitle,</span>
+<span id="cb7-42"><a href="#cb7-42"></a>    <span class="at">caption =</span> caption</span>
+<span id="cb7-43"><a href="#cb7-43"></a>  )</span>
+<span id="cb7-44"><a href="#cb7-44"></a></span>
+<span id="cb7-45"><a href="#cb7-45"></a><span class="co"># Save the plot</span></span>
+<span id="cb7-46"><a href="#cb7-46"></a>output_file <span class="ot">&lt;-</span> <span class="st">"quality_figures/p3.png"</span></span>
+<span id="cb7-47"><a href="#cb7-47"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> output_file, <span class="at">plot =</span> p3, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">1000</span>)</span>
+<span id="cb7-48"><a href="#cb7-48"></a></span>
+<span id="cb7-49"><a href="#cb7-49"></a><span class="co"># Include the plot in the document</span></span>
+<span id="cb7-50"><a href="#cb7-50"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(output_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="quality_figures/p3.png" class="img-fluid figure-img" width="4000"></p>

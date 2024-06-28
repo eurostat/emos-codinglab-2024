@@ -25,6 +25,13 @@ knitr::opts_chunk$set(echo = TRUE,
 
 # Load required packages using pacman
 if (!require("pacman")) install.packages("pacman")
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| output: false
+
 pacman::p_load(
   restatapi, tidyverse, tmap, giscoR, sf, classInt, conflicted, data.table,
   chron, kableExtra, highcharter, plotly, tmap, reshape2
@@ -32,6 +39,7 @@ pacman::p_load(
 
 conflicts_prefer(dplyr::filter)
 ```
+
 
 ## Figure 7
 
@@ -377,7 +385,7 @@ nuts3_sf <- giscoR::gisco_get_nuts(
 )
 
 countries_sf <- giscoR::gisco_get_countries(
-  resolution = "3",
+  resolution = "10",
   region = c("Asia", "Europe")
 )
 

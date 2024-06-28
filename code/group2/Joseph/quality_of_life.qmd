@@ -14,30 +14,32 @@ output-file: "Quality of Life"
 
 ## Article Source
 
-The figures here are replicated from [Quality of life indicators - natural and living environment](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment).\
+The figures here are replicated from [Quality of life indicators - natural and living environment](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment).
 
 ## Loading Packages
 
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = F,
+                      message = F)
+
+# Load required packages using pacman
+if (!require("pacman")) install.packages("pacman")
+```
+
 ```{r}
-#| warning: false
 #| message: false
+#| warning: false
+#| output: false
 
+pacman::p_load(
+  restatapi, tidyverse, tmap, 
+  giscoR, sf, classInt, conflicted, 
+  data.table, chron, kableExtra, highcharter, 
+  plotly, tmap, reshape2
+)
 
-require(conflicted)
-
-require(restatapi)
-require(giscoR)
-
-require(data.table)
-require(chron)
-require(reshape2)
-
-require(kableExtra)
-require(tidyverse)
-require(tmap)
-
-require(highcharter)
-require(plotly)
 conflicts_prefer(dplyr::filter)
 ```
 
