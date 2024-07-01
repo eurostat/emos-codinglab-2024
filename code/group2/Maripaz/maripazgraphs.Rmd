@@ -1,0 +1,778 @@
+---
+title: "emos"
+author: "Maripaz Venegas"
+date: "2024-04-22"
+output: html_document
+---
+
+# Packages
+
+```{r}
+require(conflicted)
+
+require(restatapi)
+require(giscoR)
+
+require(data.table)
+require(chron)
+require(reshape2)
+
+require(kableExtra)
+require(tidyverse)
+require(tmap)
+
+require(highcharter)
+require(plotly)
+
+conflicts_prefer(dplyr::filter)
+```
+#Environment
+
+## Figure 4
+
+Population reporting noise from neighbours or from the street, EU (1), 2011-2020
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_EU_(%C2%B9)_,_2011-2020_(%25).png
+
+### Data
+```{r}
+#| eval: true
+
+# Define parameters
+id4="ilc_mddw01"
+date4=2011:2020
+
+# Fetch the data from Eurostat
+data4 <- get_eurostat_data(
+  id4, 
+  filters = list(
+    ihhtyp="TOTAL",
+    incgrp="TOTAL",
+    geo="EU27_2020",
+    hhtyp="TOTAL"
+
+  ),
+  date_filter = date4,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+)
+```
+
+### Plot
+```{r}
+#| eval: true
+
+# Define color
+line_color <- "#B09120"
+
+# Define title, subtitle, and caption
+title=paste0("Population reporting noise from neighbours or from the street, \n EU(\U00B9)",date4[1],"-",date4[length(dates)])
+subtitle=paste("(%)")
+caption=paste0("(\U00B9) Estimate \n Source: Eurostat (online data code: ",id4, ")")
+
+# Create the plot
+p4 <- ggplot(data = data4, aes(x = time, y = values, group = 1)
+  ) +
+  geom_line(color = line_color,linewidth = 1) + 
+  scale_y_continuous(
+    expand = c(0, 0), 
+    limits = c(0, max(data4$values) + 2),
+    breaks = seq(0, max(data4$values) + 2, 2)
+  ) +
+  theme_bw() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    axis.text.x = element_text(hjust = 1.5)
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "p4.png"
+ggsave(filename = output_file, plot = p4, 
+       width = 8, height = 6, dpi = 1000, create.dir = TRUE)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+```
+
+## Figure 5
+
+Population reporting noise from neighbours or from the street, by income situation, 2020
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_by_income_situation,_2020_(%25).png
+
+### Data
+
+```{r}
+#| eval: true
+
+# Define parameters
+id5="ilc_mddw01"
+date5=2018:2020
+
+# Get country codes for EU and EFTA
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
+
+# Fetch the data from Eurostat
+data5 <- get_eurostat_data(
+  id5,
+  filters = list(
+    incgrp = c("TOTAL", "B_MD60"),
+    freq = "Annual",
+    hhtyp = "TOTAL",
+    unit = "Percentage"
+  ),
+  date_filter = date5,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = TRUE
+)
+
+# Filter the data
+data5 <- data5 |> 
+  filter(unit == "Percentage") |>
+  filter(time == 2020 | (time == 2019 & geo %in% c("Poland")) | (time == 2018 & geo %in% c("Iceland")) )
+
+# Get the data structure definition (DSD)
+dsd <- get_eurostat_dsd(id5) |> 
+  as.data.table() |>
+  filter(concept == "geo") |>
+  select(code, name)
+
+# Merge data with the DSD
+datafig5 <- merge(data5, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out geo codes
+datafig5 <- datafig5[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column
+datafig5$geo <- gsub(" \\(.*\\)", "", datafig5$geo)
+datafig5$geo <- gsub("^Eu.*", "EU", datafig5$geo)
+
+# Order the names for EU, EFTA, and other countries
+name_ord_eu <- datafig5 |>
+  filter(code %in% eu_cc, incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig5 |>
+  filter(code %in% efta_cc, incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig5 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+# Combine the ordered names
+name_ord <- c(name_ord_othr, "  ", name_ord_efta, "   ", name_ord_eu, "    ", "EU")
+
+# Prepare the final dataset for plotting
+datafig5 <- datafig5 |>
+  select(geo, incgrp, values) |>
+  mutate(
+    incgrp = recode(incgrp, 
+                    "Below 60% of median equivalised income" = "Population at-risk-of-poverty (\U00B2)")) |>
+  add_row(
+    geo = c("  ", "   ", "    "),
+    incgrp = "Total",
+    values = NA
+  )
+
+# Factorize the geo and ind_type columns
+datafig5$geo <- factor(datafig5$geo, levels = rev(name_ord))
+
+datafig5$incgrp <- factor(datafig5$incgrp, levels = c("Total", 
+                                       "Population at-risk-of-poverty (\U00B2)"))
+
+datafig5 <- datafig5 |>
+  mutate(
+    geo = recode(geo,
+                      "EU" = "EU (\U00B9)",
+                      "Germany" = "Germany (\U00B3)(\U2074)",
+                      "France" = "France (\U00B3)",
+                      "Luxembourg" = "Luxembourg (\U00B3)",
+                      "Poland"="Poland(\U2075)",
+                      "Iceland" = "Iceland (\U2076)")
+                      
+)
+```
+
+### Plot
+```{r}
+#| eval: true
+
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+# Define title, subtitle, and caption
+title=paste0("Population reporting noise from neighbours or from the street by, \n income situation, ", tail(5, n = 1))
+subtitle=paste("(%)")
+caption=paste0("(\U00B9) Estimate.
+           \n(\U00B2) People living below the national poverty treshold (60% of median equivalised income).
+           \n(\U00B3) Break in series.
+           \n(\U2074) Low reliability.
+           \n(\U2075) 2019 instead of 2020.
+           \n(\U2076) 2018 instead of 2020.
+           \nSource: Eurostat (online data code: ",id5, ")")
+
+# Create the plot
+p5 <- ggplot(data = datafig5, aes(x = geo, y = values, fill = incgrp)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data5$values, na.rm = TRUE) + 5),
+    breaks = seq(0, max(data5$values, na.rm = TRUE) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "p5.png"
+ggsave(filename = output_file, plot = p5, width = 8, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+  
+```
+
+# Digital World
+
+## Figure 3
+
+People who used the internet for civic or political participation, 2022.
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_3_People_who_used_the_internet_for_civic_or_political_participation,_2022_order_by_young_people_aged_16-29_years_(%25).png
+
+### Data
+```{r}
+
+#| eval: true
+
+# Define parameters
+id3="isoc_ci_ac_i"
+date3=2021:2022
+
+# Get country codes for EU and EFTA
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
+
+# Fetch the data from Eurostat
+data3 <- get_eurostat_data(
+  id3, 
+  filters = list(
+    ind_type = c("IND_TOTAL","Y16_29"),
+    indic_is = "I_IUCPP",
+    freq = "Annual",
+    unit = c("PC_IND")
+  ),
+  date_filter = date3,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = TRUE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+)
+
+
+# Filter the data
+data3 <- data3 |> 
+  filter(unit == "Percentage of individuals") |>
+  filter(time == 2022 | (time == 2021 & geo %in% c("Switzerland", "Iceland", "North Macedonia")))
+
+
+# Get the data structure definition (DSD) for geographic codes
+dsd<-as.data.table(get_eurostat_dsd(id3))[concept=="geo",c("code","name")]
+
+# Merge data with the DSD
+datafig3 <- merge(data3, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out codes
+datafig3 <- datafig3[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column
+datafig3$geo <- gsub(" \\(.*\\)", "", datafig3$geo)
+datafig3$geo <- gsub("^Eu.*", "EU", datafig3$geo)
+
+# Order the names
+name_ord_eu <- datafig3 |>
+  filter(code %in% eu_cc, 
+         unit == "Percentage of individuals", 
+         ind_type == "Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig3 |>
+  filter(code %in% efta_cc, 
+         unit == "Percentage of individuals", 
+         ind_type =="Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig3 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), 
+         unit == "Percentage of individuals", 
+         ind_type == "Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord <- c(name_ord_othr, " ", name_ord_efta, "  ", name_ord_eu, "   ", "EU")
+
+# Prepare the final dataset
+
+datafig3 <- datafig3 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  add_row(geo = c(" ", "  ", "   "), 
+          ind_type = "Adult population", 
+          values = NA)
+
+# Factorize geo and ind_type
+datafig3$geo <- factor(datafig3$geo,levels = rev(name_ord))
+
+datafig3$ind_type <- factor(datafig3$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+# Recode specific geo values
+datafig3 <- datafig3 |>
+  mutate(geo = recode(geo,
+                      "EU" = "EU (\U00B9)",
+                      "Ireland" = "Ireland (\U00B9)(\U00B2)",
+                      "Germany"= "Germany (\U00B9)",
+                      "Iceland" = "Iceland (\U00B3)",
+                      "Switzerland" = "Switzerland (\U00B3)",
+                      "Albania"="Albania (\U00B3)",
+                      "North Macedonia" = "North Macedonia(\U00B3)",
+                      
+))
+```
+
+
+### Plot
+```{r}
+#| eval: true
+
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+
+# Define title, subtitle, and caption
+title=paste0("People who used the internet for civic or political participation, \n ", tail(date3, n = 1))
+subtitle=paste0("order by young people aged 16-29 years \n(%)")
+caption=paste0("Note: for example, expressing opinions on civic or political issues or taking part in online consultations or voting to
+          \ndefine civic or political issues
+           \n(\U00B9) Break in time series.
+           \n(\U00B2) Low reliability for young people.
+           \n(\U00B3) Data from 2021.
+           \nSource: Eurostat (online data code: ",id3, ")")
+
+# Create the plot
+p3 <- ggplot(data = datafig3, aes(x = geo, y = values, fill = ind_type)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data3$values) + 5),
+    breaks = seq(0, max(data3$values) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "dwp3.png"
+ggsave(filename = output_file, plot = p3, width = 12, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+ 
+```
+
+## Figure 4
+
+People who used the internet for doing an online course
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Fig_4_People_who_used_the_internet_for_doing_an_online_course,_2022_order_by_young_people_aged_16-29_years_(%25).png
+
+### Data
+```{r}
+
+#| eval: true
+
+# Define parameters
+id4="isoc_ci_ac_i"
+date4=2021:2022
+
+# Get country codes for EU and EFTA
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
+
+# Fetch the data from Eurostat
+data4 <- get_eurostat_data(
+  id4, 
+  filters = list(
+    ind_type = c("IND_TOTAL","Y16_29"),
+    indic_is = "I_IUOLC",
+    freq = "Annual",
+    unit = c("PC_IND")
+  ),
+  date_filter = date4,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = TRUE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+)
+
+# Filter the data
+data4 <- data4 |> 
+  filter(unit == "Percentage of individuals") |>
+  filter((time == 2022 & !(geo %in% c("Albania")) ) | (time == 2021 & geo %in% c("Switzerland", "Iceland", "North Macedonia", "Albania")))
+
+# Get the data structure definition (DSD) for geographic codes
+dsd<-as.data.table(get_eurostat_dsd(id4))[concept=="geo",c("code","name")]
+
+# Merge data with the DSD
+datafig4 <- merge(data4, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out codes
+datafig4 <- datafig4[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column
+datafig4$geo <- gsub(" \\(.*\\)", "", datafig4$geo)
+datafig4$geo <- gsub("^Eu.*", "EU", datafig4$geo)
+
+# Order the names
+name_ord_eu <- datafig4 |>
+  filter(code %in% eu_cc, 
+         unit == "Percentage of individuals", 
+         ind_type == "Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig4 |>
+  filter(code %in% efta_cc, 
+         unit == "Percentage of individuals", 
+         ind_type =="Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig4 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), 
+         unit == "Percentage of individuals", 
+         ind_type == "Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord <- c(name_ord_othr, " ", name_ord_efta, "  ", name_ord_eu, "   ", "EU")
+
+# Prepare the final dataset
+
+datafig4 <- datafig4 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  add_row(geo = c(" ", "  ", "   "), 
+          ind_type = "Adult population", 
+          values = NA)
+
+# Factorize geo and ind_type
+datafig4$geo <- factor(datafig4$geo,levels = rev(name_ord))
+
+datafig4$ind_type <- factor(datafig4$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+# Recode specific geo values
+datafig4 <- datafig4 |>
+  mutate(geo = recode(geo,
+                      "Ireland" = "Ireland (\U00B9)",
+                      "Iceland" = "Iceland (\U00B2)",
+                      "Switzerland" = "Switzerland (\U00B2)",
+                      "Albania"="Albania (\U00B2)",
+                      "North Macedonia" = "North Macedonia(\U00B2)"
+                      
+))
+```
+
+
+### Plot
+```{r}
+#| eval: true
+
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+
+# Define title, subtitle, and caption
+title=paste0("People who used the internet for doing an online course, ",tail(date4, n = 1))
+subtitle=paste0("order by young people aged 16-29 years \n(%)")
+caption=paste0("\n(\U00B9) Low reliability for young population
+           \n(\U00B2) Data from 2021.
+           \nSource: Eurostat (online data code: ",id4, ")")
+  
+# Create the plot
+p4 <- ggplot(data = datafig4, aes(x = geo, y = values, fill = ind_type)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data4$values) + 5),
+    breaks = seq(0, max(data4$values) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "dwp4.png"
+ggsave(filename = output_file, plot = p4, width = 12, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+```
+
+## Figure 5 
+
+People who have verified the information or content found on internet, 2021
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world
+
+https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Figure_5_Percentage_of_individuals_who_have_verified_the_information_or_content_found_on_internet,_2021_order_by_young_people_aged_16-29_years_(%25).png
+
+### Data
+```{r}
+#| eval: true
+
+# Define parameters
+id5="isoc_sk_edic_i21"
+date5=2021
+
+# Get country codes for EU and EFTA
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
+
+# Fetch the data from Eurostat
+data5 <- get_eurostat_data(
+  id5, 
+  filters = list(
+    ind_type = c("IND_TOTAL","Y16_29"),
+    indic_is = "I_TIC",
+    freq = "Annual",
+    unit = c("PC_IND")
+  ),
+  date_filter = date5,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = TRUE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+)
+
+
+# Get the data structure definition (DSD) for geographic codes
+dsd<-as.data.table(get_eurostat_dsd(id5))[concept=="geo",c("code","name")]
+
+# Merge data with the DSD
+datafig5 <- merge(data5, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out codes
+datafig5 <- datafig5[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column
+datafig5$geo <- gsub(" \\(.*\\)", "", datafig5$geo)
+datafig5$geo <- gsub("^Eu.*", "EU", datafig5$geo)
+
+# Order the names
+name_ord_eu <- datafig5 |>
+  filter(code %in% eu_cc, 
+         unit == "Percentage of individuals", 
+         ind_type == "Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig5 |>
+  filter(code %in% efta_cc, 
+         unit == "Percentage of individuals", 
+         ind_type =="Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig5 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), 
+         unit == "Percentage of individuals", 
+         ind_type == "Individuals, 16 to 29 years old") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord <- c(name_ord_othr, " ", name_ord_efta, "  ", name_ord_eu, "   ", "EU")
+
+# Prepare the final dataset
+
+datafig5 <- datafig5 |>
+  select(geo, ind_type, values) |>
+  mutate(ind_type = recode(ind_type,
+                         "Individuals, 16 to 29 years old" = "Young people aged 16-29 years", "All Individuals"="Adult population")) |>
+  add_row(geo = c(" ", "  ", "   "), 
+          ind_type = "Adult population", 
+          values = NA)
+
+# Factorize geo and ind_type
+datafig5$geo <- factor(datafig5$geo,levels = rev(name_ord))
+
+datafig5$ind_type <- factor(datafig5$ind_type, levels = c("Young people aged 16-29 years", "Adult population"))
+
+# Recode specific geo values
+datafig4 <- datafig4 |>
+  mutate(geo = recode(geo,
+                      "Ireland" = "Ireland (\U00B9)"
+                      
+))
+```
+
+### Plot
+```{r}
+#| eval: true
+
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+
+# Define title, subtitle, and caption
+title=paste0("Percentage of individual who have verified the information or content \nfound on internet, ", date5)
+subtitle=paste0("order by young people aged 16-29 years \n(%)")
+caption=paste0("\n(\U00B9) Low reliability for young population
+          \nSource: Eurostat (online data code: ",id5, ")")
+
+# Create the plot
+p5 <- ggplot(data = datafig5, aes(x = geo, y = values, fill = ind_type)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data5$values) + 5),
+    breaks = seq(0, max(data5$values) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "dwp5.png"
+ggsave(filename = output_file, plot = p5, width = 12, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+
+```

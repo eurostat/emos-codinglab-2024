@@ -1,0 +1,541 @@
+---
+title: "Young people - digital world"
+author: "Joseph"
+editor: visual
+# toc: true
+# toc-location: left
+code-link: true
+code-line-numbers: true
+code-fold: false
+linkcolor: blue
+output-file: "Digital World"
+---
+
+## Article Source
+
+The figures here are replicated from [Young people - digital world](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world).
+
+## Loading Packages
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = F,
+                      message = F)
+
+# Load required packages using pacman
+if (!require("pacman")) install.packages("pacman")
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| output: false
+
+pacman::p_load(
+  restatapi, tidyverse, tmap, giscoR, sf, classInt, conflicted, data.table,
+  chron, kableExtra, highcharter, plotly, tmap, reshape2
+)
+
+conflicts_prefer(dplyr::filter)
+```
+
+
+## Figure 7
+
+### Retrieving data
+
+```{r}
+id7 <- "isoc_sk_dskl_i21"
+date7 <- 2021:2023
+
+eu_cc <- get("cc", envir = .restatapi_env)$EU27_2020
+efta_cc <- c("CH", "NO", "IS", "LI")
+
+# Fetch the data from Eurostat
+data7 <- get_eurostat_data(
+  id7, 
+  filters = list(
+    ind_type = c("M_Y16_29", "F_Y16_29"),
+    indic_is = "I_DSK2_BAB",
+    freq = "Annual",
+    unit = c("PC_IND")
+  ),
+  date_filter = date7,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+)
+
+# Filter the data
+data7 <- data7 |> 
+  filter(unit == "Percentage of individuals") |>
+  filter(time == 2023 | (time == 2021 & geo %in% c("Iceland", "North Macedonia")))
+
+# Get the data structure definition (DSD)
+dsd <- get_eurostat_dsd(id7) |> 
+  as.data.table() |>
+  filter(concept == "geo") |>
+  select(code, name)
+
+# Merge data with the DSD
+datafig7 <- merge(data7, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out codes
+datafig7 <- datafig7[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column
+datafig7$geo <- gsub(" \\(.*\\)", "", datafig7$geo)
+datafig7$geo <- gsub("^Eu.*", "EU", datafig7$geo)
+
+# Simplify ind_type column
+datafig7$ind_type <- gsub(".*(Females|Males).*", "\\1", datafig7$ind_type)
+
+# Order the names
+
+name_ord_eu <- datafig7 |>
+  filter(code %in% eu_cc, 
+         unit == "Percentage of individuals", 
+         ind_type == "Females") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig7 |>
+  filter(code %in% efta_cc, 
+         unit == "Percentage of individuals", 
+         ind_type == "Females") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig7 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), 
+         unit == "Percentage of individuals", 
+         ind_type == "Females") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord <- c(name_ord_othr, " ", name_ord_efta, "  ", name_ord_eu, "   ", "EU")
+
+# Prepare the final dataset
+datafig7 <- datafig7 |>
+  select(geo, ind_type, values) |>
+  mutate(
+    ind_type = recode(ind_type, 
+                      "Females" = "Young females", 
+                      "Males" = "Young males")
+  ) |>
+  add_row(geo = c(" ", "  ", "   "), 
+          ind_type = "Young females", 
+          values = NA)
+
+# Factorize the geo and ind_type columns
+datafig7$geo <- factor(datafig7$geo, levels = rev(name_ord))
+
+datafig7$ind_type <- factor(datafig7$ind_type, 
+                            levels = c("Young males", "Young females"))
+
+# Recode specific geo values
+datafig7 <- datafig7 |>
+  mutate(
+    geo = recode(geo,
+                 "Iceland" = "Iceland (\U00B9)",
+                 "North Macedonia" = "North Macedonia (\U00B9)"
+                 # "Albania" = "Albania (\U00B9)"
+    )
+  )
+
+```
+
+### Plot
+
+```{r}
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+# Define title, subtitle, and caption
+title <- paste0("Young people with at least basic digital skills by gender, ",
+                tail(date7, n = 1))
+subtitle <- "(%)"
+
+# "\n(\U00B9) Data from 2021",
+caption <- paste0("\n(\U00B9) Data from 2021",
+                  "\nSource: Eurostat (online data code: ", id7, ")")
+
+# Create the plot
+p7 <- ggplot(data = datafig7, aes(x = geo, y = values, fill = ind_type)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data7$values) + 5),
+    breaks = seq(0, max(data7$values) + 5, 10)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "digital_figures/p7.png"
+ggsave(filename = output_file, plot = p7, width = 12, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+```
+
+## Figure 8
+
+### Retrieving data
+
+```{r}
+#| eval: true
+
+
+id8 <- "isoc_sk_cskl_i21"
+date8 <- 2021:2023
+
+eu_cc <- get("cc", envir = .restatapi_env)$EU27_2020
+efta_cc <- c("CH", "NO", "IS", "LI")
+
+# Fetch the data from Eurostat
+data8 <- get_eurostat_data(
+  id8, 
+  filters = list(
+    ind_type = c("M_Y16_29", "F_Y16_29"),
+    indic_is = "I_CPRG2",
+    freq = "Annual",
+    unit = "PC_IND"
+  ),
+  date_filter = date8,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = TRUE
+)
+
+# Filter the data
+data8 <- data8 |> 
+  filter(unit == "Percentage of individuals") |>
+  filter(time == 2023 | (time == 2021 & geo %in% c("Iceland", "North Macedonia")))
+
+# Get the data structure definition (DSD)
+dsd <- get_eurostat_dsd(id8) |> 
+  as.data.table() |>
+  filter(concept == "geo") |>
+  select(code, name)
+
+# Merge data with the DSD
+datafig8 <- merge(data8, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out codes
+datafig8 <- datafig8[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column
+datafig8$geo <- gsub(" \\(.*\\)", "", datafig8$geo)
+datafig8$geo <- gsub("^Eu.*", "EU", datafig8$geo)
+
+# Simplify ind_type column
+datafig8$ind_type <- gsub(".*(Females|Males).*", "\\1", datafig8$ind_type)
+
+# Order the names
+name_ord_eu <- datafig8 |>
+  filter(code %in% eu_cc, 
+         unit == "Percentage of individuals", 
+         ind_type == "Females") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig8 |>
+  filter(code %in% efta_cc, 
+         unit == "Percentage of individuals", 
+         ind_type == "Females") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig8 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), 
+         unit == "Percentage of individuals", 
+         ind_type == "Females") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord <- c(name_ord_othr, " ", name_ord_efta, "  ", name_ord_eu, "   ", "EU")
+
+# Prepare the final dataset
+datafig8 <- datafig8 |>
+  select(geo, ind_type, values) |>
+  mutate(
+    ind_type = recode(ind_type, 
+                      "Females" = "Young females", 
+                      "Males" = "Young males")
+  ) |>
+  add_row(geo = c(" ", "  ", "   "), 
+          ind_type = "Young females", 
+          values = NA)
+
+# Factorize the geo and ind_type columns
+datafig8$geo <- factor(datafig8$geo, levels = rev(name_ord))
+
+datafig8$ind_type <- factor(datafig8$ind_type, 
+                            levels = c("Young males", "Young females"))
+
+# Recode specific geo values
+datafig8 <- datafig8 |>
+  mutate(
+    geo = recode(geo,
+                 "Iceland" = "Iceland (\U00B9)",
+                 "North Macedonia" = "North Macedonia (\U00B9)"
+    )
+  )
+
+```
+
+### Plot
+
+```{r}
+#| eval: true
+
+
+
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+# Define title, subtitle, and caption
+title <- paste0("Individuals who wrote code in a programming language, ", tail(date8, n = 1))
+subtitle <- "(%)"
+caption <- paste0("\n(\U00B9) Data from 2021",
+                  "\nSource: Eurostat (online data code: ", id8, ")")
+
+# Create the plot
+p8 <- ggplot(data = datafig8, aes(x = geo, y = values, fill = ind_type)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data8$values) + 5),
+    breaks = seq(0, max(data8$values) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "digital_figures/p8.png"
+ggsave(filename = output_file, plot = p8, width = 12, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+```
+
+## Map 1
+
+### Retrieve Data
+
+```{r}
+map_id = "ISOC_SK_DSKL_I21"
+# GET NUTS & COUNTRY BOUNDARIES
+nuts3_sf <- giscoR::gisco_get_nuts(
+  nuts_level = "0",
+  resolution = "3",
+  year = "2021"
+)
+
+countries_sf <- giscoR::gisco_get_countries(
+  resolution = "10",
+  region = c("Asia", "Europe")
+)
+
+# FILTER COUNTRIES
+non_eu_list <- c(
+  "AM", "AZ", "BA",
+  "BY", "GE", "MD",
+  "RU", "UA", "XK"
+)
+
+eu_list <- unique(nuts3_sf$CNTR_CODE)
+
+eu_sf <- countries_sf %>%
+  dplyr::filter(CNTR_ID %in% eu_list)
+
+non_eu_sf <- countries_sf %>%
+  dplyr::filter(CNTR_ID %in% non_eu_list)
+
+# DIGITAL SKILLS DATA
+indicator_df <- get_eurostat_data(
+  map_id,
+  filters = list(
+    ind_type = c("Y16_29"),
+    indic_is = "I_DSK2_BAB",
+    freq = "Annual",
+    unit = c("PC_IND"),
+    date_filter = c(2021:2023)
+  ),
+  label = FALSE,
+  ignore.case = TRUE,
+  exact_match = TRUE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = FALSE,
+  keep_flags = TRUE
+)
+
+# DATA
+indicator_filtered_df <- indicator_df %>%
+  dplyr::select(geo, time, values) %>%
+  dplyr::rename("NUTS_ID" = "geo")
+
+# DF TO WIDE FORMAT
+indicator_wide_df <- indicator_filtered_df %>%
+  tidyr::pivot_wider(names_from = time, values_from = values)
+
+# REPLACE MISSING VALUES
+indicator_df_final <- indicator_wide_df %>%
+  dplyr::mutate(values = dplyr::if_else(is.na(`2023`), `2021`, `2023`)) %>%
+  dplyr::select(NUTS_ID, values)
+
+# MERGE NUTS3 SF AND DF
+mapping_sf <- nuts3_sf %>%
+  dplyr::left_join(indicator_df_final, by = "NUTS_ID")
+
+# BREAKS, COLOR & BOUNDING BOX
+ni <- classInt::classIntervals(mapping_sf$values, n = 5, style = "equal")$brks
+brk <- ni %>%
+  append(max(mapping_sf$values)) %>%
+  head(-1)
+breaks <- c(min(mapping_sf$values), brk) %>%
+  tail(-1)
+
+cols <- hcl.colors(n = 6, palette = "Greens", rev = TRUE)
+
+crs_lambert <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +datum=WGS84 +units=m +no_defs"
+
+xmin <- -10.66
+ymin <- 34.5
+xmax <- 45
+ymax <- 71
+
+bbox <- sf::st_sfc(sf::st_polygon(list(cbind(
+  c(xmin, xmax, xmax, xmin, xmin),
+  c(ymin, ymin, ymax, ymax, ymin)
+))), crs = 4326)
+
+lambert_bbox <- sf::st_transform(bbox, crs = crs_lambert)
+bb <- sf::st_bbox(lambert_bbox)
+
+```
+
+
+
+### Plot
+
+```{r}
+# # MAP
+
+p <- ggplot(data = mapping_sf) +
+  geom_sf(data = subset(eu_sf, CNTR_ID == "RS"), 
+          fill = "grey80", color = "black", size = .15) +
+  geom_sf(mapping = aes(fill = values), 
+          color = NA, size = 0) +
+  geom_sf(data = eu_sf, color = "black",
+          size = .15, fill = "transparent") +
+  geom_sf(data = non_eu_sf, color = "black", 
+          size = .15, fill = "grey80") +
+  geom_sf_text(data = mapping_sf, 
+               aes(label = round(values, 0)), 
+               size = 4, 
+               color = "black", 
+               check_overlap = TRUE, 
+               nudge_y = 0.8,,
+               fontface = "bold", 
+               path = T) +
+  coord_sf(crs = crs_lambert, xlim = c(bb["xmin"], bb["xmax"]), ylim = c(bb["ymin"], bb["ymax"])) +
+  scale_fill_gradientn(
+    colors = cols,
+    breaks = breaks,
+    labels = round(breaks, 0),
+    limits = c(min(mapping_sf$values), max(mapping_sf$values)),
+    na.value = "grey80"
+  ) +
+  guides(
+    fill = guide_colorbar(
+      direction = "horizontal",
+      barheight = unit(2.5, units = "mm"),
+      barwidth = unit(50, units = "mm"),
+      label.position = "bottom",
+      label.hjust = 0,
+      nrow = 1,
+      byrow = TRUE
+    )
+  ) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),
+    plot.caption = element_text(hjust = 0, size = 14),
+    plot.title = element_text(hjust = 0, face = "bold", size = 25),
+    plot.subtitle = element_text(hjust = 0, size = 15),
+    legend.position = c(0, 0.6), 
+    legend.justification = c(0, 0),
+    legend.title = element_blank(), 
+    legend.background = element_rect(fill = "white", color = NA), 
+    legend.text = element_text(size = 10, color = "grey10")
+  ) +
+  labs(
+    caption = paste0("Iceland, North Macedonia and Albania: data from 2021.",
+                  "\nSource: Eurostat (online data code: ", map_id, ")\n"),
+    title = "Digital Skills of Young Europeans in 2023",
+    subtitle = "Share of 16-29 year olds with basic or above digital skills (%)\n"
+  )
+
+# Save the plot with a specific background setting
+output_file <- "digital_figures/map1.png"
+ggsave(filename = output_file, plot = p, width = 20, height = 12, dpi = 1000, bg = "white")
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+```
+
