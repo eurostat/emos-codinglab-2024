@@ -3,8 +3,10 @@
 library(tidyverse)
 library(grid)
 library(png)
+library(writexl)
 library(restatapi)
 library(gridExtra)
+library(kableExtra)
 
 ####################
 ###### Graph1 ######
@@ -12,10 +14,6 @@ library(gridExtra)
 
 # Get the id and read the data through dsd
 id <- "prc_hicp_aind"
-view(get_eurostat_dsd(id))
-
-labels <- get_eurostat_dsd(id)%>%
-  rename(coicop=code)
 
 # Specify the years of interest
 time_EU <- seq(from = 2013, to = 2023, by = 1)
@@ -23,42 +21,39 @@ time_EU <- seq(from = 2013, to = 2023, by = 1)
 # Specify the 7 categories of interest 
 cult_var_names <- c("CP0952", "CP0951", "CP0913", "CP00", "CP0914", "CP0911", "CP0942")
 data_api <- get_eurostat_data(id, 
-                              filters = list(geo = "EU",coicop = cult_var_names, 
+                              filters = list(geo = "EU", coicop = cult_var_names, 
                                              unit = "RCH_A_AVG"), 
-                              date_filter = time_EU) 
+                              date_filter = time_EU, label = TRUE) 
 # Create the dataset with left join by category (coicop)
-data_api <- left_join(data_api, labels, by="coicop")
-view(data_api)
-
 # Now define all the variables seperately 
 time_graph1 <- unique(data_api$time)
 
 all_hicp <- data_api %>%
-  filter(coicop == "CP00") %>%
+  filter(coicop == "All-items HICP") %>%
   select(values)
 
 equip <- data_api %>%
-  filter(coicop == "CP0913") %>%
+  filter(coicop == "Equipment for the reception, recording and reproduction of sound and picture") %>%
   select(values)
 
 info_equip <- data_api %>%
-  filter(coicop == "CP0911") %>%
+  filter(coicop == "Information processing equipment") %>%
   select(values)
 
 rec_media <- data_api %>%
-  filter(coicop == "CP0914") %>%
+  filter(coicop == "Recording media") %>%
   select(values)
 
 cult_serv <- data_api %>%
-  filter(coicop == "CP0942") %>%
+  filter(coicop == "Cultural services") %>%
   select(values)
 
 books <- data_api %>%
-  filter(coicop == "CP0951") %>%
+  filter(coicop == "Books") %>%
   select(values)
 
 newspapers <- data_api %>%
-  filter(coicop == "CP0952") %>%
+  filter(coicop == "Newspapers and periodicals") %>%
   select(values)
 
 # Bind cols and create a new column for data frame names
@@ -144,8 +139,22 @@ footnote_with_logo <- arrangeGrob(footnote_grob, logo_grob, ncol = 2, widths = c
 combined_grob <- arrangeGrob(plot1, footnote_with_logo, ncol = 1, heights = c(4, 1))
 
 # Display the combined plot with footnote and logo
-
+grid.newpage()
 grid.draw(combined_grob)
+
+
+combined_data_wide <- combined_data_long %>%
+  pivot_wider(names_from = variable, values_from = value)
+
+# Create a mapping of numeric values to years
+year_mapping <- setNames(2013:2023, 1:11)
+
+# Replace numeric time values with years in the wide data
+combined_data_wide <- combined_data_wide %>%
+  mutate(time = year_mapping[as.character(time)])
+
+write_xlsx(combined_data_wide, path = "combined_data_long_.xlsx")
+
 
 ####################
 ###### Graph2 ######
@@ -154,42 +163,50 @@ grid.draw(combined_grob)
 # Define a new dataset to not overwrite the previous
 data_api2 <- data_api %>%
   mutate(time = as.numeric(as.character(time)))
+view(data_api2)
+
+data_api2_wide <- data_api2 %>%
+  pivot_wider(names_from = time, values_from = values)
+
+view(data_api2_wide)
+
+
+write_xlsx(data_api2_wide, path = "data_for_graph2.xlsx")
 
 # Filter 2018-2023 and 2022-2023 since that's what's required
 values_2022_2023 <- data_api2 %>%
-  filter(time > 2022 & time <= 2023) %>%            # Filter for the years 2022 to 2023
-  group_by(name) %>%                             # Group by the category column
+  filter(time == 2023) %>%                          # Filter for the years 2022 to 2023
+  group_by(coicop) %>%                              # Group by the category column
   summarize(value = mean(values, na.rm = TRUE)) %>% # Calculate the mean of values for each category
-  select(name, value) %>%
+  select(coicop, value) %>%
   mutate(date = rep("2022-2023", 7)) %>%
-  arrange(name)
+  arrange(coicop)
 
 values_2018_2023 <- data_api2 %>%
   filter(time > 2018 & time <= 2023) %>%            # Filter for the years 2018 to 2023
-  group_by(name) %>%                             # Group by the category column
+  group_by(coicop) %>%                              # Group by the category column
   summarize(value = mean(values, na.rm = TRUE)) %>% # Calculate the mean of values for each category
-  select(name, value) %>%
+  select(coicop, value) %>%
   mutate(date = rep("2018-2023", 7)) %>%
-  arrange(name)
+  arrange(coicop)
 
 # Join
 data_long_2 <- bind_rows(values_2018_2023, values_2022_2023)
 data_long2 <- data_long_2 %>%
-  mutate(Color_Group = ifelse(name == "All-items HICP", paste(name, date), paste("Other", date))) %>%
+  mutate(Color_Group = ifelse(coicop == "All-items HICP", paste(coicop, date), paste("Other", date))) %>%
   mutate_if(is.character,as.factor)
-
+view(data_long2)
 # Redefine the names of the categories as needed
-var_categories <- unique(data_api$name)
+var_categories <- unique(data_api$coicop) %>% as.character()
 var_categories[2] <- "Equipment for the reception, recording  
 and reproduction of sound and picture (4)"
 var_categories[3] <- "Information processing equipment (3)"
 var_categories[4] <- "Recording Media (2)"
 var_categories[5] <- "Cultural Services (1)"
 
-var_categories <- sort(var_categories)
 var_cat <- bind_rows(as_tibble(var_categories), as_tibble(var_categories))
 colnames(var_cat) <- "category"
-data_long2 <- bind_cols(data_long2, var_cat) %>% select(-name)
+data_long2 <- bind_cols(data_long2, var_cat) %>% select(-coicop)
 
 data_long2 <- data_long2 %>% 
   arrange(date) %>% 
@@ -229,10 +246,8 @@ plot2 <- ggplot(data_long2, aes(x = category, y = value, fill = Color_Group)) +
         plot.title = element_text(size = 14, face = "bold"),
         plot.subtitle = element_text(size = 12),
         plot.caption = element_text(size = 7, hjust = 0),
-        
         panel.grid.major.y = element_blank()) +
   scale_y_continuous(breaks = c(seq(-4, 6, by = 2)), minor_breaks= c(seq(-4, 6, by = 2)))
-
 
 # Display the plot with footnote and logo
 footnote_grob2 <- textGrob(cap2, x = unit(0, "npc"), y = unit(1, "npc"), 
@@ -245,8 +260,10 @@ footnote_with_logo2 <- arrangeGrob(footnote_grob2, logo_grob, ncol = 2, widths =
 combined_grob2 <- arrangeGrob(plot2, footnote_with_logo2, ncol = 1, heights = c(4, 1))
 
 # Display the combined plot
+grid.newpage()
 grid.draw(combined_grob2)
 
+write_xlsx(data_long2, path = "data_graph2_calc_.xlsx")
 
 ####################
 ###### Table #######
@@ -256,37 +273,39 @@ grid.draw(combined_grob2)
 data_api_all <- get_eurostat_data(id, 
                                   filters = list(coicop = cult_var_names, 
                                                  unit = "RCH_A_AVG"), 
-                                  date_filter = time_EU) 
+                                  date_filter = time_EU, label = TRUE) 
 
-data_api_all <- left_join(data_api_all, labels, by="coicop")
-view(data_api_all)
+# data_api_all <- left_join(data_api_all, labels, by="coicop")
+# view(data_api_all)
 unique(data_api_all$geo)
 
 data_api_all_2 <- data_api_all %>%
-  filter(!(geo %in% c("UK","US","EA","EA19","EA20","EU28","EU27_2020","EEA")))
+  filter(
+    !geo %in% c("United Kingdom", "United States") & 
+      !str_detect(geo, "^(Euro area|European Economic|European Union -)"))
 
 data_api_all_2 <- data_api_all_2 %>% mutate(time=as.numeric(as.character(time)))
 
 # Sort the times again 2018-2023 and 2022-2023
 values_2022_2023_all <- data_api_all_2 %>%
   filter(time == 2023) %>%            
-  group_by(name, geo) %>%                             
+  group_by(coicop, geo) %>%                             
   summarize(value = mean(values, na.rm = TRUE)) %>% # Calculate the mean of values for each category
-  select(name, value, geo) %>%
+  select(coicop, value, geo) %>%
   mutate(date = rep("2022-2023")) %>%
-  arrange(name)
+  arrange(coicop)
 
 values_2018_2023_all <- data_api_all_2 %>%
   filter(time > 2018 & time <= 2023) %>%            # Filter for the years 2018 to 2023
-  group_by(name, geo) %>%                             # Group by the category column
+  group_by(coicop, geo) %>%                             # Group by the category column
   summarize(value = mean(values, na.rm = TRUE)) %>% # Calculate the mean of values for each category
-  select(name, value, geo) %>%
+  select(coicop, value, geo) %>%
   mutate(date = rep("2018-2023")) %>%
-  arrange(name)
+  arrange(coicop)
 
 # Bind and redefine the categories as needed
 combo <- bind_rows(values_2018_2023_all, values_2022_2023_all) %>%
-  mutate(name = str_replace_all(name, c(
+  mutate(coicop = str_replace_all(coicop, c(
     "Equipment for the reception, recording and reproduction of sound and picture" = "Equipment for the reception, recording  \nand reproduction of sound and picture (4)",
     "Information processing equipment" = "Information processing equipment (3)",
     "Recording media" = "Recording Media (2)",
@@ -296,35 +315,28 @@ combo <- bind_rows(values_2018_2023_all, values_2022_2023_all) %>%
 #Get the elements to 13 from 7 and save in reverse order and arrange
 labels_graph2 <- rev(data_long2$category[7:13])
   
-combo$name <- factor(combo$name, levels=labels_graph2)
+combo$coicop <- factor(combo$coicop, levels=labels_graph2)
 combo2 <- combo %>%
   arrange(date) %>%
-  arrange(name)
+  arrange(coicop)
 
-# Recode the country names
-country_names <- c("Albania (⁵)" = "AL", "Austria" = "AT", "Belgium" = "BE", "Bulgaria" = "BG", 
-                   "Switzerland" = "CH", "Cyprus" = "CY", "Czech Republic" = "CZ", "Germany" = "DE", 
-                   "Denmark" = "DK", "Estonia" = "EE", "Greece" = "EL", "Spain" = "ES", 
-                   "EU" = "EU", "Finland" = "FI", "France" = "FR", "Croatia" = "HR", 
-                   "Hungary" = "HU", "Ireland" = "IE", "Iceland" = "IS", "Italy" = "IT", 
-                   "Lithuania" = "LT", "Luxembourg" = "LU", "Latvia" = "LV", "Montenegro (⁵)" = "ME", 
-                   "North Macedonia (⁵)" = "MK", "Malta" = "MT", "Netherlands" = "NL", "Norway" = "NO", 
-                   "Poland" = "PL", "Portugal" = "PT", "Romania" = "RO", "Serbia (⁵)" = "RS", 
-                   "Sweden" = "SE", "Slovenia" = "SI", "Slovakia" = "SK", "Türkiye (⁵)" = "TR", 
-                   "Kosovo (⁵)(⁶)" = "XK")
+levels(combo2$geo)[17] <- "EU"
+
+country_names <- c("Albania (⁵)" = "Albania", "Montenegro (⁵)" = "Montenegro", "North Macedonia (⁵)" = "North Macedonia",
+                   "Kosovo (⁵)(⁶)" = "Kosovo*", "Serbia (⁵)" = "Serbia", "Türkiye (⁵)" = "Türkiye", "Czech Republic" = "Czechia")
 
 # Convert the 'geo' column to a factor and recode it
 combo2$geo <- fct_recode(factor(combo2$geo), !!!country_names)
 
 combo3 <- combo2 %>%
-  pivot_wider(names_from = c(name, date), values_from = value)
+  pivot_wider(names_from = c(coicop, date), values_from = value)
 
 # Specified order of country names
-country_order <- c("EU", "Belgium", "Bulgaria", "Czech Republic", "Denmark", "Germany", 
-                   "Estonia", "Ireland", "Greece", "Spain", "France", "Croatia", "Italy", "Cyprus", 
-                   "Latvia", "Lithuania", "Luxembourg", "Hungary", "Malta", "Netherlands", "Austria", 
-                   "Poland", "Portugal", "Romania", "Slovenia", "Slovakia", "Finland", "Sweden", 
-                   "Iceland", "Norway", "Switzerland", "Montenegro (⁵)", "North Macedonia (⁵)", "Albania (⁵)", 
+country_order <- c("EU", "Belgium", "Bulgaria", "Czech Republic", "Denmark", "Germany",
+                   "Estonia", "Ireland", "Greece", "Spain", "France", "Croatia", "Italy", "Cyprus",
+                   "Latvia", "Lithuania", "Luxembourg", "Hungary", "Malta", "Netherlands", "Austria",
+                   "Poland", "Portugal", "Romania", "Slovenia", "Slovakia", "Finland", "Sweden",
+                   "Iceland", "Norway", "Switzerland", "Montenegro (⁵)", "North Macedonia (⁵)", "Albania (⁵)",
                    "Serbia (⁵)", "Türkiye (⁵)", "Kosovo (⁵)(⁶)")
 
 # Convert the 'geo' column to a factor with the specified levels
@@ -375,8 +387,10 @@ final_table <- kable(combo3, format = "html", escape = F, digits = 1,
   row_spec(row = 1, background = "#e1bae4") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
                 full_width = F, font_size = 12, fixed_thead = TRUE) %>%
-  footnote(general =footnote_text, escape = F)
+  footnote(general = footnote_text, escape = F)
 
 # Output the table
 final_table
 
+write_xlsx(combo3, path = "Table_HICP.xlsx")
+    
