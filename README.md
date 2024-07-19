@@ -5,8 +5,9 @@ The 3rd edition of the EMOS Coding Lab entitled ‘Statistics Explained through 
 
 Six students from EMOS-labelled master´s programmes worked in four groups from March to June on selected Statistics Explained articles covering the domains of culture statistics, sports statistics, and quality of life indicators.
 
-
-| Quality of life indicators - overall experience of life - Statistics Explained (europa.eu) | Group 1 |
+| Article | Group |
+| --- | --- |
+| [Quality of life indicators - overall experience of life](https://ec.europa.eu/eurostat/statistics-explained/index.php?oldid=622907) | [Group 1](code/group1) |
 | Consumer prices of recreational and sporting goods and services - Statistics Explained (europa.eu) | Group 1 |
 | Quality of life indicators - natural and living environment - Statistics Explained (europa.eu) | Group 2 |
 | Young people - digital world - Statistics Explained (europa.eu) | Group 2 |
