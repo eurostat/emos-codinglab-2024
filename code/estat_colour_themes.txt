@@ -1,4 +1,0 @@
-theme_nr	theme_desc	theme_color	add_color1	add_color2	add_color3	add_color4	add_color5	text_dark	text_light	background_dark	background_light
-1	Palette A	#2644A7	#B09120	#E04040	#208486	#388AE2	#C05F03	#000000	#FFFFFF	#1F497D	#EEECE1
-2	Palette B	#B656BD	#2644A7	#B09120	#672DC4	#388AE2	#AF155C	#000000	#FFFFFF	#1F497D	#EEECE1
-3	Palette C	#33A033	#2644A7	#C05F03	#208486	#B09120	#388AE2	#000000	#FFFFFF	#1F497D	#EEECE1

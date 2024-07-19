@@ -1,0 +1,831 @@
+---
+title: "Quality of life indicators"
+format: html
+editor: visual
+---
+
+# Loading Packages
+
+```{r}
+#| warning: false
+#| message: false
+
+
+require(conflicted)
+
+require(restatapi)
+require(giscoR)
+
+require(data.table)
+require(chron)
+require(reshape2)
+
+require(kableExtra)
+require(tidyverse)
+require(tmap)
+
+require(highcharter)
+require(plotly)
+conflicts_prefer(dplyr::filter)
+```
+
+# Quality of life indicators - natural and living environment
+
+<https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment>
+
+## Figure 1
+
+Population reporting exposure to pollution, grime or other environmental problems, EU, 2011-2020 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_exposure_to_pollution,_grime_or_other_environmental_problems,>*EU*(%C2%B9),*2011-2020*(%25).png
+
+### Retrieving data
+
+```{r data-fig1}
+#| eval: true
+
+id1<-"ilc_mddw02"
+date1 = 2011:2020
+
+data1 = get_eurostat_data(
+  id1, 
+  filters = list(incgrp = "TOTAL",
+              hhtyp = "TOTAL",
+              geo = "EU27_2020"),
+  date_filter = date1,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+  )
+
+data1 = data1 |>
+        group_by(time) |>
+        summarise(exp = mean(values)) |>
+        ungroup()
+
+```
+
+### Plot
+
+```{r}
+#| eval: true
+
+# Define color
+line_color <- "#B09120"
+
+# Define title, subtitle, and caption
+title <- paste0("Population reporting exposure to pollution, grime or other\nenvironmental problems, EU (\U00B9) ", date1[1], "-", date1[length(date1)])
+subtitle <- "(%)"
+caption <- paste0("\n(\U00B9) Estimate.",
+                  "\nSource: Eurostat (online data code: ", id1, ")")
+
+# Create the plot
+p1 <- ggplot(data = data1, aes(x = time, y = exp, group = 1)
+  ) +
+  geom_line(color = line_color,linewidth = 1) + 
+  scale_y_continuous(
+    expand = c(0, 0), 
+    limits = c(0, max(data1$exp) + 2),
+    breaks = seq(0, max(data1$exp) + 2, 2)
+  ) +
+  theme_bw() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    axis.text.x = element_text(hjust = 1.5)
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "quality_of_life/p1.png"
+ggsave(filename = output_file, plot = p1, 
+       width = 8, height = 6, dpi = 1000, create.dir = TRUE)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+```
+
+## Figure 2
+
+Population reporting exposure to pollution, grime or other environmental problems, by income situation, 2020 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_exposure_to_pollution,_grime_or_other_environmental_problems,>*by_income_situation,2020*(%25).png
+
+### Retrieving data
+
+```{r}
+#| eval: true
+
+# Define parameters
+id2 <- "ilc_mddw02"
+date2 <- 2020
+
+# Get country codes for EU and EFTA
+eu_cc <- get("cc", envir = .restatapi_env)$EU27_2020
+efta_cc <- c("CH", "NO", "IS", "LI")
+
+# Fetch the data from Eurostat
+data2 <- get_eurostat_data(
+  id2,
+  filters = list(
+    incgrp = c("TOTAL", "B_MD60"),
+    freq = "Annual",
+    hhtyp = "TOTAL",
+    unit = "Percentage"
+  ),
+  date_filter = date2,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = TRUE
+)
+
+# Get the data structure definition (DSD) for geographic codes
+dsd <- get_eurostat_dsd(id2) |> 
+  as.data.table() |> 
+  filter(concept == "geo") |> 
+  select(code, name)
+
+# Merge the main data with DSD to get full names for geos
+datafig2 <- merge(data2, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out unwanted geo codes
+datafig2 <- datafig2[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column by removing unwanted text and standardizing EU names
+datafig2$geo <- datafig2$geo %>%
+  gsub(" \\(.*\\)", "", .) %>% 
+  gsub("^Eu.*", "EU", .)
+
+# Order the names for EU, EFTA, and other countries
+name_ord_eu <- datafig2 |>
+  filter(code %in% eu_cc, incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig2 |>
+  filter(code %in% efta_cc, incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig2 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+# Combine the ordered names
+name_ord <- c(name_ord_othr, "  ", name_ord_efta, "   ", name_ord_eu, "    ", "EU")
+
+# Prepare the final dataset for plotting
+datafig2 <- datafig2 |>
+  select(geo, incgrp, values) |>
+  mutate(
+    incgrp = recode(incgrp, 
+                    "Below 60% of median equivalised income" = "Population at-risk-of-poverty (\U00B2)")) |>
+  add_row(
+    geo = c("  ", "   ", "    "),
+    incgrp = "Total",
+    values = NA
+  )
+
+# Factorize the geo and ind_type columns
+datafig2$geo <- factor(datafig2$geo, levels = rev(name_ord))
+
+datafig2$incgrp <- factor(datafig2$incgrp, levels = c("Total", 
+                                       "Population at-risk-of-poverty (\U00B2)"))
+
+# Recode specific geo values for the final plot
+datafig2 <- datafig2 |>
+  mutate(
+    geo = recode(geo,
+                 "France" = "France (\U00B3)",
+                 "Luxembourg" = "Luxembourg (\U00B3)",
+                 "Germany" = "Germany (\U00B3)(\U2075)",
+                 "Ireland" = "Ireland (\U00B3)",
+                 "EU" = "EU (\U00B9)")
+  )
+
+```
+
+### Plot
+
+```{r}
+#| eval: true
+
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+# Define title, subtitle, and caption
+title <- paste0("Population reporting exposure to pollution, grime or other \nenvironmental problems, by income situation, ", date2, " (% share)")
+subtitle <- "(%)"
+caption <- paste0("\n(\U00B9) Estimate.",
+                  "\n(\U00B2) People living below the national poverty threshold (60% of median equivalised income).",
+                  "\n(\U00B3) Break in series.",
+                  "\n(\U2074) 2019 instead of 2020.",
+                  "\n(\U2075) Low reliability.",
+                  "\n(\U2076) 2018 instead of 2020.",
+                  "\nSource: Eurostat (online data code: ", id2, ")")
+
+# Create the plot
+p2 <- ggplot(data = datafig2, aes(x = geo, y = values, fill = incgrp)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data2$values, na.rm = TRUE) + 5),
+    breaks = seq(0, max(data2$values, na.rm = TRUE) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "quality_of_life/p2.png"
+ggsave(filename = output_file, plot = p2, width = 8, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+```
+
+## Figure 3
+
+Population reporting exposure to pollution, grime or other environmental problems, by degree of urbanisation, 2020 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_exposure_to_pollution,_grime_or_other_environmental_problems,>*by_degree_of_urbanisation,2020*(%25).png
+
+### Retrieving data
+
+```{r}
+#| eval: true
+
+# Define parameters
+id3 <- "ilc_mddw05"
+date3 <- 2020
+
+# Get country codes for EU and EFTA
+eu_cc <- get("cc", envir = .restatapi_env)$EU27_2020
+efta_cc <- c("CH", "NO", "IS", "LI")
+
+# Fetch the data from Eurostat
+data3 <- get_eurostat_data(
+  id3,
+  filters = list(
+    incgrp = "Total",
+    freq = "Annual",
+    deg_urb = c("Cities", "Towns and suburbs", "Rural areas"),
+    unit = "Percentage"
+  ),
+  date_filter = date3,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+)
+
+# Get the data structure definition (DSD) for geographic codes
+dsd <- get_eurostat_dsd(id3) |> 
+  as.data.table() |> 
+  filter(concept == "geo") |> 
+  select(code, name)
+
+# Merge the main data with DSD to get full names for geos
+datafig3 <- merge(data3, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out unwanted geo codes
+datafig3 <- datafig3[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column by removing unwanted text and standardizing EU names
+datafig3$geo <- datafig3$geo %>% 
+  gsub(" \\(.*\\)", "", .) %>% 
+  gsub("^Eu.*", "EU", .)
+
+# Order the names for EU, EFTA, and other countries
+name_ord_eu <- datafig3 |>
+  filter(code %in% eu_cc, deg_urb == "Cities") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig3 |>
+  filter(code %in% efta_cc, deg_urb == "Cities") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig3 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), deg_urb == "Cities") |>
+  arrange(values) |>
+  pull(geo)
+
+# Combine the ordered names
+name_ord <- c(name_ord_othr, " ", name_ord_efta, "  ", name_ord_eu, "   ", "EU")
+
+# Prepare the final dataset for plotting
+datafig3 <- datafig3 |>
+  select(geo, deg_urb, values) |>
+  add_row(
+    geo = c(" ", "  ", "   "),
+    deg_urb = "Cities",
+    values = NA
+  )
+
+# Factorize the geo and deg_urb columns
+datafig3$geo <- factor(datafig3$geo, levels = rev(name_ord))
+datafig3$deg_urb <- factor(datafig3$deg_urb, levels = c("Cities", "Towns and suburbs", "Rural areas"))
+
+# Recode specific geo values for the final plot
+datafig3 <- datafig3 |>
+  mutate(
+    geo = recode(geo,
+                 "France" = "France (\U00B3)",
+                 "Luxembourg" = "Luxembourg (\U00B3)",
+                 "Germany" = "Germany (\U00B3)(\U2075)",
+                 "Ireland" = "Ireland (\U00B3)",
+                 "EU" = "EU (\U00B9)")
+  )
+
+
+```
+
+### Plot
+
+```{r}
+#| eval: true
+
+# Define color palette
+colors <- c("#B09120", "#2644A7", "#E04040")
+
+# Define title, subtitle, and caption
+title <- paste0("Population reporting exposure to pollution, grime or other \nenvironmental problems, by degree of urbanisation, ", date3)
+subtitle <- "(%)"
+caption <- paste0("\n(\U00B9) Estimate.",
+                  "\n(\U00B2) Break in series.",
+                  "\n(\U00B3) 2019 instead of 2020.",
+                  "\n(\U2074) Low reliability.",
+                  "\n(\U2075) 2018 instead of 2020.",
+                  "\nSource: Eurostat (online data code: ", id3, ")")
+
+# Create the plot
+p3 <- ggplot(data = datafig3, aes(x = geo, y = values, fill = deg_urb)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(datafig3$values, na.rm = TRUE) + 5),
+    breaks = seq(0, max(datafig3$values, na.rm = TRUE) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "quality_of_life/p3.png"
+ggsave(filename = output_file, plot = p3, width = 8, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+
+```
+
+## Figure 4
+
+Population reporting noise from neighbours or from the street, EU, 2011-2020 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,>*EU*(%C2%B9)\_,*2011-2020*(%25).png
+
+### Retrieving data
+
+```{r}
+#| eval: true
+
+# Define parameters
+id4="ilc_mddw01"
+date4=2011:2020
+
+# Fetch the data from Eurostat
+data4 <- get_eurostat_data(
+  id4, 
+  filters = list(
+    ihhtyp="TOTAL",
+    incgrp="TOTAL",
+    geo="EU27_2020",
+    hhtyp="TOTAL"
+
+  ),
+  date_filter = date4,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = T
+)
+```
+
+### Plot
+
+```{r}
+#| eval: true
+
+# Define color
+line_color <- "#B09120"
+
+# Define title, subtitle, and caption
+title=paste0("Population reporting noise from neighbours or from the street, \n EU(\U00B9)",date4[1],"-",date4[length(dates)])
+subtitle=paste("(%)")
+caption=paste0("(\U00B9) Estimate \n Source: Eurostat (online data code: ",id4, ")")
+
+# Create the plot
+p4 <- ggplot(data = data4, aes(x = time, y = values, group = 1)
+  ) +
+  geom_line(color = line_color,linewidth = 1) + 
+  scale_y_continuous(
+    expand = c(0, 0), 
+    limits = c(0, max(data4$values) + 2),
+    breaks = seq(0, max(data4$values) + 2, 2)
+  ) +
+  theme_bw() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    axis.text.x = element_text(hjust = 1.5)
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "quality_of_life/p4.png"
+ggsave(filename = output_file, plot = p4, 
+       width = 8, height = 6, dpi = 1000, create.dir = TRUE)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+```
+
+## Figure 5
+
+Population reporting noise from neighbours or from the street, by income situation, 2020 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_by_income_situation,>*2020*(%25).png
+
+### Retrieving data
+
+```{r}
+#| eval: true
+
+# Define parameters
+id5="ilc_mddw01"
+date5=2018:2020
+
+# Get country codes for EU and EFTA
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+efta_cc<-c("CH","NO","IS","LI")
+
+# Fetch the data from Eurostat
+data5 <- get_eurostat_data(
+  id5,
+  filters = list(
+    incgrp = c("TOTAL", "B_MD60"),
+    freq = "Annual",
+    hhtyp = "TOTAL",
+    unit = "Percentage"
+  ),
+  date_filter = date5,
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = F,
+  keep_flags = TRUE
+)
+
+# Filter the data
+data5 <- data5 |> 
+  filter(unit == "Percentage") |>
+  filter(time == 2020 | (time == 2019 & geo %in% c("Poland")) | (time == 2018 & geo %in% c("Iceland")) )
+
+# Get the data structure definition (DSD)
+dsd <- get_eurostat_dsd(id5) |> 
+  as.data.table() |>
+  filter(concept == "geo") |>
+  select(code, name)
+
+# Merge data with the DSD
+datafig5 <- merge(data5, dsd, by.x = "geo", by.y = "name", all.x = TRUE)
+
+# Filter out geo codes
+datafig5 <- datafig5[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+# Clean geo column
+datafig5$geo <- gsub(" \\(.*\\)", "", datafig5$geo)
+datafig5$geo <- gsub("^Eu.*", "EU", datafig5$geo)
+
+# Order the names for EU, EFTA, and other countries
+name_ord_eu <- datafig5 |>
+  filter(code %in% eu_cc, incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_efta <- datafig5 |>
+  filter(code %in% efta_cc, incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+name_ord_othr <- datafig5 |>
+  filter(!code %in% c(efta_cc, eu_cc, "EU27_2020"), incgrp == "Total") |>
+  arrange(values) |>
+  pull(geo)
+
+# Combine the ordered names
+name_ord <- c(name_ord_othr, "  ", name_ord_efta, "   ", name_ord_eu, "    ", "EU")
+
+# Prepare the final dataset for plotting
+datafig5 <- datafig5 |>
+  select(geo, incgrp, values) |>
+  mutate(
+    incgrp = recode(incgrp, 
+                    "Below 60% of median equivalised income" = "Population at-risk-of-poverty (\U00B2)")) |>
+  add_row(
+    geo = c("  ", "   ", "    "),
+    incgrp = "Total",
+    values = NA
+  )
+
+# Factorize the geo and ind_type columns
+datafig5$geo <- factor(datafig5$geo, levels = rev(name_ord))
+
+datafig5$incgrp <- factor(datafig5$incgrp, levels = c("Total", 
+                                       "Population at-risk-of-poverty (\U00B2)"))
+
+datafig5 <- datafig5 |>
+  mutate(
+    geo = recode(geo,
+                      "EU" = "EU (\U00B9)",
+                      "Germany" = "Germany (\U00B3)(\U2074)",
+                      "France" = "France (\U00B3)",
+                      "Luxembourg" = "Luxembourg (\U00B3)",
+                      "Poland"="Poland(\U2075)",
+                      "Iceland" = "Iceland (\U2076)")
+                      
+)
+```
+
+### Plot
+
+```{r}
+#| eval: true
+
+# Define color palette
+colors <- c("#B09120", "#2644A7")
+
+# Define title, subtitle, and caption
+title=paste0("Population reporting noise from neighbours or from the street by, \n income situation, ", tail(5, n = 1))
+subtitle=paste("(%)")
+caption=paste0("(\U00B9) Estimate.
+           \n(\U00B2) People living below the national poverty treshold (60% of median equivalised income).
+           \n(\U00B3) Break in series.
+           \n(\U2074) Low reliability.
+           \n(\U2075) 2019 instead of 2020.
+           \n(\U2076) 2018 instead of 2020.
+           \nSource: Eurostat (online data code: ",id5, ")")
+
+# Create the plot
+p5 <- ggplot(data = datafig5, aes(x = geo, y = values, fill = incgrp)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = colors) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, max(data5$values, na.rm = TRUE) + 5),
+    breaks = seq(0, max(data5$values, na.rm = TRUE) + 5, 5)
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = title,
+    subtitle = subtitle,
+    caption = caption
+  )
+
+# Save the plot
+output_file <- "quality_of_life/p5.png"
+ggsave(filename = output_file, plot = p5, width = 8, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+  
+```
+
+## Figure 6
+
+Population reporting noise from neighbours or from the street, by degree of urbanisation, 2020 <https://ec.europa.eu/eurostat/statistics-explained/index.php?title=File:Population_reporting_noise_from_neighbours_or_from_the_street,_by_degree_of_urbanisation,>*2020*(%25).png
+
+### Retrieving data
+
+```{r}
+id="ilc_mddw04"
+date=2020
+
+eu_cc<-get("cc",envir=.restatapi_env)$EU27_2020
+
+efta_cc<-c("CH","NO","IS")
+
+data <- get_eurostat_data(
+  id, 
+  filters = list(
+    incgrp = c("TOTAL"),
+    freq = "A",
+    deg_urb = c("DEG1", "DEG2", "DEG3"),
+    unit = "PC"
+  ),
+  label = TRUE,
+  ignore.case = TRUE,
+  exact_match = FALSE,
+  perl = TRUE,
+  stringsAsFactors = FALSE,
+  force_local_filter = TRUE, 
+  verbose = FALSE
+)
+
+dsd<-as.data.table(get_eurostat_dsd(id))[concept=="geo",c("code","name")]
+
+data<-merge(data,
+                dsd,
+                by.x="geo",
+                by.y="name", 
+                all.x=T, 
+                all.y = F)
+
+data<- data[!code %in% c("EA19", "EA18", "EA", "EU28", "EU27_2007", "EU")]
+
+data$geo<-gsub(" \\(.*\\)","",data$geo)
+
+
+data$geo<-gsub("^Eu.*","EU",data$geo)
+
+# Order the names within the EU
+ordered_name <- data[(code %in% eu_cc) &  (deg_urb == "Cities")]
+ordered_name_eu <- ordered_name[order(-values)]$geo
+
+# Order the names within EFTA
+ordered_name <- data[(code %in% efta_cc) & (deg_urb == "Cities")]
+ordered_name_efta <- ordered_name[order(-values)]$geo
+
+# Order the names for other countries
+ordered_name <- data[!(code %in% c(efta_cc, eu_cc, "EU27_2020")) & (deg_urb == "Cities")]
+ordered_name_other <- ordered_name[order(-values)]$geo
+
+# Combine the ordered names into a single vector
+ordered_name <- c("EU", " ", ordered_name_eu, "  ", ordered_name_efta, "   ", ordered_name_other)
+
+# Ensure ordered_name contains unique values
+ordered_name <- unique(ordered_name)
+
+ordered_name <- unique(ordered_name)
+
+
+data$geo <- factor(data$geo, levels = rev(ordered_name))
+
+data <- data %>%
+  select(geo, deg_urb, values) %>%
+  mutate(
+    geo = factor(geo, levels = rev(ordered_name))
+  )
+
+data <- data |>
+  select(geo, deg_urb, values) |>
+  (\(df){
+    dt_sep <- data.table::data.table(
+      geo = c(" ", "  ", "   "),
+      deg_urb = rep("Cities", 3),
+      values = rep(NA, 3)
+    )
+    rbind(df, dt_sep)
+  })()
+
+data$geo <- factor(data$geo,
+                       levels = ordered_name)
+data$deg_urb <- factor(data$deg_urb, 
+                           levels = c("Cities", 
+                                      "Towns and suburbs",
+                                      "Rural areas"))
+```
+
+### Plot
+
+```{r}
+p6=ggplot(data = data, aes(x = geo, y = values, fill = deg_urb)) +  
+  theme_minimal() +
+  geom_bar(stat = "identity", position = "dodge", width = 0.5) +
+  scale_fill_manual(values = c("#B09120", "#2644A7", "#E04040"), 
+                    labels = c("Cities", "Towns and Suburbs", "Rural Areas")) +
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, max(data$values, na.rm = TRUE) + 5),
+                     breaks = seq(0, max(data$values, na.rm = TRUE) + 5, 5)) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(colour = "black", linetype = "solid"),
+    plot.caption = element_text(hjust = 0),
+    plot.title = element_text(hjust = 0, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_blank()
+  ) +
+  labs(
+    title = "Population reporting noise from neighbours or from the street, by degree of urbanisation, 2020",
+    caption = "\nEU: Estimate\nDE: Low Reliability\nPL: 2019 instead of 2020\nIS: 2018 instead of 2020\nSource: Eurostat (online data code: ilc_mddw04)"
+  ) +
+  theme(
+    legend.title = element_blank(),  # Remove legend title
+    legend.position = "bottom",  # Place legend below the plot
+    plot.caption = element_text(hjust = 0, face = "italic")
+  )
+
+# Save the plot
+output_file <- "quality_of_life/p6.png"
+ggsave(filename = output_file, plot = p6, width = 8, height = 8, dpi = 1000)
+
+# Include the plot in the document
+knitr::include_graphics(output_file)
+```
