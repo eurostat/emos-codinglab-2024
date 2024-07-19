@@ -11,9 +11,7 @@ Six students from EMOS-labelled master´s programmes worked in four groups from 
 | [Consumer prices of recreational and sporting goods and services](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Consumer_prices_of_recreational_and_sporting_goods_and_services) | [Group 1](code/group1)  |
 | [Quality of life indicators - natural and living environment](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_natural_and_living_environment) | [Group 2](code/group2)  |
 | [Young people - digital world](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_digital_world) | [Group 2](code/group2)  |
-| [Culture statistics - international trade in cultural goods](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Culture_statistics_-_international_trade_in_cultural_goods) | [Group 3](code/group3) |
 | [Consumer prices of cultural goods and services](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Consumer_prices_of_cultural_goods_and_services) | [Group 3](code/group3) |
-| [Young people - housing conditions](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Young_people_-_housing_conditions) | [Group 4](code/group4) |
 | [Culture statistics - cultural employment](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Culture_statistics_-_cultural_employment) | [Group 4](code/group4) |
 
 
