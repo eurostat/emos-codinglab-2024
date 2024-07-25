@@ -3,9 +3,9 @@
 ### Quality of life indicators - overall experience of life
 #############################################################
 #https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Quality_of_life_indicators_-_overall_experience_of_life#EU_citizens_were_rather_satisfied_with_their_lives_in_2022
-############################################################
+#############################################################
 ## Gabriella Manuti manutigabriella@gmail.com
-###########################################################
+#############################################################
 
 #install and load packages
 pacman::p_load(restatapi, 
@@ -690,7 +690,7 @@ grid.draw(combined_grob_fig3)
 
 
 #save the final plot as a PNG file
-ggsave("combined_plot_fig3.png", combined_grob_fig2, width = 12, height = 9)
+ggsave("combined_plot_fig3.png", combined_grob_fig3, width = 12, height = 9)
 
 #create a new workbook or add it to the already existing workbook "wb"
 #wb <- createWorkbook()
